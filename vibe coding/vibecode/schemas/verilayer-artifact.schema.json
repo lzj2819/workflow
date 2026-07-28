@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "verilayer-artifact.schema.json",
+  "title": "VeriLayer Canonical Artifact",
+  "description": "Day 1 Adapter-boundary envelope for PRD, Architecture, Testcases, Mocktest, Leaf, Code, and TestResult.",
+  "type": "object",
+  "required": ["schema_version", "run_id", "project_id", "node_id", "parent_node_id", "artifact_id", "artifact_type", "status", "created_at", "generator", "input_artifacts", "requirement_ids", "content_path", "content_sha256", "error"],
+  "properties": {
+    "schema_version": {"const": "verilayer-artifact/v0.2"},
+    "run_id": {"type": "string", "minLength": 1},
+    "project_id": {"type": "string", "minLength": 1},
+    "node_id": {"type": "string", "minLength": 1},
+    "parent_node_id": {"type": ["string", "null"], "minLength": 1},
+    "artifact_id": {"type": "string", "minLength": 1},
+    "artifact_type": {"enum": ["prd", "architecture", "testcases", "mocktest", "leaf", "code", "test_result"]},
+    "status": {"enum": ["PENDING", "RUNNING", "PASS", "FAIL", "ERROR", "CONTINUE_LAYERING", "STOP_LAYERING", "COMPLETED"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "generator": {"type": ["string", "object", "null"]},
+    "input_artifacts": {"type": "array", "items": {"type": "string", "pattern": "^(?![A-Za-z]:|/|\\\\).+"}},
+    "requirement_ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "content_path": {"type": ["string", "null"], "pattern": "^(?![A-Za-z]:|/|\\\\).+"},
+    "content_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$", "description": "For a JSON artifact, SHA-256 of canonical UTF-8 JSON after removing only top-level content_sha256; otherwise SHA-256 of original file bytes."},
+    "error": {
+      "type": ["object", "null"],
+      "required": ["category", "code", "message"],
+      "properties": {
+        "category": {"enum": ["tool", "system", "schema", "path", "business"]},
+        "code": {"type": "string", "minLength": 1},
+        "message": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    }
+  },
+  "x-verilayer-content-hash-rule": {
+    "non_json": "sha256(original file bytes)",
+    "json_artifact": "sha256(canonical UTF-8 JSON after removing top-level content_sha256)",
+    "canonical_json": {"sort_keys": true, "separators": [",", ":"], "ensure_ascii": false}
+  },
+  "allOf": [
+    {"not": {"required": ["child_node_id"]}},
+    {"if": {"properties": {"status": {"const": "ERROR"}}}, "then": {"properties": {"error": {"type": "object"}}, "required": ["error"]}, "else": {"properties": {"error": {"type": "null"}}}},
+    {"if": {"properties": {"content_path": {"type": "null"}}}, "then": {"properties": {"content_sha256": {"type": "null"}}}},
+    {"if": {"properties": {"artifact_type": {"const": "leaf"}}}, "then": {"properties": {"status": {"enum": ["PASS", "FAIL", "ERROR", "CONTINUE_LAYERING", "STOP_LAYERING"]}}}, "else": {"properties": {"status": {"not": {"enum": ["CONTINUE_LAYERING", "STOP_LAYERING"]}}}}}
+  ],
+  "additionalProperties": true
+}
