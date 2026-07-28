@@ -22,9 +22,9 @@ The artifact MUST carry A's canonical envelope. The payload below is the minimum
 | `requirement_mappings` | yes | One or more `requirement_id` to component/interface/state/risk references, with `coverage_status`. |
 | `integration_points` | yes | External or cross-module touchpoints with owner, direction, contract reference, failure policy, and trace. |
 | `recursive_context` | required for a child | `target_node_id`, `parent_node_id`, `parent_artifact_ref`, `boundary_fingerprint`, inherited-fixed/refinable/delegated items, and `node_match_evidence`. |
-| `children` | yes | Objects with `child_id`, responsibility, exclusions, owned state, requirement IDs, dependencies, reason, and next-entry status. |
+| `children` | yes | Objects keyed by `node_id` (the canonical child identity), with responsibility, exclusions, owned state, requirement IDs, dependencies, reason, and next-entry status. |
 
-Empty arrays are allowed only where semantically valid; required mapping and ownership information must not be replaced by descriptive prose. `node_id` remains the only cross-module child identity; do not emit a distinct `child_node_id`.
+Empty arrays are allowed only where semantically valid; required mapping and ownership information must not be replaced by descriptive prose. `node_id` remains the only cross-module child identity; do not emit a distinct `child_id` or `child_node_id`.
 
 ## Seven-file recursive package mapping
 
