@@ -1,0 +1,35 @@
+# B Day 1 validator record
+
+Status: contract-fixture validation only. These are not production Adapter runs or benchmark evidence.
+
+## Root orchestrator baseline
+
+| Command | Exit | Result |
+|---|---:|---|
+| `C:\Users\Lenovo\anaconda3\python.exe -m pytest -q tests\test_contracts.py tests\test_module_runner.py tests\test_root_workflow.py` (working directory: `vibe coding`) | 0 | 27 passed in 4.87s |
+
+## Inputs
+
+| Input | SHA-256 |
+|---|---|
+| `vibe coding/tests/fixtures/contracts/architecture.example.json` | `6944309b23227436e8a929df1eed2b32ae8c4df9766919187ff0c50c455ca93c` |
+| `vibe coding/tests/fixtures/contracts/testcases.example.json` | `ad1c79e9bb72f4a87af740f9a694f834e7bdca12f06f7ed55050638649d0fe9c` |
+| `vibe coding/tests/fixtures/contracts/s1.feature` | `0a19c3aec005bbafa34a6860496fd5cf72ad3932115d52299fab7132e8465f52` |
+| `vibe coding/tests/fixtures/contracts/requirement-model.example.yaml` | `2db65d5a137eef75ba52980e5d8b561646f5605393b0c99286c87f370f8f961b` |
+
+## Validator executions
+
+Output hashes are SHA-256 over UTF-8 normalized stdout (PowerShell line joining followed by a final LF). Stderr was empty for both passing executions.
+
+| Validator command | Exit | stdout SHA-256 | Classification | Summary |
+|---|---:|---|---|---|
+| `node prd-to-gherkin/scripts/validate_requirement_graph.mjs vibe coding/tests/fixtures/contracts/requirement-model.example.yaml` | 0 | `db60be6520f615cf3f285c4fcc95a13cd0acb173d4b9a4874777a8ebb9bee21e` | `PASS` | 8 nodes, 7 edges, one authoritative Scenario, all five graph coverage rates are 1. |
+| `node prd-to-gherkin/scripts/validate_feature.mjs vibe coding/tests/fixtures/contracts/s1.feature vibe coding/tests/fixtures/contracts/requirement-model.example.yaml` | 0 | `21d1ab50b0feeef91e7e839e22ac304589a6892c451369debcd40a6c6f65bb13` | `PASS` | Syntax, YAML/model integrity, and one TC-to-Scenario trace all pass. |
+
+## Recorded setup failure
+
+Before dependency installation, both validators exited 1 with `ERR_MODULE_NOT_FOUND` for `js-yaml`; classification: `TOOL_ENVIRONMENT/DEPENDENCY_MISSING`. An in-sandbox `npm.cmd ci` timed out at 60 seconds and left a partial dependency tree. The locked dependency install was then completed using `npm.cmd ci` (exit 0: 4 packages added, 0 vulnerabilities); validators were rerun successfully.
+
+## Limits
+
+These validators prove structural traceability and graph/Feature conformance only. They do not prove complete PRD interpretation, semantic equivalence of natural-language outcomes, or that the S1 fixture is a production-generated result.

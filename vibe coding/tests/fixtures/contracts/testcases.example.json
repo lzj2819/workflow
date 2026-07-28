@@ -1,0 +1,20 @@
+{
+  "schema_version": "0.1",
+  "run_id": "contract-s1-example-001",
+  "project_id": "verilayer-contract-fixtures",
+  "node_id": "S1-NOTE-CAPTURE",
+  "parent_node_id": null,
+  "artifact_id": "testcases:S1-NOTE-CAPTURE:contract-s1-example-001",
+  "artifact_type": "testcases",
+  "status": "PASS",
+  "created_at": "2026-07-28T00:00:00Z",
+  "generator": "day-1-contract-example",
+  "input_artifacts": ["vibe coding/tests/fixtures/contracts/requirement-model.example.yaml","vibe coding/tests/fixtures/contracts/s1.feature"],
+  "requirement_ids": ["REQ-S1-R1"],
+  "content_path": "vibe coding/tests/fixtures/contracts/testcases.example.json",
+  "features": [{"feature_id":"FEAT-S1-NOTE","name":"Save a short note","source_feature_path":"vibe coding/tests/fixtures/contracts/s1.feature","requirement_ids":["REQ-S1-R1"],"verification_status":"VALIDATED"}],
+  "scenarios": [{"scenario_id":"SC-S1-001","feature_id":"FEAT-S1-NOTE","testcase_id":"TC-S1-001","gherkin_kind":"SCENARIO","tags":["TC-S1-001","REQ-S1"],"requirement_ids":["REQ-S1-R1"]}],
+  "testcases": [{"testcase_id":"TC-S1-001","requirement_ids":["REQ-S1-R1"],"preconditions":"the note form is available","action":"the user saves a non-empty note","expected_result":"the note is stored with the submitted text","acceptance_criteria_ids":["AC-S1-001"],"verification_status":"VALIDATED","source_feature_path":"vibe coding/tests/fixtures/contracts/s1.feature","evidence_ids":["FACT-S1-001"]}],
+  "requirement_model_path": "vibe coding/tests/fixtures/contracts/requirement-model.example.yaml",
+  "validation": {"status":"PENDING_HASH_RECORD","error_categories":[]}
+}
