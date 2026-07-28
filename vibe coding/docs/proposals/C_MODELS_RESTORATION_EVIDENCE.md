@@ -34,3 +34,14 @@ The candidate must run these checks after commit:
 
 Their exit codes prove only import/CLI reachability. They do not establish
 strict, Mocktest semantic, Leaf, Coding, or downstream-gate PASS.
+
+## Validation record
+
+At candidate commit `dc1e0efe1ac9e3137ca78632e81b4e165af53480`, with
+`PYTHONPATH=mocktest/src` and the locally available dependency-complete Python:
+
+| Command | Exit code | Interpretation |
+|---|---:|---|
+| `python -c "import mock_framework.models"` | 0 | package import reachable |
+| `python -c "import mock_framework.models.validator"` | 0 | validator import reachable |
+| `python mocktest/.agents/skills/validate-arch/main_session_strict_driver.py --help` | 0 | driver help reachable |
