@@ -26,7 +26,7 @@ No static check, log, historical report, or unrun test is a substitute for `27 p
 - `jsonschema==4.26.0`
 - Install source: the approved package index/wheelhouse selected by D at installation time; credentials and index tokens are not recorded.
 - Project-local environment path: `vibe coding/.venv/` only, ignored by Git.
-- Approved input file: `vibe coding/requirements-verilayer.txt` with SHA-256 `f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472`.
+- Approved input file: `vibe coding/requirements-verilayer.txt` with raw-bytes SHA-256 `f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472` (recomputed by A on 2026-07-28).
 
 This is an exact install specification, not a completed lock. After installation, D must provide `pip freeze --all` and its SHA-256; A must verify it against the frozen direct dependencies before any test result becomes a baseline.
 
