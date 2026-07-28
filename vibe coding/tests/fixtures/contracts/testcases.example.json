@@ -12,9 +12,11 @@
   "input_artifacts": ["vibe coding/tests/fixtures/contracts/requirement-model.example.yaml","vibe coding/tests/fixtures/contracts/s1.feature"],
   "requirement_ids": ["REQ-S1-R1"],
   "content_path": "vibe coding/tests/fixtures/contracts/testcases.example.json",
-  "features": [{"feature_id":"FEAT-S1-NOTE","name":"Save a short note","source_feature_path":"vibe coding/tests/fixtures/contracts/s1.feature","requirement_ids":["REQ-S1-R1"],"verification_status":"VALIDATED"}],
+  "content_sha256": "20731198e99413884db454058f504621845d1a2e46a79359d3d4ec785687611a",
+  "features": [{"feature_id":"FEAT-S1-NOTE","name":"Save a short note","source_feature_path":"vibe coding/tests/fixtures/contracts/s1.feature","content_sha256":"0a19c3aec005bbafa34a6860496fd5cf72ad3932115d52299fab7132e8465f52","requirement_ids":["REQ-S1-R1"],"verification_status":"VALIDATED"}],
   "scenarios": [{"scenario_id":"SC-S1-001","feature_id":"FEAT-S1-NOTE","testcase_id":"TC-S1-001","gherkin_kind":"SCENARIO","tags":["TC-S1-001","REQ-S1"],"requirement_ids":["REQ-S1-R1"]}],
   "testcases": [{"testcase_id":"TC-S1-001","requirement_ids":["REQ-S1-R1"],"preconditions":"the note form is available","action":"the user saves a non-empty note","expected_result":"the note is stored with the submitted text","acceptance_criteria_ids":["AC-S1-001"],"verification_status":"VALIDATED","source_feature_path":"vibe coding/tests/fixtures/contracts/s1.feature","evidence_ids":["FACT-S1-001"]}],
   "requirement_model_path": "vibe coding/tests/fixtures/contracts/requirement-model.example.yaml",
-  "validation": {"status":"PENDING_HASH_RECORD","error_categories":[]}
+  "requirement_model_sha256": "2db65d5a137eef75ba52980e5d8b561646f5605393b0c99286c87f370f8f961b",
+  "validation": {"command":"node prd-to-gherkin/scripts/validate_feature.mjs vibe coding/tests/fixtures/contracts/s1.feature vibe coding/tests/fixtures/contracts/requirement-model.example.yaml","exit_code":0,"status":"PASS","output_sha256":"8481129d603606807d53eeaad958b6b2cc1821e06879b9cc6c0d7c36894b5764","output_hash_note":"SHA-256 over UTF-8 stdout, CR stripped per line","error_categories":[]}
 }

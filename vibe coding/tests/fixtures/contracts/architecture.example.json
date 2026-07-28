@@ -12,6 +12,7 @@
   "input_artifacts": ["vibe coding/tests/fixtures/contracts/requirement-model.example.yaml"],
   "requirement_ids": ["REQ-S1-R1"],
   "content_path": "vibe coding/tests/fixtures/contracts/architecture.example.json",
+  "content_sha256": "a4a845e381188c819fff802e6b00feb30d30a3fae418bdbbd9789a3b7367d28e",
   "components": [{"component_id":"S1-NOTE-ENTRY","name":"Note entry","responsibility":"Accept one short note request","owned_state_ids":[],"requirement_ids":["REQ-S1-R1"],"status":"PROPOSED"},{"component_id":"S1-NOTE-STORE","name":"Note store","responsibility":"Own accepted note text","owned_state_ids":["STATE-S1-NOTE"],"requirement_ids":["REQ-S1-R1"],"status":"PROPOSED"}],
   "interfaces": [{"contract_id":"S1-NOTE-SAVE","provider":"S1-NOTE-ENTRY","consumer":"S1-NOTE-STORE","trigger":"save request","protocol":"in-process","sync_mode":"sync","schema_ref":"S1-NOTE-SAVE-v1","side_effects":"Creates one note record","dependencies":["S1-NOTE-STORE"],"error_timeout_retry":"Reject blank note; no retry","idempotency":"not-idempotent","version":"v1","requirement_ids":["REQ-S1-R1"]}],
   "dependencies": [{"from_component_id":"S1-NOTE-ENTRY","to_component_id":"S1-NOTE-STORE","dependency_type":"command","reason":"persist accepted note","requirement_ids":["REQ-S1-R1"]}],
