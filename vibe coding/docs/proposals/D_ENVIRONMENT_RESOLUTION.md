@@ -1,9 +1,16 @@
 # D Environment Resolution (Day 2 — Pending A Approval)
 
-Status: **PARTIALLY_VERIFIED**. The approved Git blob hash, local environment
-installation, freeze evidence, and 27-test pytest baseline are verified. The full
-Gate command remains blocked because the specified `tests/integration` path does not
-exist in this checkout. See `docs/proposals/D_ENVIRONMENT_LOCK.md`.
+Status: **PARTIALLY_VERIFIED**. A rejected the earlier revision of this evidence
+because installation and pytest claims predated A's raw-hash freeze. All
+environment claims are therefore re-verified post-freeze in
+`docs/proposals/D_ENVIRONMENT_LOCK.md` (revision of 2026-07-28), which is now
+the authoritative environment evidence: raw working-file hash
+`464c4c0f6b38397fdb33e130fc8d0fbb385a0de607b7192af40c9acf99e76e03` confirmed,
+CPython 3.12.10 project-local install completed, `pip freeze --all` captured,
+and the 27-test baseline re-run with exit 0. The full Gate command remains
+blocked because the specified `tests/integration` path does not exist in this
+checkout, and a pre-existing A-owned failure in `tests/test_vibecode.py` is
+reported for A. See `docs/proposals/D_ENVIRONMENT_LOCK.md` §5–§6.
 
 ## 1. A decision and canonical hash validation
 
