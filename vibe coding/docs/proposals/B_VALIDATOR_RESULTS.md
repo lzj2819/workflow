@@ -33,3 +33,9 @@ Before dependency installation, both validators exited 1 with `ERR_MODULE_NOT_FO
 ## Limits
 
 These validators prove structural traceability and graph/Feature conformance only. They do not prove complete PRD interpretation, semantic equivalence of natural-language outcomes, or that the S1 fixture is a production-generated result.
+
+## Day 2 pre-freeze rerun
+
+The unchanged independent S1 inputs were rerun while A's integration branch/profile freeze was unavailable. Both commands exited 0 with the same input and normalized-stdout hashes listed above; classification remains `PASS`. This records validator availability for future Adapter work, not an end-to-end or strict Mocktest result.
+
+The pre-freeze Adapter test design ran as `6 xfailed in 0.32s`; the existing root baseline remained `27 passed in 4.51s`. The xfails are intentional contract gates and must become ordinary passing tests only after A resolves the pending contract decisions.
