@@ -2,6 +2,8 @@
 
 Status: contract-fixture validation only. These are not production Adapter runs or benchmark evidence.
 
+> Scope note (A review, Day 1): the adapter contract tests (`tests/integration/test_architecture_adapter.py`, `test_gherkin_adapter.py`) and the Day 2 adapter draft were split out of the Day 1 PR per A's review. The `6 xfailed` records below refer to the pre-split branch state; those tests are preserved for Day 2 and are no longer part of this branch.
+
 ## Root orchestrator baseline
 
 | Command | Exit | Result |
