@@ -1,15 +1,28 @@
 # D Environment Resolution (Day 2 — Pending A Approval)
 
-Status: **PENDING_A_APPROVAL**. This is an environment-resolution proposal, not a
-lock file and not authorization to install packages. No virtual environment has been
-created, no dependency has been installed, and no system Python has been changed.
+Status: **BLOCKED_INPUT_HASH_MISMATCH**. A approved the exact direct dependencies
+and D profile review after this proposal was first written, but installation is
+fail-closed until the approved input-file hash matches the checked-out file. A
+project-local virtual environment exists; no approved dependency has been installed
+and no system Python has been changed.
 
-## 1. Decision requested from A
+## 1. A decision and current hash blocker
 
-A must approve an exact, reproducible VeriLayer experiment environment before D
-creates the project-local virtual environment. The approval must name exact versions
-and installation source for Python, pytest, FastAPI, SQLAlchemy, pydantic, and
-jsonschema; it must also approve the resulting package-inventory hash.
+A approved the following exact environment in `docs/DAY1_GATE_STATUS.md` and
+`requirements-verilayer.txt`: CPython 3.12.10, `pytest==8.3.5`,
+`fastapi==0.115.12`, `SQLAlchemy==2.0.41`, `pydantic==2.13.4`, and
+`jsonschema==4.26.0`. A also accepted the D Code/TestResult/Evidence profile as
+`ADDITIVE_ONLY` in `docs/contract-change-log.md`.
+
+However, the approved-input SHA-256 recorded by A is
+`f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472`, while the
+raw bytes of the currently checked-out repository-relative
+`requirements-verilayer.txt` hash to
+`464c4c0f6b38397fdb33e130fc8d0fbb385a0de607b7192af40c9acf99e76e03`.
+
+D must not guess which input A intended. A must either correct the recorded hash or
+publish the intended approved file before D installs packages or treats this
+environment as a lock.
 
 The relevant Artifact Contract rule is fail-closed: an unavailable or unverifiable
 environment is an `ERROR`, not a `FAIL` or a successful Coding result. This proposal
@@ -49,33 +62,35 @@ evidence only; they do not enter S1, model context, public tests, or C0--C5 data
 
 | Field | Proposed value until approval |
 |---|---|
-| `environment_id` | `verilayer-py312-pending` |
-| Python candidate | CPython 3.12.10, because it matches the observed host and Tutor container major/minor; **pending A approval** |
-| pytest | exact version **pending**; source constraint is Mocktest `^7.0` only |
-| FastAPI | exact version **pending**; source constraint is `>=0.115` only |
-| SQLAlchemy | exact version **pending**; source constraint is `>=2.0` only |
-| pydantic/jsonschema | exact versions **pending**; current observed versions are not a lock decision |
-| Installation source | approved package index/wheelhouse **pending A approval** |
+| `environment_id` | `verilayer-py312-v1` (blocked until requirements hash is reconciled) |
+| Python | CPython 3.12.10 (approved) |
+| pytest | `8.3.5` (approved) |
+| FastAPI | `0.115.12` (approved) |
+| SQLAlchemy | `2.0.41` (approved) |
+| pydantic/jsonschema | `2.13.4` / `4.26.0` (approved) |
+| Installation source | approved package index/wheelhouse selected by D at installation time; credentials are not recorded |
 | Virtual-environment location | `vibe coding/.venv/` only; local, ignored, never committed |
 | Freeze artifact | `pip freeze --all` output plus SHA-256, recorded as a repository-relative evidence artifact after approval |
 | Test invocation | `.venv\Scripts\python.exe -m pytest -q tests/test_contracts.py tests/test_module_runner.py tests/test_root_workflow.py` |
 | Timeout | 120 seconds per public pytest invocation |
 
-## 5. Post-approval procedure (not yet executed)
+## 5. Post-reconciliation procedure (not yet executed)
 
-1. Create exactly `vibe coding/.venv/`; confirm it is ignored before installation.
-2. Install only the A-approved exact package list from the A-approved source.
-3. Capture interpreter identity, platform, `pip freeze --all`, package-list hash, and
+1. Confirm the reconciled `requirements-verilayer.txt` SHA-256 and record A's
+   resolution.
+2. Use exactly `vibe coding/.venv/`; it is already ignored by Git.
+3. Install only the A-approved exact package list from the A-approved source.
+4. Capture interpreter identity, platform, `pip freeze --all`, package-list hash, and
    install command provenance without credentials.
-4. Run the required pytest baseline. Only exit `0` with all three files collected
+5. Run the required pytest baseline. Only exit `0` with all three files collected
    permits the label “pytest 27-test baseline.”
-5. Preserve command, exit code, stdout, stderr, and duration as environment
+6. Preserve command, exit code, stdout, stderr, and duration as environment
    evidence. A missing package, collection error, or nonzero exit remains `ERROR`.
 
 ## 6. Current gates and non-authorizations
 
-- A has not yet recorded approval of D's proposed `Code`, `TestResult`, and
-  `Evidence` profiles; no executor skeleton may be written.
+- A accepted D's Code/TestResult/Evidence profile, but the environment input hash
+  mismatch still blocks installation, pytest, and executor skeleton work.
 - C's strict backend is currently `ERROR` because the public package omits
   `mock_framework.models`; this does not become a mock `PASS`, Leaf `STOP_LAYERING`,
   or Coding input.
