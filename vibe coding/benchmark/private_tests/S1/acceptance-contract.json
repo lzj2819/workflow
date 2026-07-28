@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0-draft",
+  "contract_id": "S1-private-acceptance-v1",
+  "task_id": "S1",
+  "visibility": "PRIVATE_ACCEPTANCE_ONLY",
+  "execution_boundary": {
+    "private_root_required": true,
+    "model_context_forbidden": true,
+    "leaf_workspace_forbidden": true,
+    "repair_prompt_forbidden": true,
+    "shared_evidence_forbidden": true
+  },
+  "acceptance_requirements": [
+    {
+      "acceptance_id": "S1-AC-001",
+      "requirement_id": "S1-REQ-001",
+      "category": "route_contract"
+    },
+    {
+      "acceptance_id": "S1-AC-002",
+      "requirement_id": "S1-REQ-002",
+      "category": "normalization_edge_cases"
+    },
+    {
+      "acceptance_id": "S1-AC-003",
+      "requirement_id": "S1-REQ-003",
+      "category": "input_validation_and_no_persistence"
+    }
+  ],
+  "shared_result_policy": {
+    "allowed": ["contract_id", "contract_sha256", "status", "duration_ms", "summary_counts"],
+    "forbidden": ["private_test_path", "test_name", "test_source", "assertion_text", "failure_detail", "private_stdout", "private_stderr"]
+  },
+  "note": "This file is an opaque acceptance contract, not the private test implementation. Its contents do not disclose private assertions or cases."
+}

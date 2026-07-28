@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0-draft",
+  "task_id": "S1",
+  "title": "Independent label normalization service",
+  "status": "DAY1_PROTOCOL_ONLY",
+  "contamination_rule": "This task is independently authored. It must not reference Tutor paths, source, tests, identifiers, STOP labels, completion packages, or behavior text.",
+  "technology_profile": "python-fastapi-pytest-sqlite-modular-monolith-v1",
+  "requirements": [
+    {
+      "requirement_id": "S1-REQ-001",
+      "weight": 0.25,
+      "statement": "Expose GET /health that returns JSON declaring the service healthy."
+    },
+    {
+      "requirement_id": "S1-REQ-002",
+      "weight": 0.5,
+      "statement": "Expose POST /v1/labels/normalize. Given a JSON object with a string field label, return its trimmed, lower-cased value with internal whitespace collapsed to one space."
+    },
+    {
+      "requirement_id": "S1-REQ-003",
+      "weight": 0.25,
+      "statement": "Reject a missing, non-string, or blank label with a client-error JSON response; do not persist request data."
+    }
+  ],
+  "public_test_contract": {
+    "path": "benchmark/tasks/S1/public_tests/test_s1_public_contract.py",
+    "visible_to_model": true
+  },
+  "private_acceptance_contract": {
+    "contract_id": "S1-private-acceptance-v1",
+    "path": "benchmark/private_tests/S1/acceptance-contract.json",
+    "visible_to_model": false
+  },
+  "acceptance_mapping": {
+    "S1-REQ-001": ["S1-PUB-001", "S1-AC-001"],
+    "S1-REQ-002": ["S1-PUB-002", "S1-AC-002"],
+    "S1-REQ-003": ["S1-PUB-003", "S1-AC-003"]
+  }
+}
