@@ -28,4 +28,3 @@ def test_s1_pub_003_rejects_blank_label():
     response = client.post("/v1/labels/normalize", json={"label": "   "})
     assert 400 <= response.status_code < 500
     assert "detail" in response.json()
-

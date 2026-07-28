@@ -95,4 +95,3 @@ Real S1 Coding remains blocked until all six conditions are recorded:
 4. C completes strict execution and records Architecture `PASS`.
 5. C's Leaf result is `STOP_LAYERING` with complete evidence.
 6. A explicitly releases this S1 leaf to D.
-

@@ -68,4 +68,3 @@ key, endpoint credential, cached response, or provider value.
    environment. A reference-regression result cannot certify the experiment runtime.
 5. A's frozen Artifact Contract and a B/C strict-PASS S1 leaf bundle are required
    before any real Coding Executor invocation.
-

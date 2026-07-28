@@ -164,4 +164,3 @@ prompt template hash, model/settings hash, technology profile hash, task-budget
 hash, public-test hash, timeout, and repair limit. Permitted differences are only
 the frozen workflow-stage inputs and C2's explicit `ABLATION_NOT_RUN` evidence.
 Any mismatch invalidates the run rather than granting a configuration an advantage.
-
