@@ -1,15 +1,20 @@
 import unittest
 
-from vibecode.adapters.mocktest_adapter import allocate_strict_run_layout, build_mocktest_formal_input, evaluate_mocktest_gate
+from vibecode.adapters.mocktest_adapter import (
+    allocate_strict_run_layout,
+    build_mocktest_formal_input,
+    build_mocktest_formal_result,
+    evaluate_mocktest_gate,
+)
 
 
 def artifact(kind: str, *, node_id: str = "S1-root", sha: str = "a" * 64) -> dict:
     return {
-        "schema_version": "verilayer-contract/v0.1", "run_id": "run-s1", "project_id": "project-s1",
+        "schema_version": "verilayer-artifact/v0.2", "run_id": "run-s1", "project_id": "project-s1",
         "node_id": node_id, "parent_node_id": None, "artifact_id": f"{kind}-s1", "artifact_type": kind,
         "created_at": "2026-07-28T00:00:00Z", "generator": "fixture", "status": "COMPLETED",
         "input_artifacts": [], "requirement_ids": ["REQ-S1-001"], "content_path": f"artifacts/{kind}.json",
-        "content_sha256": sha,
+        "content_sha256": sha, "error": None,
     }
 
 
@@ -21,6 +26,7 @@ class MocktestAdapterTests(unittest.TestCase):
             result = build_mocktest_formal_input(**values, contract_frozen=True)
             self.assertEqual(result["status"], "ERROR")
             self.assertEqual(result["downstream_gate"], "BLOCK")
+            self.assertTrue(result["provisional"])
 
     def test_contract_not_frozen_blocks_input_preparation(self):
         result = build_mocktest_formal_input(artifact("prd"), artifact("architecture"), artifact("testcases"), contract_frozen=False)
@@ -38,16 +44,45 @@ class MocktestAdapterTests(unittest.TestCase):
         self.assertEqual(result["architecture_status"], "FAIL")
         self.assertIsNone(result["tool_error"])
         self.assertEqual(result["downstream_gate"], "BLOCK")
+        self.assertTrue(result["provisional"])
 
     def test_tool_error_never_becomes_architecture_fail(self):
         result = evaluate_mocktest_gate({}, None, tool_error={"category": "import", "code": "IMPORT_ERROR", "message": "missing dependency"})
         self.assertEqual(result["status"], "ERROR")
         self.assertEqual(result["architecture_status"], "NOT_RUN")
         self.assertEqual(result["downstream_gate"], "BLOCK")
+        self.assertTrue(result["provisional"])
 
     def test_only_complete_audit_and_semantic_pass_allow_leaf(self):
         result = evaluate_mocktest_gate({"status": "PASS"}, {"status": "PASS"})
         self.assertEqual(result["downstream_gate"], "ALLOW")
+        self.assertTrue(result["provisional"])
+
+    def test_only_completed_strict_evidence_can_be_serialized_as_canonical_result(self):
+        sources = [artifact(kind) for kind in ("prd", "architecture", "testcases")]
+        gate = evaluate_mocktest_gate({"status": "PASS"}, {"status": "PASS"})
+        result = build_mocktest_formal_result(
+            sources,
+            gate,
+            artifact_id="mocktest-s1",
+            created_at="2026-07-28T00:00:00Z",
+            generator="mocktest-strict",
+            content_path="reports/mocktest/run-s1/report.json",
+            content_sha256="c" * 64,
+        )
+        self.assertFalse(result.get("provisional", False))
+        self.assertEqual(result["schema_version"], "verilayer-artifact/v0.2")
+        self.assertEqual(result["artifact_type"], "mocktest")
+        self.assertEqual(result["downstream_gate"], "ALLOW")
+
+    def test_incomplete_strict_evidence_cannot_be_serialized_as_formal_result(self):
+        sources = [artifact(kind) for kind in ("prd", "architecture", "testcases")]
+        gate = evaluate_mocktest_gate({"status": "PASS"}, None)
+        with self.assertRaises(ValueError):
+            build_mocktest_formal_result(
+                sources, gate, artifact_id="mocktest-s1", created_at="2026-07-28T00:00:00Z",
+                generator="mocktest-strict", content_path="reports/mocktest/run-s1/report.json", content_sha256="c" * 64,
+            )
 
     def test_strict_paths_are_unique_and_delivery_is_not_work_dir(self):
         first, second = allocate_strict_run_layout(), allocate_strict_run_layout()

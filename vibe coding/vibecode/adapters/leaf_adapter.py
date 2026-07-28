@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Callable
 
-from .mocktest_adapter import AdapterInputError, _error, evaluate_mocktest_gate, validate_artifact, validate_identity
+from .mocktest_adapter import AdapterInputError, _error, _provisional, evaluate_mocktest_gate, validate_artifact, validate_identity
 
 
 HashVerifier = Callable[[dict[str, Any]], bool]
@@ -29,7 +29,7 @@ def prepare_leaf_formal_input(
             validate_artifact(prd, "prd"),
             validate_artifact(architecture, "architecture"),
             validate_artifact(testcases, "testcases"),
-            validate_artifact(mocktest_report, "mocktest_report"),
+            validate_artifact(mocktest_report, "mocktest"),
         ]
         identity = validate_identity(artifacts)
     except AdapterInputError as exc:
@@ -42,7 +42,7 @@ def prepare_leaf_formal_input(
     invalid = [artifact["artifact_type"] for artifact in artifacts if not hash_verifier(artifact)]
     if invalid:
         return _error("ARTIFACT_HASH_MISMATCH", f"hash verification failed: {', '.join(invalid)}")
-    return {
+    return _provisional({
         "status": "READY_FOR_LEAF",
         "downstream_gate": "ALLOW",
         "eligible_for_leaf": True,
@@ -55,7 +55,7 @@ def prepare_leaf_formal_input(
             "strict_audit_status": gate["strict_audit_status"],
             "semantic_mocktest_status": gate["semantic_mocktest_status"],
         },
-    }
+    })
 
 
 def adapt_proposed_children(native_children: Any, *, parent_node_id: str) -> dict[str, Any]:
@@ -77,4 +77,4 @@ def adapt_proposed_children(native_children: Any, *, parent_node_id: str) -> dic
         normalized["node_id"] = legacy
         normalized["parent_node_id"] = parent_node_id
         adapted.append(normalized)
-    return {"status": "PASS", "proposed_children": adapted}
+    return _provisional({"status": "PASS", "proposed_children": adapted})
