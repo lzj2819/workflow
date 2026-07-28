@@ -1,12 +1,11 @@
 # D Environment Resolution (Day 2 — Pending A Approval)
 
-Status: **BLOCKED_INPUT_HASH_MISMATCH**. A approved the exact direct dependencies
-and D profile review after this proposal was first written, but installation is
-fail-closed until the approved input-file hash matches the checked-out file. A
-project-local virtual environment exists; no approved dependency has been installed
-and no system Python has been changed.
+Status: **PARTIALLY_VERIFIED**. The approved Git blob hash, local environment
+installation, freeze evidence, and 27-test pytest baseline are verified. The full
+Gate command remains blocked because the specified `tests/integration` path does not
+exist in this checkout. See `docs/proposals/D_ENVIRONMENT_LOCK.md`.
 
-## 1. A decision and current hash blocker
+## 1. A decision and canonical hash validation
 
 A approved the following exact environment in `docs/DAY1_GATE_STATUS.md` and
 `requirements-verilayer.txt`: CPython 3.12.10, `pytest==8.3.5`,
@@ -14,15 +13,13 @@ A approved the following exact environment in `docs/DAY1_GATE_STATUS.md` and
 `jsonschema==4.26.0`. A also accepted the D Code/TestResult/Evidence profile as
 `ADDITIVE_ONLY` in `docs/contract-change-log.md`.
 
-However, the approved-input SHA-256 recorded by A is
-`f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472`, while the
-raw bytes of the currently checked-out repository-relative
-`requirements-verilayer.txt` hash to
-`464c4c0f6b38397fdb33e130fc8d0fbb385a0de607b7192af40c9acf99e76e03`.
-
-D must not guess which input A intended. A must either correct the recorded hash or
-publish the intended approved file before D installs packages or treats this
-environment as a lock.
+The approved-input SHA-256 recorded by A is
+`f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472`. It matches
+the raw LF bytes of the tracked Git blob
+`origin/verilayer/a-contract-integration:vibe coding/requirements-verilayer.txt`.
+This Windows checkout has `core.autocrlf=true`; its CRLF-transformed working file
+hashes to `464c4c0f6b38397fdb33e130fc8d0fbb385a0de607b7192af40c9acf99e76e03`.
+The latter is an EOL-observation value, not a replacement approved input hash.
 
 The relevant Artifact Contract rule is fail-closed: an unavailable or unverifiable
 environment is an `ERROR`, not a `FAIL` or a successful Coding result. This proposal
@@ -62,7 +59,7 @@ evidence only; they do not enter S1, model context, public tests, or C0--C5 data
 
 | Field | Proposed value until approval |
 |---|---|
-| `environment_id` | `verilayer-py312-v1` (blocked until requirements hash is reconciled) |
+| `environment_id` | `verilayer-py312-v1` |
 | Python | CPython 3.12.10 (approved) |
 | pytest | `8.3.5` (approved) |
 | FastAPI | `0.115.12` (approved) |
@@ -74,23 +71,23 @@ evidence only; they do not enter S1, model context, public tests, or C0--C5 data
 | Test invocation | `.venv\Scripts\python.exe -m pytest -q tests/test_contracts.py tests/test_module_runner.py tests/test_root_workflow.py` |
 | Timeout | 120 seconds per public pytest invocation |
 
-## 5. Post-reconciliation procedure (not yet executed)
+## 5. Installation procedure and current result
 
-1. Confirm the reconciled `requirements-verilayer.txt` SHA-256 and record A's
-   resolution.
-2. Use exactly `vibe coding/.venv/`; it is already ignored by Git.
-3. Install only the A-approved exact package list from the A-approved source.
+1. Confirm the canonical Git blob hash and record the Windows EOL observation.
+2. Use exactly `vibe coding/.venv/`; it is ignored by Git.
+3. Install only the A-approved exact package list from the approved source.
 4. Capture interpreter identity, platform, `pip freeze --all`, package-list hash, and
    install command provenance without credentials.
-5. Run the required pytest baseline. Only exit `0` with all three files collected
-   permits the label “pytest 27-test baseline.”
+5. Run the required pytest baseline. Only exit `0` with all three root files
+   collected permits the label “pytest 27-test baseline.”
 6. Preserve command, exit code, stdout, stderr, and duration as environment
-   evidence. A missing package, collection error, or nonzero exit remains `ERROR`.
+   evidence. A missing suite path, collection error, or nonzero exit remains `ERROR`.
 
 ## 6. Current gates and non-authorizations
 
-- A accepted D's Code/TestResult/Evidence profile, but the environment input hash
-  mismatch still blocks installation, pytest, and executor skeleton work.
+- A accepted D's Code/TestResult/Evidence profile. The 27-test baseline is now
+  PASS, but the specified full Gate command is still an `ENVIRONMENT_ERROR` until A
+  supplies or corrects the missing `tests/integration` target.
 - C's strict backend is currently `ERROR` because the public package omits
   `mock_framework.models`; this does not become a mock `PASS`, Leaf `STOP_LAYERING`,
   or Coding input.
