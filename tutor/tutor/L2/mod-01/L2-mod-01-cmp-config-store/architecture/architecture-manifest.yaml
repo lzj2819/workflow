@@ -1,0 +1,102 @@
+schema_version: "1.0"
+package_type: recursive_child_architecture
+current_node:
+  name: CMP-CONFIG-STORE
+  level: L2
+  level_label: "L2 component refinement"
+  target_node_id: CMP-CONFIG-STORE
+  parent_node_id: MOD-01
+  responsibility: "PluginConfig 的本地持久化、读取、保存校验、完整性标记与有效配置保留"
+  exclusions:
+    - "不发起网络调用"
+    - "不执行材料收集、对话导出或上传"
+    - "不承担姓名/小组归属校验"
+    - "不改变父层 IC-M01-02、IC-M01-05 的公共语义"
+    - "不创建独立服务、数据库、消息总线或部署单元"
+
+inputs:
+  mode: new
+  current_prd: "C:__PROVENANCE_PATH_REMOVED__"
+  parent_architecture: "C:__PROVENANCE_PATH_REMOVED__"
+  parent_prd: null
+  ancestor_architectures: []
+  output_dir: "C:__PROVENANCE_PATH_REMOVED__"
+
+parent_binding:
+  parent_package_type: recursive_child_package
+  parent_node_id: MOD-01
+  target_node_id: CMP-CONFIG-STORE
+  node_match_evidence:
+    - "L1/02-architecture-decomposition.md §2 child registry row CMP-CONFIG-STORE"
+    - "L1/child-handoff.md §2 row CMP-CONFIG-STORE"
+    - "L1/architecture-manifest.yaml target node registry includes CMP-CONFIG-STORE"
+  responsibility_and_exclusions: "L1/02-architecture-decomposition.md §2 row CMP-CONFIG-STORE"
+  state_and_data_ownership:
+    - "ST-01 PluginConfig owned solely by CMP-CONFIG-STORE"
+    - "L1/03-state-and-data.md §1 ST-01"
+  provided_and_consumed_contracts:
+    - "IC-M01-02 configuration port; L1/04-contracts-and-runtime.md §2"
+    - "IC-M01-05 status presentation port, ConfigView portion; L1/04-contracts-and-runtime.md §5"
+  direct_boundaries:
+    - "CMP-INTENT-PARSER, CMP-DIALOGUE-COLLECTOR, CMP-MATERIAL-COLLECTOR, CMP-UPLOAD-CLIENT read configuration only"
+    - "CMP-STATUS-PRESENTER consumes derived ConfigView only"
+    - "Local plugin persistence and local filesystem are inherited internal/external boundaries"
+  relevant_flows:
+    - "L1/04-contracts-and-runtime.md R3 configuration save"
+    - "L1/04-contracts-and-runtime.md IC-M01-02 realization"
+  inherited_decisions_and_constraints:
+    - "KD-003 HTTPS applies to network consumers; this component performs no network call"
+    - "KD-005 invite_code is read by upload flow but remains local configuration data"
+    - "A-007 plugin-local persistence mechanism remains implementation detail"
+    - "DU-1 student-plugin local runtime boundary"
+  delegated_and_unresolved_items:
+    - "Concrete serialization and atomic replacement primitive remain next-level implementation detail"
+  boundary_fingerprint:
+    - "CMP-CONFIG-STORE"
+    - "ST-01"
+    - "IC-M01-02"
+    - "IC-M01-05 ConfigView"
+    - "REQ-D002 / REQ-DD002"
+    - "D-AC-REQ-002-01"
+    - "KD-005"
+    - "A-007"
+    - "DU-1"
+
+status: leaf_ready
+resolved_input_inventory:
+  - "current_prd exists and was read: prd.md"
+  - "parent architecture exists and was read: L1-mod-01"
+  - "target node matched uniquely: CMP-CONFIG-STORE"
+  - "output directory existed but was empty before generation"
+
+generated_artifacts:
+  - architecture-manifest.yaml
+  - 01-design-context.md
+  - 02-architecture-decomposition.md
+  - 03-state-and-data.md
+  - 04-contracts-and-runtime.md
+  - 05-local-decisions.md
+  - child-handoff.md
+
+validation:
+  method: "逐项核对当前 PRD、L1 选中节点边界、父契约、状态所有权、稳定 ID 追踪和交接清单"
+  checks:
+    - { check: "四项必需输入已解析且目标节点唯一匹配", result: pass }
+    - { check: "输出目录写入前为空，未覆盖既有架构包", result: pass }
+    - { check: "四个 L2 child_id 稳定、排序且均有需求/父层追踪", result: pass }
+    - { check: "ST-01 仍由 CMP-CS-STATE-STORE 单一持有，未转移给兄弟节点", result: pass }
+    - { check: "IC-M01-02 与 IC-M01-05 外部语义、字段、错误和版本约束未改变", result: pass }
+    - { check: "未新增父层服务、数据库、消息总线、公共运行时或部署边界", result: pass }
+    - { check: "本层决策队列无遗留 decide_now 或 return_to_parent", result: pass }
+    - { check: "child-handoff.md 列出实际输入、输出、验证结果和下一层 target_node_id", result: pass }
+
+incomplete_items:
+  - "具体序列化格式、文件锁实现和原子替换 API 留给下一级详细设计；不阻塞当前架构交接"
+blocking_impact: "无；当前包可进入一次 Human Gate"
+
+leaf_gate_override:
+  decision: STOP_LAYERING
+  status: leaf_ready
+  authority: product_owner
+  rationale: "?????? L2 ??????????????? vibe coding?????????????"
+  no_further_layering: true

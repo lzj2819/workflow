@@ -1,0 +1,86 @@
+# Architecture Manifest — L2 SI-CORE
+# 由 recursive-architecture-design 生成；mode: new
+
+package:
+  node_name: submission-core
+  layer: L2
+  target_node_id: SI-CORE
+  parent_node_id: MOD-02
+  parent_node_name: submission-intake
+  responsibility: >
+    在 MOD-02 边界内拥有 Submission 聚合的唯一领域写入口；维护提交生命周期状态机、
+    材料清单、完整性报告与缺失项标记；在单一本地事务中提交状态、清单、报告和父层
+    Outbox 写入；为 CT-002 提供提交查询，并承接评分回写与清除回写。
+  exclusions:
+    - 不处理 HTTP、认证、端点路由或 30 秒同步编排（SI-API）。
+    - 不拥有 UploadSession、分片、断点续传或暂存材料文件（SI-XFER/SI-STORE）。
+    - 不操作文件系统、不决定材料清除范围、不计算保留到期时间（SI-STORE/SI-PURGE/MOD-05）。
+    - 不直接向 MOD-04 或 MOD-05 投递事件；仅通过 SI-RELAY 的父层 Outbox 契约写入。
+    - 不执行评分、不落地评分依据、建议或原始评分内容（MOD-04/MOD-05）。
+    - 不改变父层公开契约、状态值域、数据所有权、部署单元或技术平台。
+
+inputs:
+  current_prd: "prd/L2-PRD/mod-02/L2-mod-02-si-core/prd.md"
+  parent_architecture: "architecture/L1/L1-mod-02"
+  parent_prd: null
+  parent_prd_read: false
+  parent_prd_read_reason: "L1 包已提供 SI-CORE 的需求、状态、契约、流程和决策追踪。"
+  ancestor_architectures: []
+  output_dir: "architecture/L2/mod-02/L2-mod-02-si-core"
+  mode: new
+  existing_architecture: null
+  human_constraints: null
+
+resolved_inputs:
+  current_prd: "C:__PROVENANCE_PATH_REMOVED__"
+  parent_architecture: "C:__PROVENANCE_PATH_REMOVED__"
+  output_dir: "C:__PROVENANCE_PATH_REMOVED__"
+
+parent:
+  parent_package_type: recursive-child-package
+  parent_node_id: MOD-02
+  parent_node_name: submission-intake
+  node_match_evidence:
+    source: "architecture/L1/L1-mod-02/child-handoff.md"
+    location: "下一层 target_node_id 清单（直接 child_id）"
+    matched_row: "| SI-CORE | submission-core 提交聚合核心 | Submission 聚合、状态机、完整性报告、单事务持久化 |"
+    match_count: 1
+    cross_check:
+      - "architecture/L1/L1-mod-02/architecture-manifest.yaml children contains SI-CORE exactly once"
+      - "architecture/L1/L1-mod-02/02-architecture-decomposition.md SI-CORE row owns ST-01"
+      - "architecture/L1/L1-mod-02/04-contracts-and-runtime.md IC-SI-04 owner is SI-CORE"
+  selected_node_identity:
+    child_id: SI-CORE
+    display_name: submission-core
+    parent_target_node_id: MOD-02
+
+boundary_fingerprint:
+  responsibility:
+    - "L1 architecture-manifest.yaml package.responsibility"
+    - "L1 02-architecture-decomposition.md SI-CORE direct-child row"
+  ownership:
+    - "ST-01 Submission owned by SI-CORE"
+    - "Submission aggregate invariants INV-1..INV-5"
+    - "MaterialFile and CourseQuotaUsage remain owned by SI-STORE"
+  contracts:
+    - "IC-SI-04 submission aggregate port"
+    - "IC-SI-05 Outbox relay port as the parent transaction participant"
+    - "CT-001, CT-002, CT-003, CT-004, CT-005, CT-006, CT-012, CT-014"
+  flows:
+    - "FLOW-001, FLOW-002, FLOW-003, FLOW-004, FLOW-006, FLOW-008, FLOW-010, FLOW-012"
+    - "L1 RF-01 success, RF-02 failure/recovery, RF-03 retention purge"
+  decisions:
+    - "KD-002, KD-003, KD-004, KD-005 inherited"
+    - "LCD-002 upload_failed CT-006 timing inherited-fixed"
+    - "LCD-003 CT-004 task_persisted acknowledgement before processing inherited-fixed"
+  deployment:
+    - "DU-2 course-app; in-process component; no independent deployment"
+
+children: []  # L2 leaf override: no L3/L4 decomposition
+status: leaf_ready
+leaf_gate_override:
+  decision: STOP_LAYERING
+  status: leaf_ready
+  authority: product_owner
+  rationale: "?????? L2 ??????????????? vibe coding?????????????"
+  no_further_layering: true

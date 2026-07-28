@@ -1,0 +1,66 @@
+{
+  "contract_id": "CT-007",
+  "title": "教师课程数据查询",
+  "contract_type": "api",
+  "direction": "sync_api_query",
+  "provider": "MOD-05",
+  "consumer": "教师浏览器",
+  "endpoint": { "method": "GET", "path": "/api/v1/teacher/courses/...", "notes": "视图族：课程列表/小组列表/学生详情/提交详情/删除批次，按视图层级使用定位参数" },
+  "sync_async": "sync",
+  "versioning": "/api/v1 路径版本",
+  "idempotency": "只读，天然幂等",
+  "timeout_retry": "无权课程 → 403 并记录 AccessDeniedLogged；查询超时 → 前端重试",
+  "error_codes": ["AUTH_INVALID", "FORBIDDEN"],
+  "publishes_events": [],
+  "side_effects": "None; read-only",
+  "source": { "doc": "tutor/L0-root/architecture/04-interface-contracts.md", "sha256": "4599918536e46ca90f566919dc3e1e9f42c59d6da034d771ca44a98bae3efb9f" },
+  "schemas": {
+    "request": {
+      "type": "object",
+      "required": ["teacher_session"],
+      "properties": {
+        "teacher_session": { "type": "string", "description": "教师账号会话（Bearer/会话凭证）" },
+        "course_id": { "type": "string" },
+        "group_id": { "type": "string" },
+        "student_id": { "type": "string" },
+        "submission_id": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "description": "视图族出参超集，按视图层级取用；具体端点拆分由 L15 详细设计承载",
+      "properties": {
+        "courses": { "type": "array", "items": { "type": "object" } },
+        "groups": { "type": "array", "items": { "type": "object" } },
+        "students": { "type": "array", "items": { "type": "object" } },
+        "submissions": { "type": "array", "items": { "type": "object" } },
+        "material_refs": { "type": "array", "items": { "type": "object" } },
+        "status": { "type": "string", "enum": ["upload_failed", "rejected", "received", "processing", "scored", "scoring_failed"] },
+        "original_grade": { "type": "string", "enum": ["A", "B", "C", "D", "E"] },
+        "dimension_rationales": { "type": "array", "items": { "type": "object" } },
+        "teacher_suggestions": { "type": "array", "items": { "type": "string" } },
+        "annotations": { "type": "array", "items": { "type": "object", "required": ["text", "operator", "updated_at"], "properties": { "text": { "type": "string" }, "operator": { "type": "string" }, "updated_at": { "type": "string", "format": "date-time" } } } },
+        "final_grade": { "type": "string", "enum": ["A", "B", "C", "D", "E"] },
+        "failure_reason": { "type": "string", "description": "scoring_failed 时返回" },
+        "retry_record": { "type": "object", "description": "scoring_failed 时返回" },
+        "deletion_batches": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["batch_id", "retention_due_at", "scope", "batch_status", "exclusions"],
+            "properties": {
+              "batch_id": { "type": "string" },
+              "retention_due_at": { "type": "string", "format": "date-time" },
+              "scope": { "type": "string" },
+              "batch_status": { "type": "string" },
+              "exclusions": { "type": "array", "items": { "type": "string" } }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

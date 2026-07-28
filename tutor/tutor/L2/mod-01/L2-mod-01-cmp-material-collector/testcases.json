@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-01-cmp-material-collector",
+  "project_id": "vibe-coding-course",
+  "node_id": "CMP-MATERIAL-COLLECTOR",
+  "parent_node_id": "CMP-MATERIAL-COLLECTOR",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD004"
+  ],
+  "artifact_id": "testcases:CMP-MATERIAL-COLLECTOR:leaf-gate-l2-l2-mod-01-cmp-material-collector",
+  "artifact_type": "testcases",
+  "testcases": [
+    {
+      "id": "TC-001",
+      "name": "服务器保存材料并执行课程邀请码、姓名和小组校验",
+      "requirement_ids": [
+        "REQ-DD004"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-002",
+      "name": "提交详情可列出对话、代码、截图、结果及缺失项",
+      "requirement_ids": [
+        "REQ-DD004"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-003",
+      "name": "校验通过后状态进入 processing",
+      "requirement_ids": [
+        "REQ-DD004"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-004",
+      "name": "校验失败时状态为 rejected 且记录原因",
+      "requirement_ids": [
+        "REQ-DD004"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-005",
+      "name": "提交进入评分并明确标记该材料缺失",
+      "requirement_ids": [
+        "REQ-DD004"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-006",
+      "name": "提交状态为 upload_failed，教师端可见失败原因",
+      "requirement_ids": [
+        "REQ-DD004"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    }
+  ]
+}

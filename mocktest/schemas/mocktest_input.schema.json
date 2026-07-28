@@ -1,0 +1,158 @@
+{
+  "$defs": {
+    "FormalArtifactRef": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {
+          "minLength": 1,
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "artifact_type": {
+          "enum": [
+            "markdown_directory",
+            "markdown_file",
+            "architecture_json",
+            "gherkin_file",
+            "gherkin_directory",
+            "testcases_json"
+          ],
+          "title": "Artifact Type",
+          "type": "string"
+        },
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "schema_version": {
+          "minLength": 1,
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "run_id": {
+          "minLength": 1,
+          "title": "Run Id",
+          "type": "string"
+        },
+        "project_id": {
+          "minLength": 1,
+          "title": "Project Id",
+          "type": "string"
+        },
+        "node_id": {
+          "minLength": 1,
+          "title": "Node Id",
+          "type": "string"
+        },
+        "source_prd_id": {
+          "minLength": 1,
+          "title": "Source Prd Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "artifact_type",
+        "path",
+        "schema_version",
+        "run_id",
+        "project_id",
+        "node_id",
+        "source_prd_id"
+      ],
+      "title": "FormalArtifactRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "mocktest-input/v1",
+      "default": "mocktest-input/v1",
+      "enum": [
+        "mocktest-input/v1"
+      ],
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "run_id": {
+      "minLength": 1,
+      "title": "Run Id",
+      "type": "string"
+    },
+    "project_id": {
+      "minLength": 1,
+      "title": "Project Id",
+      "type": "string"
+    },
+    "node_id": {
+      "minLength": 1,
+      "title": "Node Id",
+      "type": "string"
+    },
+    "parent_node_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Parent Node Id"
+    },
+    "source_prd_id": {
+      "minLength": 1,
+      "title": "Source Prd Id",
+      "type": "string"
+    },
+    "created_at": {
+      "minLength": 1,
+      "title": "Created At",
+      "type": "string"
+    },
+    "generator": {
+      "minLength": 1,
+      "title": "Generator",
+      "type": "string"
+    },
+    "status": {
+      "const": "COMPLETED",
+      "default": "COMPLETED",
+      "enum": [
+        "COMPLETED"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "mode": {
+      "default": "strict",
+      "enum": [
+        "strict",
+        "validate-only"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "architecture": {
+      "$ref": "#/$defs/FormalArtifactRef"
+    },
+    "testcases": {
+      "$ref": "#/$defs/FormalArtifactRef"
+    }
+  },
+  "required": [
+    "run_id",
+    "project_id",
+    "node_id",
+    "source_prd_id",
+    "created_at",
+    "generator",
+    "architecture",
+    "testcases"
+  ],
+  "title": "FormalInputManifest",
+  "type": "object"
+}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}展示视图 · {{ vm.presentation_id }}{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>展示视图 {{ vm.presentation_id }}</h1>
+  <p class="missing-value">快照视图，不随源数据实时更新</p>
+</div>
+{% for block in vm.blocks %}
+<div class="block" data-group="{{ block.group_id }}">
+  <h2>小组 {{ block.group_id }}</h2>
+
+  <h3>项目结果</h3>
+  {% if block.project_result %}
+  <ul>
+    {% for key, value in block.project_result.items() %}
+    <li>{{ key }}：{{ value }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="missing-value">项目结果缺失</p>
+  {% endif %}
+
+  <h3>过程摘要</h3>
+  <p>{{ block.process_summary or '缺失' }}</p>
+
+  <h3>评分</h3>
+  {% if block.grades %}
+  <ul>
+    {% for g in block.grades %}
+    <li>
+      {{ g.student_name or g.student_id or g.submission_id or '提交' }}：
+      原始 {{ g.original_grade or '缺失' }} / 最终 {{ g.final_grade or '未调整' }}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="missing-value">评分缺失</p>
+  {% endif %}
+
+  <h3>教师批注</h3>
+  {% if block.annotations %}
+  <ul>
+    {% for a in block.annotations %}
+    <li>{{ a.text }}{% if a.operator %}（{{ a.operator }}，{{ a.updated_at }}）{% endif %}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="missing-value">暂无批注</p>
+  {% endif %}
+
+  <h3>缺失标记</h3>
+  {% if block.missing_marks %}
+  <p>
+    {% for mark in block.missing_marks %}
+    <span class="missing-mark">缺失：{{ mark }}</span>
+    {% endfor %}
+  </p>
+  {% else %}
+  <p>无缺失</p>
+  {% endif %}
+</div>
+{% else %}
+<div class="card"><p class="missing-value">展示视图为空</p></div>
+{% endfor %}
+{% endblock %}

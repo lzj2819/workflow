@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "node-tree.schema.json",
+  "type": "object",
+  "required": ["schema_version", "run_id", "root_node_id", "nodes"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "root_node_id": {"type": "string", "minLength": 1},
+    "nodes": {"type": "object", "minProperties": 1}
+  }
+}

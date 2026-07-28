@@ -1,0 +1,4 @@
+interface:
+  display_name: "DDD 到系统架构完整流程"
+  short_description: "从 PRD 完成 DDD 战略建模，并将 DDD 产物映射为系统架构交付物。"
+  default_prompt: "基于 PRD 先完成 DDD 战略建模，再将 DDD 产物映射为系统架构文档。"

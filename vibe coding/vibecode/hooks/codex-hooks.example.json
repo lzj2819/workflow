@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python vibecode/scripts/vibecode.py hook-guard",
+            "commandWindows": "python vibecode\\scripts\\vibecode.py hook-guard",
+            "statusMessage": "Checking layered vibe coding path guard",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

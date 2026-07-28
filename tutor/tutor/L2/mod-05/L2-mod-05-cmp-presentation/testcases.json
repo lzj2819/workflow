@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-05-cmp-presentation",
+  "project_id": "vibe-coding-course",
+  "node_id": "CMP-PRESENTATION",
+  "parent_node_id": "MOD-05",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD002"
+  ],
+  "artifact_id": "testcases:CMP-PRESENTATION:leaf-gate-l2-l2-mod-05-cmp-presentation",
+  "artifact_type": "testcases",
+  "testcases": [
+    {
+      "id": "TC-001",
+      "name": "生成展示视图，包含项目结果、过程摘要、评分和教师批注",
+      "requirement_ids": [
+        "REQ-DD002"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-002",
+      "name": "展示视图中的小组与所选小组一致",
+      "requirement_ids": [
+        "REQ-DD002"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-003",
+      "name": "视图可在教师网页端打开",
+      "requirement_ids": [
+        "REQ-DD002"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-004",
+      "name": "展示缺失标记，不隐藏缺口",
+      "requirement_ids": [
+        "REQ-DD002"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-005",
+      "name": "阻止生成并说明原因",
+      "requirement_ids": [
+        "REQ-DD002"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    }
+  ]
+}

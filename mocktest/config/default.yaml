@@ -1,0 +1,81 @@
+framework:
+  name: "Mock测试框架"
+  version: "0.1.0"
+
+loader:
+  gherkin_parser: "official"
+  mapping_confidence_threshold: "medium"
+  gap_detector:
+    non_component_words: []
+    chinese_mode_threshold: 0.5
+
+simulator:
+  latency_model:
+    components:
+      AuthController:
+        base_ms: 2
+        per_kb_ms: 0.5
+      LoginService:
+        base_ms: 10
+        per_user_ms: 0.1
+    network_overhead:
+      intra_service_ms: 2
+      inter_service_ms: 5
+    concurrency_penalty:
+      per_100_concurrent_ms: 3
+  token_budget: 50000
+
+validator:
+  dimensions:
+    - structure
+    - flow
+    - state
+    - contract
+    - performance
+  token_budget: 50000
+
+logging:
+  level: INFO
+  format: structured
+  output: console
+
+llm:
+  api_key: "${MOCKTEST_API_KEY}"
+  base_url: https://api.qingyuntop.top/v1
+
+  simulator:
+    provider: "openai"
+    model: "gpt-5.4"
+    token_budget: 50000
+    timeout_seconds: 60
+    max_retries: 3
+    retry_backoff_seconds: 1.0
+
+  validator:
+    provider: "openai"
+    model: "gpt-5.4-mini"
+    token_budget: 50000
+    timeout_seconds: 60
+    max_retries: 3
+    retry_backoff_seconds: 1.0
+
+pbt:
+  max_examples: 100
+  default_mode: "both"
+  timeout_seconds: 30
+  report_format: "markdown"
+  layer_aware: true
+  pbt_mode: auto
+
+skill:
+  max_modify_rounds: 3
+  auto_modify: true
+  pause_on_high_severity: false
+  show_reasoning: true
+  show_modification_diff: true
+  enable_cross_layer_check: true
+  enable_modification_history: true
+  max_history_versions: 10
+  cache_file_path: ".claude/skills/validate-arch/.tmp/prompt_cache.json"
+  cache_ttl_seconds: 86400
+  batch_size: 1

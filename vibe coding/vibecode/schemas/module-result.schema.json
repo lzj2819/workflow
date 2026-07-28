@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "module-result.schema.json",
+  "title": "Workflow Module Result",
+  "allOf": [
+    {"$ref": "common-envelope.schema.json"},
+    {
+      "type": "object",
+      "required": [
+        "module",
+        "input_hash",
+        "output_artifacts",
+        "duration_ms",
+        "error_type",
+        "error_message"
+      ],
+      "properties": {
+        "module": {"type": "string", "minLength": 1},
+        "status": {"enum": ["PASS", "FAIL", "ERROR"]},
+        "input_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "output_artifacts": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "output_hashes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "duration_ms": {"type": "number", "minimum": 0},
+        "error_type": {"type": ["string", "null"]},
+        "error_message": {"type": ["string", "null"]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "PASS"}}},
+          "then": {"required": ["output_hashes"]}
+        }
+      ]
+    }
+  ]
+}

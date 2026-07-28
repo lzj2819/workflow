@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}删除批次 · {{ batch.batch_id }}{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>删除批次 {{ batch.batch_id }}</h1>
+  <table>
+    <tbody>
+      <tr><th>批次状态</th><td><span class="badge">{{ batch.batch_status }}</span></td></tr>
+      <tr><th>保留到期时间</th><td>{{ batch.retention_due_at }}</td></tr>
+      <tr><th>待删除范围</th><td>{{ batch.scope }}</td></tr>
+      <tr>
+        <th>排除标记</th>
+        <td>
+          {% for e in batch.exclusions %}<span class="missing-mark">保留 {{ e }}</span>{% endfor %}
+          {% if not batch.exclusions %}<span class="missing-value">无</span>{% endif %}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="card">
+  <h2>确认删除（高风险操作，需二次确认）</h2>
+  <p>确认后触发异步删除执行；同一批次重复确认返回同一状态（CT-011）。</p>
+  <form class="inline" method="post"
+        action="/teacher/deletion-batches/{{ batch.batch_id }}/confirm"
+        data-lock data-confirm="确认执行删除批次 {{ batch.batch_id }}？该操作不可撤销。">
+    <label for="exclusions">追加排除标记（保留的记录，逗号分隔，可选）</label>
+    <input type="text" id="exclusions" name="exclusions">
+    <p><button type="submit" class="danger">确认删除</button></p>
+  </form>
+</div>
+{% endblock %}

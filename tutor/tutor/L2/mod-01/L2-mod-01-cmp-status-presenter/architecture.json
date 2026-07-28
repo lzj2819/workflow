@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-01-cmp-status-presenter",
+  "project_id": "vibe-coding-course",
+  "node_id": "CMP-STATUS-PRESENTER",
+  "parent_node_id": "MOD-01",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD001",
+    "REQ-DD002"
+  ],
+  "artifact_id": "architecture:CMP-STATUS-PRESENTER:leaf-gate-l2-l2-mod-01-cmp-status-presenter",
+  "artifact_type": "architecture",
+  "components": [
+    "CMP-STATUS-PRESENTER",
+    "CMP-PENDING-QUEUE",
+    "CMP-CONFIG-STORE",
+    "CMP-UPLOAD-CLIENT",
+    "CMP-INTENT-PARSER",
+    "CMP-SP-RENDER-ADAPTER",
+    "CMP-SP-CONFIG-VIEW-PROJECTOR",
+    "CMP-SP-STATUS-MESSAGE-MAPPER",
+    "CMP-SP-TASK-VIEW-PROJECTOR"
+  ],
+  "interfaces": [
+    "IC-M01-05",
+    "FLOW-M01-001",
+    "FLOW-M01-002",
+    "FLOW-M01-003",
+    "IC-L2-SP-01",
+    "CT-001",
+    "CT-002",
+    "IC-L2-SP-03",
+    "IC-L2-SP-02"
+  ],
+  "dependencies": [
+    "CMP-PENDING-QUEUE",
+    "CMP-CONFIG-STORE",
+    "CMP-UPLOAD-CLIENT",
+    "CMP-INTENT-PARSER",
+    "CMP-SP-RENDER-ADAPTER",
+    "CMP-SP-CONFIG-VIEW-PROJECTOR",
+    "CMP-SP-STATUS-MESSAGE-MAPPER",
+    "CMP-SP-TASK-VIEW-PROJECTOR"
+  ],
+  "depth": 2,
+  "complexity": 26,
+  "risks": [],
+  "responsibility": "CMP-STATUS-PRESENTER is a terminal L2 implementation boundary.",
+  "children": []
+}

@@ -1,0 +1,119 @@
+# Architecture Manifest — L2 / CMP-STATUS-PRESENTER
+manifest_version: "1.0"
+
+package:
+  node_name: CMP-STATUS-PRESENTER
+  level: L2
+  level_label: component
+  target_node_id: CMP-STATUS-PRESENTER
+  parent_node_id: MOD-01
+  responsibility: >-
+    将提交任务状态、缺失字段、配置完整性、目录错误、提交编号、接收确认和失败原因
+    转换为学生可理解的只读展示结果；不持有业务状态，不执行网络调用、上传、重试或归属校验。
+  exclusions:
+    - 不拥有 ST-01 PluginConfig 或 ST-04 PendingTask；只读其父组件提供的视图数据
+    - 不改变 IC-M01-05 的字段、所有者、错误语义或版本策略
+    - 不复制或预判 MOD-02 的 Submission 状态机和归属校验结论
+    - 不执行 CT-001、CT-002、auth/token、上传、重试或恢复调度
+    - 不创建独立服务、容器、数据库、消息通道或部署单元
+
+inputs:
+  parent_architecture: architecture/L1/L1-mod-01
+  target_node_id: CMP-STATUS-PRESENTER
+  current_prd: prd/L2-PRD/mod-01/L2-mod-01-cmp-status-presenter/prd.md
+  parent_prd: null
+  output_dir: architecture/L2/mod-01/L2-mod-01-cmp-status-presenter
+  mode: new
+
+parent_package_type: recursive_child_package
+parent_package_detection: >-
+  父包根存在 architecture-manifest.yaml，按 parent-package-adapter 规则 1 识别为递归子架构包。
+
+node_match_evidence:
+  - source: architecture/L1/L1-mod-01/child-handoff.md §2
+    match: "| CMP-STATUS-PRESENTER | 学生侧状态与错误展示 |"
+    kind: exact_unique
+  - source: architecture/L1/L1-mod-01/04-contracts-and-runtime.md §3
+    match: "IC-M01-05 consumer: CMP-STATUS-PRESENTER; next_hop: CMP-STATUS-PRESENTER"
+    kind: exact_unique
+  - source: architecture/L1/L1-mod-01/03-state-and-data.md §3.2
+    match: "STATUS-PRESENTER 只读 ST-01 与 ST-04；纯派生展示，不持有状态"
+    kind: cross_confirmation
+  - source: prd/L2-PRD/mod-01/L2-mod-01-cmp-status-presenter/prd.md frontmatter
+    match: "module_name: CMP-STATUS-PRESENTER; requirement_ids: REQ-DD001, REQ-DD002"
+    kind: cross_confirmation
+
+boundary_fingerprint:
+  parent_artifacts:
+    - "architecture-manifest.yaml：MOD-01 身份、DU-1 部署、无服务端所有权与排除项"
+    - "01-design-context.md §2.3/§2.5：IC-M01-05、ST-01、ST-04、学生侧展示边界"
+    - "02-architecture-decomposition.md：CMP-STATUS-PRESENTER 子节点职责与局部协作位置"
+    - "03-state-and-data.md §1/§3.2：状态所有权、只读派生展示与本地清理边界"
+    - "04-contracts-and-runtime.md §3/§4：IC-M01-05、FLOW-M01-001~003 与错误呈现语义"
+    - "05-local-decisions.md §4：KD-003、KD-004、KD-005、A-007 与 DU-1 继承决策"
+    - "child-handoff.md §2~§6：当前组件的追踪、契约、状态与未决展示机制"
+  contracts:
+    - "IC-M01-05（CMP-PENDING-QUEUE/CMP-CONFIG-STORE → CMP-STATUS-PRESENTER，read-only）"
+  decisions: [KD-003, KD-004, KD-005, A-007, LCD-001, LCD-002, LCD-003, LCD-005]
+  ownership: "当前节点不拥有持久状态；ST-01 归 CMP-CONFIG-STORE，ST-04 归 CMP-PENDING-QUEUE"
+  deployment: "DU-1 student-plugin；继续运行在学生本机 Codex Plugin 进程内"
+
+resolved_input_inventory:
+  - path: prd/L2-PRD/mod-01/L2-mod-01-cmp-status-presenter/prd.md
+    role: current_prd
+    status: parsed
+  - path: architecture/L1/L1-mod-01/architecture-manifest.yaml
+    role: parent_manifest
+    status: parsed
+  - path: architecture/L1/L1-mod-01/01-design-context.md
+    role: parent_boundary_and_requirements
+    status: parsed
+  - path: architecture/L1/L1-mod-01/02-architecture-decomposition.md
+    role: parent_node_registry
+    status: parsed
+  - path: architecture/L1/L1-mod-01/03-state-and-data.md
+    role: parent_state_ownership
+    status: parsed
+  - path: architecture/L1/L1-mod-01/04-contracts-and-runtime.md
+    role: parent_contracts_and_flows
+    status: parsed
+  - path: architecture/L1/L1-mod-01/05-local-decisions.md
+    role: parent_decisions
+    status: parsed
+  - path: architecture/L1/L1-mod-01/child-handoff.md
+    role: parent_handoff_and_target_match
+    status: parsed
+
+status: leaf_ready
+outputs:
+  - architecture-manifest.yaml
+  - 01-design-context.md
+  - 02-architecture-decomposition.md
+  - 03-state-and-data.md
+  - 04-contracts-and-runtime.md
+  - 05-local-decisions.md
+  - child-handoff.md
+
+validation:
+  checks:
+    - { check: "四项输入解析且目标节点唯一匹配", result: pass }
+    - { check: "输出目录为新建目标包，未覆盖已有兄弟包", result: pass }
+    - { check: "REQ-DD001/REQ-DD002 与 D-AC-REQ-001-01/D-AC-REQ-002-01 全部追踪", result: pass }
+    - { check: "子节点均有稳定 child_id、职责、排除项、状态、依赖和需求/父层追踪", result: pass }
+    - { check: "IC-M01-05 的 owner、consumer、字段、只读副作用和错误语义保持不变", result: pass }
+    - { check: "ST-01/ST-04 所有权未转移，当前节点无持久化状态", result: pass }
+    - { check: "关键流程覆盖成功、失败/恢复和配置生命周期", result: pass }
+    - { check: "无 return_to_parent；局部未决项均已委托或标记为实现细节", result: pass }
+    - { check: "七个架构文件实际生成并可互相追踪", result: pass }
+  method: "逐项对照 L1 父包原文、当前 PRD、子节点注册表、契约与状态清单"
+
+incomplete_items:
+  - "宿主 Codex 具体渲染/交互 API 未由父层或当前 PRD规定，委托 CMP-SP-RENDER-ADAPTER 的下一层细化"
+blocking_impact: "无阻塞项；当前包内部一致，可进入一次 Human Gate"
+
+leaf_gate_override:
+  decision: STOP_LAYERING
+  status: leaf_ready
+  authority: product_owner
+  rationale: "?????? L2 ??????????????? vibe coding?????????????"
+  no_further_layering: true

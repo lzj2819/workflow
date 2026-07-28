@@ -1,0 +1,484 @@
+{
+  "$defs": {
+    "ArtifactRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "artifact_type": {
+          "title": "Artifact Type",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "sha256": {
+          "default": "",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "schema_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Schema Version"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "artifact_type",
+        "path"
+      ],
+      "title": "ArtifactRecord",
+      "type": "object"
+    },
+    "Coverage": {
+      "additionalProperties": false,
+      "properties": {
+        "total_scenarios": {
+          "title": "Total Scenarios",
+          "type": "integer"
+        },
+        "evaluated_scenarios": {
+          "title": "Evaluated Scenarios",
+          "type": "integer"
+        },
+        "passed_scenarios": {
+          "title": "Passed Scenarios",
+          "type": "integer"
+        },
+        "failed_scenarios": {
+          "title": "Failed Scenarios",
+          "type": "integer"
+        },
+        "warning_scenarios": {
+          "title": "Warning Scenarios",
+          "type": "integer"
+        },
+        "scenario_coverage": {
+          "title": "Scenario Coverage",
+          "type": "number"
+        },
+        "requirement_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Requirement Ids",
+          "type": "array"
+        },
+        "covered_requirement_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Covered Requirement Ids",
+          "type": "array"
+        },
+        "uncovered_requirement_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Uncovered Requirement Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "total_scenarios",
+        "evaluated_scenarios",
+        "passed_scenarios",
+        "failed_scenarios",
+        "warning_scenarios",
+        "scenario_coverage"
+      ],
+      "title": "Coverage",
+      "type": "object"
+    },
+    "Finding": {
+      "additionalProperties": false,
+      "properties": {
+        "finding_id": {
+          "title": "Finding Id",
+          "type": "string"
+        },
+        "defect_type": {
+          "title": "Defect Type",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "FAIL",
+            "WARNING",
+            "ERROR"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "scenario_id": {
+          "default": "",
+          "title": "Scenario Id",
+          "type": "string"
+        },
+        "dimension": {
+          "default": "",
+          "title": "Dimension",
+          "type": "string"
+        },
+        "components": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Components",
+          "type": "array"
+        },
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        },
+        "evidence_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Refs",
+          "type": "array"
+        },
+        "requirement_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Requirement Ids",
+          "type": "array"
+        },
+        "scenario_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Scenario Ids",
+          "type": "array"
+        },
+        "component_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Component Ids",
+          "type": "array"
+        },
+        "interface_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Interface Ids",
+          "type": "array"
+        },
+        "evidence": {
+          "items": {
+            "type": "object"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "expected_behavior": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Behavior"
+        },
+        "observed_or_simulated_behavior": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Or Simulated Behavior"
+        },
+        "remediation_hint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Remediation Hint"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        }
+      },
+      "required": [
+        "finding_id",
+        "defect_type",
+        "severity",
+        "detail"
+      ],
+      "title": "Finding",
+      "type": "object"
+    },
+    "RunIdentity": {
+      "additionalProperties": false,
+      "properties": {
+        "project_id": {
+          "default": "",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "node_id": {
+          "default": "",
+          "title": "Node Id",
+          "type": "string"
+        },
+        "parent_node_id": {
+          "default": "",
+          "title": "Parent Node Id",
+          "type": "string"
+        },
+        "branch_id": {
+          "default": "",
+          "title": "Branch Id",
+          "type": "string"
+        },
+        "architecture_artifact_id": {
+          "default": "",
+          "title": "Architecture Artifact Id",
+          "type": "string"
+        },
+        "testcase_artifact_id": {
+          "default": "",
+          "title": "Testcase Artifact Id",
+          "type": "string"
+        },
+        "source_prd_id": {
+          "default": "",
+          "title": "Source Prd Id",
+          "type": "string"
+        }
+      },
+      "title": "RunIdentity",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "default": "mocktest/v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "input_fingerprint": {
+      "default": "",
+      "title": "Input Fingerprint",
+      "type": "string"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "ERROR"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "execution_status": {
+      "enum": [
+        "COMPLETED",
+        "ERROR"
+      ],
+      "title": "Execution Status",
+      "type": "string"
+    },
+    "validation_status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "NOT_RUN"
+      ],
+      "title": "Validation Status",
+      "type": "string"
+    },
+    "identity": {
+      "$ref": "#/$defs/RunIdentity"
+    },
+    "coverage": {
+      "$ref": "#/$defs/Coverage"
+    },
+    "findings": {
+      "items": {
+        "$ref": "#/$defs/Finding"
+      },
+      "title": "Findings",
+      "type": "array"
+    },
+    "defect_counts": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Defect Counts",
+      "type": "object"
+    },
+    "metrics": {
+      "title": "Metrics",
+      "type": "object"
+    },
+    "evidence_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Evidence Refs",
+      "type": "array"
+    },
+    "errors": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Errors",
+      "type": "array"
+    },
+    "project_id": {
+      "default": "",
+      "title": "Project Id",
+      "type": "string"
+    },
+    "node_id": {
+      "default": "",
+      "title": "Node Id",
+      "type": "string"
+    },
+    "parent_node_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Parent Node Id"
+    },
+    "artifact_id": {
+      "default": "",
+      "title": "Artifact Id",
+      "type": "string"
+    },
+    "artifact_type": {
+      "default": "mocktest_report",
+      "title": "Artifact Type",
+      "type": "string"
+    },
+    "generator": {
+      "default": "validate-arch",
+      "title": "Generator",
+      "type": "string"
+    },
+    "input_artifacts": {
+      "items": {
+        "$ref": "#/$defs/ArtifactRecord"
+      },
+      "title": "Input Artifacts",
+      "type": "array"
+    },
+    "requirement_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Requirement Ids",
+      "type": "array"
+    },
+    "architecture_artifact_id": {
+      "default": "",
+      "title": "Architecture Artifact Id",
+      "type": "string"
+    },
+    "testcase_artifact_id": {
+      "default": "",
+      "title": "Testcase Artifact Id",
+      "type": "string"
+    },
+    "summary": {
+      "title": "Summary",
+      "type": "object"
+    },
+    "evaluated_scenarios": {
+      "default": 0,
+      "title": "Evaluated Scenarios",
+      "type": "integer"
+    },
+    "passed_scenarios": {
+      "default": 0,
+      "title": "Passed Scenarios",
+      "type": "integer"
+    },
+    "failed_scenarios": {
+      "default": 0,
+      "title": "Failed Scenarios",
+      "type": "integer"
+    },
+    "requirement_coverage": {
+      "title": "Requirement Coverage",
+      "type": "object"
+    },
+    "scenario_coverage": {
+      "default": 0.0,
+      "title": "Scenario Coverage",
+      "type": "number"
+    },
+    "unresolved_errors": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Unresolved Errors",
+      "type": "array"
+    },
+    "execution_metadata": {
+      "title": "Execution Metadata",
+      "type": "object"
+    }
+  },
+  "required": [
+    "run_id",
+    "created_at",
+    "status",
+    "execution_status",
+    "validation_status",
+    "identity",
+    "coverage"
+  ],
+  "title": "MocktestReport",
+  "type": "object"
+}

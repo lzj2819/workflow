@@ -1,0 +1,92 @@
+manifest_version: "1.0"
+
+package:
+  node_name: CMP-DIALOGUE-COLLECTOR
+  level: L2
+  target_node_id: CMP-DIALOGUE-COLLECTOR
+  parent_node_id: CMP-DIALOGUE-COLLECTOR
+  responsibility: >-
+    在 MOD-01 学生侧插件内部，将当前作业项目相关的完整 Codex 对话从宿主 Codex
+    运行环境导出为一次性、可验证、类别为 dialogue 的提交材料快照。
+  exclusions:
+    - 不采集代码、截图或结果目录材料
+    - 不决定提交时机，不创建或推进 PendingTask
+    - 不直接访问 CT-001、CT-002 或 auth/token 网络端点
+    - 不判断邀请码、姓名、小组或课程归属，不持有服务端 Submission 状态
+    - 不新增服务、容器、消息总线、数据库或独立部署单元
+
+inputs:
+  parent_architecture: '__PROVENANCE_PATH_REMOVED__
+  target_node_id: CMP-DIALOGUE-COLLECTOR
+  current_prd: '__PROVENANCE_PATH_REMOVED__
+  parent_prd: null
+  ancestor_architectures: []
+  output_dir: '__PROVENANCE_PATH_REMOVED__
+  mode: new
+
+parent_package_type: recursive_child_package
+parent_package_detection: >-
+  父包根存在 architecture-manifest.yaml，按 parent-package-adapter 规则识别为递归子架构包。
+
+node_match_evidence:
+  - source: '__PROVENANCE_PATH_REMOVED__
+    match: "子节点注册表中 child_id=CMP-DIALOGUE-COLLECTOR"
+    kind: exact_unique_registry_match
+  - source: '__PROVENANCE_PATH_REMOVED__
+    match: "L2 可选 child_id 表中 CMP-DIALOGUE-COLLECTOR"
+    kind: exact_unique_handoff_match
+  - source: '__PROVENANCE_PATH_REMOVED__
+    match: "ST-02 对话导出物的 owner=CMP-DIALOGUE-COLLECTOR"
+    kind: parent_state_confirmation
+  - source: '__PROVENANCE_PATH_REMOVED__
+    match: "IC-M01-03 consumer 与 CT-001 material_chunks[] 来源包含 CMP-DIALOGUE-COLLECTOR"
+    kind: parent_contract_confirmation
+
+boundary_fingerprint:
+  parent_artifacts:
+    - "L1/02-architecture-decomposition.md：目标组件职责、排除项、C5 宿主 Codex ACL 边界"
+    - "L1/03-state-and-data.md：ST-02 owner、快照时机、随任务清理、本地隐私约束"
+    - "L1/04-contracts-and-runtime.md：IC-M01-02、IC-M01-03、IC-M01-04、CT-001/CT-002 映射"
+    - "L1/05-local-decisions.md：LCD-002 任务创建时快照、LCD-003 服务端权威不变"
+    - "L1/child-handoff.md：宿主导出机制委托给本节点及下一层入口"
+  contracts:
+    - "IC-M01-02（只读获取有效配置/上下文）"
+    - "IC-M01-03（PENDING-QUEUE 编排采集，返回 dialogue_artifact）"
+    - "CT-001（仅作为 material_chunks[] 中 category=dialogue 的内容来源）"
+  decisions: [KD-003, KD-004, KD-005, A-007, LCD-002, LCD-003]
+  ownership: "仅持有 MOD-01 本地 ST-02 对话导出物及本组件内部采集会话状态；不持有服务端 Submission"
+  deployment: "DU-1 student-plugin；学生本机 Codex 环境内进程组件"
+
+status: leaf_ready
+outputs:
+  - architecture-manifest.yaml
+  - 01-design-context.md
+  - 02-architecture-decomposition.md
+  - 03-state-and-data.md
+  - 04-contracts-and-runtime.md
+  - 05-local-decisions.md
+  - child-handoff.md
+
+validation:
+  checks:
+    - {check: "四项必需输入解析、父包可读、输出目录为空且无覆盖", result: pass}
+    - {check: "递归父包识别与 CMP-DIALOGUE-COLLECTOR 注册表唯一匹配", result: pass}
+    - {check: "REQ-DD003 与 D-AC-REQ-003-01 的本组件切片已分配", result: pass}
+    - {check: "所有子节点具有 child_id、职责、排除项、状态、依赖、理由与追踪", result: pass}
+    - {check: "ST-02 所有权、快照语义和父契约字段未被转移或修改", result: pass}
+    - {check: "无新增外部系统、网络出口、部署单元或兄弟节点重设计", result: pass}
+    - {check: "本地决策无未处理 decide_now 或 return_to_parent", result: pass}
+    - {check: "child_id、状态、契约、决策清单按稳定 ID 排序", result: pass}
+    - {check: "七个架构文件、输入输出清单和交接验证证据齐全", result: pass}
+  method: "逐项对照 L1 父包原文、L2 PRD、清单追踪、契约不变性与目录实际文件"
+
+incomplete_items:
+  - "宿主 Codex 环境的具体导出能力与 API 形态未由父层规定；本包只固定 ACL/端口和失败边界，具体绑定交由 CMP-DLG-HOST-ADAPTER 下一层确认"
+blocking_impact: "无当前架构阻塞；若宿主无法提供任务创建时刻的对话快照及完整性证据，必须在实现前回到父层申请边界或能力变更"
+
+leaf_gate_override:
+  decision: STOP_LAYERING
+  status: leaf_ready
+  authority: product_owner
+  rationale: "?????? L2 ??????????????? vibe coding?????????????"
+  no_further_layering: true

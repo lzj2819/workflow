@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "delivery.schema.json",
+  "title": "Completed Child Delivery",
+  "type": "object",
+  "required": [
+    "schema_version", "delivery_id", "run_id", "project_id", "node_id",
+    "parent_node_id", "status", "source", "completion_artifact_id",
+    "completion_hash", "contract_artifact_id", "contract_hash", "changed_paths",
+    "created_at", "integrated_by_batch_id"
+  ],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "delivery_id": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "project_id": {"type": "string", "minLength": 1},
+    "node_id": {"type": "string", "minLength": 1},
+    "parent_node_id": {"type": ["string", "null"]},
+    "status": {"enum": ["READY", "INTEGRATED"]},
+    "source": {"enum": ["CODING", "BACKFILL"]},
+    "completion_artifact_id": {"type": "string", "minLength": 1},
+    "completion_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "contract_artifact_id": {"type": "string", "minLength": 1},
+    "contract_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "changed_paths": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "created_at": {"type": "string", "format": "date-time"},
+    "integrated_by_batch_id": {"type": ["string", "null"]}
+  },
+  "additionalProperties": false
+}

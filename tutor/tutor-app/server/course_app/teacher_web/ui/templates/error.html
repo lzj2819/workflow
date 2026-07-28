@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}错误{% endblock %}
+{% block content %}
+<div class="error-panel">
+  <h1>操作未完成</h1>
+  <p>错误码：<strong>{{ code }}</strong></p>
+  {% if message %}<p>{{ message }}</p>{% endif %}
+  {% if batch_id %}<p><a href="/teacher/deletion-batches/{{ batch_id }}">返回批次 {{ batch_id }}</a></p>{% endif %}
+</div>
+{% endblock %}

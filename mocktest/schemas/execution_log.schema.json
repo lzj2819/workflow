@@ -1,0 +1,335 @@
+{
+  "$defs": {
+    "ArtifactRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "artifact_type": {
+          "title": "Artifact Type",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "sha256": {
+          "default": "",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "schema_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Schema Version"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "artifact_type",
+        "path"
+      ],
+      "title": "ArtifactRecord",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "default": "mocktest/v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "execution_status": {
+      "enum": [
+        "COMPLETED",
+        "ERROR"
+      ],
+      "title": "Execution Status",
+      "type": "string"
+    },
+    "started_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Started At"
+    },
+    "finished_at": {
+      "title": "Finished At",
+      "type": "string"
+    },
+    "duration_ms": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Duration Ms"
+    },
+    "model_context": {
+      "title": "Model Context",
+      "type": "object"
+    },
+    "random_seed": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Random Seed"
+    },
+    "component_calls": {
+      "default": 0,
+      "title": "Component Calls",
+      "type": "integer"
+    },
+    "validator_calls": {
+      "default": 0,
+      "title": "Validator Calls",
+      "type": "integer"
+    },
+    "retry_count": {
+      "default": 0,
+      "title": "Retry Count",
+      "type": "integer"
+    },
+    "cache_hits": {
+      "default": 0,
+      "title": "Cache Hits",
+      "type": "integer"
+    },
+    "human_interventions": {
+      "default": 0,
+      "title": "Human Interventions",
+      "type": "integer"
+    },
+    "input_hashes": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Input Hashes",
+      "type": "object"
+    },
+    "artifact_hashes": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Artifact Hashes",
+      "type": "object"
+    },
+    "events": {
+      "items": {
+        "type": "object"
+      },
+      "title": "Events",
+      "type": "array"
+    },
+    "project_id": {
+      "default": "",
+      "title": "Project Id",
+      "type": "string"
+    },
+    "node_id": {
+      "default": "",
+      "title": "Node Id",
+      "type": "string"
+    },
+    "parent_node_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Parent Node Id"
+    },
+    "artifact_id": {
+      "default": "",
+      "title": "Artifact Id",
+      "type": "string"
+    },
+    "artifact_type": {
+      "default": "execution_log",
+      "title": "Artifact Type",
+      "type": "string"
+    },
+    "created_at": {
+      "default": "",
+      "title": "Created At",
+      "type": "string"
+    },
+    "generator": {
+      "default": "validate-arch",
+      "title": "Generator",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "ERROR"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "module": {
+      "default": "mocktest",
+      "title": "Module",
+      "type": "string"
+    },
+    "start_time": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Start Time"
+    },
+    "end_time": {
+      "title": "End Time",
+      "type": "string"
+    },
+    "input_artifacts": {
+      "items": {
+        "$ref": "#/$defs/ArtifactRecord"
+      },
+      "title": "Input Artifacts",
+      "type": "array"
+    },
+    "output_artifacts": {
+      "items": {
+        "$ref": "#/$defs/ArtifactRecord"
+      },
+      "title": "Output Artifacts",
+      "type": "array"
+    },
+    "input_hash": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Input Hash"
+    },
+    "output_hash": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Output Hash"
+    },
+    "model": {
+      "title": "Model",
+      "type": "object"
+    },
+    "model_parameters": {
+      "title": "Model Parameters",
+      "type": "object"
+    },
+    "token_usage": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Token Usage"
+    },
+    "estimated_cost": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Estimated Cost"
+    },
+    "warning_count": {
+      "default": 0,
+      "title": "Warning Count",
+      "type": "integer"
+    },
+    "error_type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error Type"
+    },
+    "error_message": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error Message"
+    }
+  },
+  "required": [
+    "run_id",
+    "execution_status",
+    "finished_at",
+    "status",
+    "end_time"
+  ],
+  "title": "ExecutionLog",
+  "type": "object"
+}

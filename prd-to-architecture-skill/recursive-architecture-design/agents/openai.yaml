@@ -1,0 +1,4 @@
+interface:
+  display_name: "Parent-to-Child Architecture Design"
+  short_description: "Refine one selected parent module or component into a child architecture package."
+  default_prompt: "Use $recursive-architecture-design to refine target_node_id from a parent architecture package using the current-level PRD."

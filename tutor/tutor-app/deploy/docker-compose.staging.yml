@@ -1,0 +1,64 @@
+name: tutor-staging
+
+# Phase 6 D-4：staging 压测环境（真实 uvicorn 服务 + PostgreSQL + worker）
+# 用法：docker compose -f deploy/docker-compose.staging.yml up -d --build
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: tutor
+      POSTGRES_PASSWORD: tutor
+      POSTGRES_DB: tutor_staging
+    ports:
+      - "18001:5432"  # 供宿主机运维脚本（staging_provision/迁移演练）直连
+    volumes:
+      - tutor-staging-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tutor -d tutor_staging"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  server:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.server
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://tutor:tutor@db:5432/tutor_staging
+      TEACHER_SESSION_SECRET: staging-secret-change-me
+      DATA_DIR: /app/data
+      CONTRACTS_DIR: /app/contracts
+      LOG_LEVEL: INFO
+      MODEL_PROVIDER: fake
+      TUTOR_RUN_ID: tutor-r01
+    ports:
+      - "18000:8000"
+    volumes:
+      - tutor-staging-data:/app/data
+
+  worker:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.worker
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://tutor:tutor@db:5432/tutor_staging
+      MODEL_PROVIDER: fake
+      LOG_LEVEL: INFO
+      TUTOR_RUN_ID: tutor-r01
+      # GAP-02 常驻循环：材料只读根（与 server 同一 DATA_DIR，只读挂载）+ 并发/轮询
+      DATA_DIR: /app/data
+      WORKER_ID: staging-worker-1
+      WORKER_CONCURRENCY: "2"
+      WORKER_POLL_INTERVAL_SECONDS: "1.0"
+    volumes:
+      - tutor-staging-data:/app/data:ro
+
+volumes:
+  tutor-staging-db:
+  tutor-staging-data:

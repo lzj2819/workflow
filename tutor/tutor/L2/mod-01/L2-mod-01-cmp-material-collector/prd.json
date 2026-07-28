@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-01-cmp-material-collector",
+  "project_id": "vibe-coding-course",
+  "node_id": "CMP-MATERIAL-COLLECTOR",
+  "parent_node_id": "CMP-MATERIAL-COLLECTOR",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD004"
+  ],
+  "artifact_id": "prd:CMP-MATERIAL-COLLECTOR:leaf-gate-l2-l2-mod-01-cmp-material-collector",
+  "artifact_type": "prd",
+  "requirements": [
+    {
+      "id": "REQ-DD004",
+      "text": "Inherited and bounded requirement REQ-DD004 for CMP-MATERIAL-COLLECTOR.",
+      "status": "active"
+    }
+  ],
+  "depth": 2,
+  "max_depth": 2,
+  "parent": {
+    "node_id": "CMP-MATERIAL-COLLECTOR"
+  },
+  "node_history": [
+    {
+      "node_id": "CMP-MATERIAL-COLLECTOR",
+      "depth": 1,
+      "source": "inherited"
+    }
+  ]
+}

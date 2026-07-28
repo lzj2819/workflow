@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "common-envelope.schema.json",
+  "title": "Common Workflow Artifact Envelope",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "project_id",
+    "node_id",
+    "parent_node_id",
+    "artifact_id",
+    "artifact_type",
+    "created_at",
+    "generator",
+    "status",
+    "input_artifacts",
+    "requirement_ids"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "project_id": {"type": "string", "minLength": 1},
+    "node_id": {"type": "string", "minLength": 1},
+    "parent_node_id": {"type": ["string", "null"]},
+    "artifact_id": {"type": ["string", "null"]},
+    "artifact_type": {"type": ["string", "null"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "generator": {"type": ["string", "object", "null"]},
+    "status": {
+      "enum": [
+        "PENDING",
+        "RUNNING",
+        "PASS",
+        "FAIL",
+        "ERROR",
+        "CONTINUE_LAYERING",
+        "STOP_LAYERING",
+        "COMPLETED"
+      ]
+    },
+    "input_artifacts": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "requirement_ids": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  },
+  "additionalProperties": true
+}

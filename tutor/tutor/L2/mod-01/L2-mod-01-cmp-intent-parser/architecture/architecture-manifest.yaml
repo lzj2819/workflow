@@ -1,0 +1,92 @@
+manifest_version: "1.0"
+
+package:
+  node_name: CMP-INTENT-PARSER
+  level: L2
+  target_node_id: CMP-INTENT-PARSER
+  parent_node_id: CMP-INTENT-PARSER
+  responsibility: >-
+    将学生自然语言提交指令解析为 SubmissionIntent，并以确定性规则检查
+    assignment、student_name、group_name 三个必填字段；返回具体缺失字段，
+    不创建任务、不持久化状态、不发起网络调用。
+  exclusions:
+    - 不持久化配置、任务或材料
+    - 不创建 PendingTask、不生成 submission_uuid、不驱动上传
+    - 不收集对话或目录材料
+    - 不调用服务端或引入外部 NLU 服务
+    - 不拥有服务端 Submission 或归属校验结论
+
+inputs:
+  parent_architecture: "C:__PROVENANCE_PATH_REMOVED__"
+  target_node_id: CMP-INTENT-PARSER
+  current_prd: "C:__PROVENANCE_PATH_REMOVED__"
+  parent_prd: null
+  output_dir: "C:__PROVENANCE_PATH_REMOVED__"
+  mode: new
+
+parent_package_type: recursive_child_package
+parent_package_detection: >-
+  父包根存在 architecture-manifest.yaml，且 child-handoff.md 与
+  02-architecture-decomposition.md 提供 L1 子节点清单；按递归父包规则识别。
+
+node_match_evidence:
+  - source: "architecture/L1/L1-mod-01/child-handoff.md §2"
+    match: "CMP-INTENT-PARSER | 提交意图解析器 | 解析自然语言提交指令 → SubmissionIntent；确定性缺项校验并返回具体缺失字段"
+    kind: exact_unique
+  - source: "architecture/L1/L1-mod-01/02-architecture-decomposition.md §2"
+    match: "child_id=CMP-INTENT-PARSER；拥有状态=无持久状态；依赖 CONFIG-STORE、PENDING-QUEUE"
+    kind: exact_unique
+  - source: "architecture/L1/L1-mod-01/04-contracts-and-runtime.md §3"
+    match: "IC-M01-01 provider=CMP-INTENT-PARSER，consumer=CMP-PENDING-QUEUE"
+    kind: exact_unique
+
+boundary_fingerprint:
+  parent_artifacts:
+    - "01-design-context.md：CMP-INTENT-PARSER 职责、F1-1、依赖与无持久状态边界"
+    - "02-architecture-decomposition.md：SubmissionIntent、LCD-001、组件清单与局部依赖"
+    - "03-state-and-data.md：解析器无持久状态；ST-01 PluginConfig 仅作为只读输入"
+    - "04-contracts-and-runtime.md：IC-M01-01、IC-M01-02、FLOW-M01-001 及错误语义"
+    - "05-local-decisions.md：LCD-001 确定性槽位闸门与提取机制下沉"
+    - "child-handoff.md：L2 目标职责、内部契约约束和关键不变量 INV-1"
+  contracts:
+    - "IC-M01-01：command_text → SubmissionIntent 或 MissingFields；无副作用"
+    - "IC-M01-02：从 CMP-CONFIG-STORE 只读获取 EffectiveConfig；不得改变配置所有权"
+  decisions:
+    - "LCD-001：确定性缺项闸门，提取机制为 implementation_detail"
+    - "KD-003/KD-005：本节点不发起网络调用，仅保留父层网络边界"
+  ownership: "本节点不拥有持久状态；解析结果为请求范围值对象，由 CMP-PENDING-QUEUE 接收"
+  deployment: "继承 DU-1 student-plugin；本节点仅作为插件进程内 domain_logic/integration_wiring"
+
+status: leaf_ready
+outputs:
+  - architecture-manifest.yaml
+  - 01-design-context.md
+  - 02-architecture-decomposition.md
+  - 03-state-and-data.md
+  - 04-contracts-and-runtime.md
+  - 05-local-decisions.md
+  - child-handoff.md
+
+validation:
+  checks:
+    - { check: "四必需输入已解析；目标输出目录不存在且未覆盖兄弟包", result: pass }
+    - { check: "父包类型识别与 CMP-INTENT-PARSER 唯一匹配", result: pass }
+    - { check: "REQ-DD001、D-AC-REQ-001-01 与 REQ-D001/F1-1 追踪完整", result: pass }
+    - { check: "子节点清单含稳定 child_id、职责、排除项、状态、依赖、理由和追踪列", result: pass }
+    - { check: "IC-M01-01/IC-M01-02 父契约语义、所有权与错误边界未改变", result: pass }
+    - { check: "所有状态均为请求范围瞬态；未转移 MOD-01 或兄弟节点所有权", result: pass }
+    - { check: "局部决策队列无未处理 decide_now 与 return_to_parent", result: pass }
+    - { check: "子节点、内部契约、状态和决策清单按稳定 ID 排序", result: pass }
+  method: "逐项对照 L1 父包原文、当前 L2 PRD、七文件结构与契约字段；再执行文件级检查"
+
+incomplete_items:
+  - "自然语言提取器的具体宿主能力或规则实现仍为 implementation_detail，交由下一层/详细设计确认"
+  - "若后续要求外部 NLU 服务、持久化解析缓存或修改 IC-M01-01 字段，必须 return_to_parent"
+blocking_impact: "无阻塞项；包可进入一次 Human Gate"
+
+leaf_gate_override:
+  decision: STOP_LAYERING
+  status: leaf_ready
+  authority: product_owner
+  rationale: "?????? L2 ??????????????? vibe coding?????????????"
+  no_further_layering: true

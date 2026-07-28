@@ -1,0 +1,1065 @@
+{
+  "node_id": "L0-root",
+  "phase": "FINAL",
+  "decision": "CONTINUE_LAYERING",
+  "summary": "scenario points exceed threshold; implementation pack context exceeds threshold",
+  "thresholds": {
+    "leaf_score_pass": 10,
+    "leaf_score_warn": 20,
+    "max_scenario_points": 10,
+    "max_expanded_cases": 20,
+    "max_steps_per_scenario": 12,
+    "max_req_tags_per_scenario": 3,
+    "max_open_questions": 0,
+    "max_high_risks": 0,
+    "max_estimated_tokens": 24000,
+    "max_implementation_pack_tokens": 18000,
+    "max_full_artifact_tokens": 50000,
+    "min_llm_confidence": 0.75
+  },
+  "config": {
+    "config_path": null,
+    "profile_path": null,
+    "profile": {
+      "trace_terms": [],
+      "trace_synonyms": {},
+      "architecture_markers": [],
+      "risk_class_patterns": {},
+      "high_risk_classes": [],
+      "active_requirement_statuses": [
+        "active"
+      ]
+    },
+    "warnings": []
+  },
+  "static_checks": {
+    "artifacts": {
+      "node_dir": "outputs\\vibe-coding-course\\L0-root",
+      "prd": "outputs\\vibe-coding-course\\L0-root\\vibe-coding-course-prd.md",
+      "feature": "outputs\\vibe-coding-course\\L0-root\\vibe-coding-course.feature",
+      "architecture": "outputs\\vibe-coding-course\\L0-root\\architecture",
+      "architecture_files": [
+        "outputs\\vibe-coding-course\\L0-root\\architecture\\01-system-overview.md",
+        "outputs\\vibe-coding-course\\L0-root\\architecture\\02-runtime-architecture.md",
+        "outputs\\vibe-coding-course\\L0-root\\architecture\\03-data-and-consistency.md",
+        "outputs\\vibe-coding-course\\L0-root\\architecture\\04-interface-contracts.md",
+        "outputs\\vibe-coding-course\\L0-root\\architecture\\05-decisions-and-technology.md",
+        "outputs\\vibe-coding-course\\L0-root\\architecture\\06-deployment.md",
+        "outputs\\vibe-coding-course\\L0-root\\architecture\\acceptance-contract-projections.yaml",
+        "outputs\\vibe-coding-course\\L0-root\\architecture\\README.md"
+      ],
+      "architecture_validation": null,
+      "architecture_validation_files": [],
+      "architecture_supporting_files": [],
+      "architecture_remediation_files": [],
+      "architecture_manifest": "outputs\\vibe-coding-course\\L0-root\\architecture\\README.md",
+      "architecture_selection": "semantic-package",
+      "traceability": "outputs\\vibe-coding-course\\L0-root\\traceability.md",
+      "risks": "outputs\\vibe-coding-course\\L0-root\\risks.md",
+      "missing": [],
+      "warnings": [],
+      "inventory": {
+        "traceability_source": "provided",
+        "risks_source": "provided",
+        "architecture_package": "outputs\\vibe-coding-course\\L0-root\\architecture",
+        "architecture_primary_count": 8,
+        "architecture_validation_count": 0,
+        "architecture_supporting_count": 0,
+        "architecture_remediation_count": 0
+      }
+    },
+    "requirements": {
+      "count": 16,
+      "ids": [
+        "NFR-001",
+        "NFR-002",
+        "NFR-003",
+        "NFR-004",
+        "REQ-001",
+        "REQ-002",
+        "REQ-003",
+        "REQ-004",
+        "REQ-005",
+        "REQ-006",
+        "REQ-007",
+        "REQ-008",
+        "REQ-009",
+        "REQ-010",
+        "REQ-011",
+        "REQ-012"
+      ],
+      "items": [
+        {
+          "id": "NFR-001",
+          "text": "系统应支持单门课程约 100 名学生、20–50 个小组的提交和教师查询。",
+          "section": "Current Release — Non-functional Requirements",
+          "priority": "must",
+          "status": "active",
+          "source": {
+            "artifact": "vibe-coding-course-prd.md",
+            "line": 62
+          }
+        },
+        {
+          "id": "NFR-002",
+          "text": "系统应允许至少 30 名学生同时提交。",
+          "section": "Current Release — Non-functional Requirements",
+          "priority": "must",
+          "status": "active",
+          "source": {
+            "artifact": "vibe-coding-course-prd.md",
+            "line": 63
+          }
+        },
+        {
+          "id": "NFR-003",
+          "text": "上传接收确认应在 30 秒内返回；Agent 评分完成目标为 10 分钟内。",
+          "section": "Current Release — Non-functional Requirements",
+          "priority": "must",
+          "status": "active",
+          "source": {
+            "artifact": "vibe-coding-course-prd.md",
+            "line": 64
+          }
+        },
+        {
+          "id": "NFR-004",
+          "text": "提交内容和评分记录应保存至课程结束后 1 年，并由教师确认删除。",
+          "section": "Current Release — Non-functional Requirements",
+          "priority": "must",
+          "status": "active",
+          "source": {
+            "artifact": "vibe-coding-course-prd.md",
+            "line": 65
+          }
+        },
+        {
+          "id": "REQ-001",
+          "text": "插件应识别包含作业、姓名和小组信息的自然语言提交意图，并启动一次提交。",
+          "section": "Current Release — Functional Requirements",
+          "priority": "must",
+          "status": "active",
+          "source": {
+            "artifact": "vibe-coding-course-prd.md",
+            "line": 45
+          }
+        },
+        {
+          "id": "REQ-002",
+          "text": "插件应允许学生配置课程邀请码、姓名、小组、代码目录、截图目录和项目结果目录。",
+          "section": "Current Release — Functional Requirements",
+          "priority": "must",
+          "status": "active",
+          "source": {
+            "artifact": "vibe-coding-course-prd.md",
+            "line": 46
+          }
+        },
+        {
+          "id": "REQ-003",
+          "text": "每次提交应采集当前作业项目相关的完整 Codex 对话。",
+          "section": "Current Release — Functional Requirements",
+          "priority": "must",
+          "status": "active",
+          "source": {
+            "artifact": "vibe-coding-course-prd.md",
+            "line": 47
+          }
+        },
+        {
+          "id": "REQ-004",
+          "text": "每次提交应按插件配置收集代码、截图和项目结果文件，并将其关联到作业、姓名和小组。",
+          "section": "Current Release — Functional Requirements",
+          "priority": "must",
+          "status": "active",
+          "source": {
+            "artifact": "vibe-coding-course-prd.md",
+            "line": 48
+          }
+        },
+        {
+          "id": "REQ-005",
+          "text": "服务器应使用课程邀请码、课程名单以及提交中的姓名和小组校验课程归属。",
+          "section": "Current Release — Functional Requirements",
+          "priority": "must",
+          "status": "active",
+          "source": {
+            "artifact": "vibe-coding-course-prd.md",
+            "line": 49
+          }
+        },
+        {
+          "id": "REQ-006",
+          "text": "学生修改姓名或小组后，服务器应在每次提交时重新执行校验。",
+          "section": "Current Release — Functional Requirements",
+          "priority": "must",
+          "status": "active",
+          "source": {
+            "artifact": "vibe-coding-course-prd.md",
+            "line": 50
+          }
+        },
+        {
+          "id": "REQ-007",
+          "text": "上传成功后系统应返回接收确认，并异步执行 Agent 评分。",
+          "section": "Current Release — Functional Requirements",
+          "priority": "must",
+          "status": "active",
+          "source": {
+            "artifact": "vibe-coding-course-prd.md",
+            "line": 51
+          }
+        },
+        {
+          "id": "REQ-008",
+          "text": "Agent 应基于需求理解、Codex 迭代过程、代码质量、最终功能、文档/展示完整性输出 A–E 等级、分维度依据和改进建议。",
+          "section": "Current Release — Functional Requirements",
+          "priority": "must",
+          "status": "active",
+          "source": {
+            "artifact": "vibe-coding-course-prd.md",
+            "line": 52
+          }
+        },
+        {
+          "id": "REQ-009",
+          "text": "教师应能查看课程、小组、学生详情、提交材料、评分依据、建议和处理状态，并可批注及调整最终等级。",
+          "section": "Current Release — Functional Requirements",
+          "priority": "must",
+          "status": "active",
+          "source": {
+            "artifact": "vibe-coding-course-prd.md",
+            "line": 53
+          }
+        },
+        {
+          "id": "REQ-010",
+          "text": "教师应能选择小组并生成包含项目结果、过程摘要、评分和教师批注的展示视图。",
+          "section": "Current Release — Functional Requirements",
+          "priority": "must",
+          "status": "active",
+          "source": {
+            "artifact": "vibe-coding-course-prd.md",
+            "line": 54
+          }
+        },
+        {
+          "id": "REQ-011",
+          "text": "材料不完整时系统应允许提交进入评分，并在教师端标记缺失项。",
+          "section": "Current Release — Functional Requirements",
+          "priority": "must",
+          "status": "active",
+          "source": {
+            "artifact": "vibe-coding-course-prd.md",
+            "line": 55
+          }
+        },
+        {
+          "id": "REQ-012",
+          "text": "Agent 评分失败时系统应自动重试一次；仍失败时应标记“评分失败”并通知教师。",
+          "section": "Current Release — Functional Requirements",
+          "priority": "must",
+          "status": "active",
+          "source": {
+            "artifact": "vibe-coding-course-prd.md",
+            "line": 56
+          }
+        }
+      ]
+    },
+    "C1_behavior_complexity": {
+      "status": "fail",
+      "reason": "scenario points exceed threshold",
+      "evidence": {
+        "parser": "gherkin-official",
+        "scenario_count": 16,
+        "scenario_outline_count": 0,
+        "expanded_case_count": 16,
+        "max_steps_per_scenario": 3,
+        "max_req_tags_per_scenario": 1,
+        "composite_scenario_count": 0,
+        "metric_only_scenario_count": 0,
+        "weak_assertion_scenarios": [],
+        "scenario_points": 16,
+        "untagged_scenarios": [],
+        "covered_requirements": [
+          "NFR-001",
+          "NFR-002",
+          "NFR-003",
+          "NFR-004",
+          "REQ-001",
+          "REQ-002",
+          "REQ-003",
+          "REQ-004",
+          "REQ-005",
+          "REQ-006",
+          "REQ-007",
+          "REQ-008",
+          "REQ-009",
+          "REQ-010",
+          "REQ-011",
+          "REQ-012"
+        ],
+        "scenarios": [
+          {
+            "id": null,
+            "name": "Submit an assignment instruction",
+            "outline": false,
+            "tags": [
+              "@REQ-001",
+              "@TC-001"
+            ],
+            "req_tags": [
+              "REQ-001"
+            ],
+            "trace_tags": [
+              "REQ-001"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "strong",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "vibe-coding-course.feature",
+              "line": 5
+            }
+          },
+          {
+            "id": null,
+            "name": "Save course configuration",
+            "outline": false,
+            "tags": [
+              "@REQ-002",
+              "@TC-002"
+            ],
+            "req_tags": [
+              "REQ-002"
+            ],
+            "trace_tags": [
+              "REQ-002"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "medium",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "vibe-coding-course.feature",
+              "line": 12
+            }
+          },
+          {
+            "id": null,
+            "name": "Upload conversation material",
+            "outline": false,
+            "tags": [
+              "@REQ-003",
+              "@TC-003"
+            ],
+            "req_tags": [
+              "REQ-003"
+            ],
+            "trace_tags": [
+              "REQ-003"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "medium",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "vibe-coding-course.feature",
+              "line": 19
+            }
+          },
+          {
+            "id": null,
+            "name": "Upload project materials",
+            "outline": false,
+            "tags": [
+              "@REQ-004",
+              "@TC-004"
+            ],
+            "req_tags": [
+              "REQ-004"
+            ],
+            "trace_tags": [
+              "REQ-004"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "medium",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "vibe-coding-course.feature",
+              "line": 26
+            }
+          },
+          {
+            "id": null,
+            "name": "Process a validated submission",
+            "outline": false,
+            "tags": [
+              "@REQ-005",
+              "@TC-005"
+            ],
+            "req_tags": [
+              "REQ-005"
+            ],
+            "trace_tags": [
+              "REQ-005"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "strong",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "vibe-coding-course.feature",
+              "line": 33
+            }
+          },
+          {
+            "id": null,
+            "name": "Revalidate a modified identity on a new submission",
+            "outline": false,
+            "tags": [
+              "@REQ-006",
+              "@TC-006"
+            ],
+            "req_tags": [
+              "REQ-006"
+            ],
+            "trace_tags": [
+              "REQ-006"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "medium",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "vibe-coding-course.feature",
+              "line": 40
+            }
+          },
+          {
+            "id": null,
+            "name": "Confirm material receipt",
+            "outline": false,
+            "tags": [
+              "@REQ-007",
+              "@TC-007"
+            ],
+            "req_tags": [
+              "REQ-007"
+            ],
+            "trace_tags": [
+              "REQ-007"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "medium",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "vibe-coding-course.feature",
+              "line": 47
+            }
+          },
+          {
+            "id": null,
+            "name": "Assess a submission",
+            "outline": false,
+            "tags": [
+              "@REQ-008",
+              "@TC-008"
+            ],
+            "req_tags": [
+              "REQ-008"
+            ],
+            "trace_tags": [
+              "REQ-008"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "medium",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "vibe-coding-course.feature",
+              "line": 54
+            }
+          },
+          {
+            "id": null,
+            "name": "Preserve grade history",
+            "outline": false,
+            "tags": [
+              "@REQ-009",
+              "@TC-009"
+            ],
+            "req_tags": [
+              "REQ-009"
+            ],
+            "trace_tags": [
+              "REQ-009"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "medium",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "vibe-coding-course.feature",
+              "line": 61
+            }
+          },
+          {
+            "id": null,
+            "name": "Generate a group presentation view",
+            "outline": false,
+            "tags": [
+              "@REQ-010",
+              "@TC-010"
+            ],
+            "req_tags": [
+              "REQ-010"
+            ],
+            "trace_tags": [
+              "REQ-010"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "medium",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "vibe-coding-course.feature",
+              "line": 68
+            }
+          },
+          {
+            "id": null,
+            "name": "Assess incomplete materials",
+            "outline": false,
+            "tags": [
+              "@REQ-011",
+              "@TC-011"
+            ],
+            "req_tags": [
+              "REQ-011"
+            ],
+            "trace_tags": [
+              "REQ-011"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "medium",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "vibe-coding-course.feature",
+              "line": 75
+            }
+          },
+          {
+            "id": null,
+            "name": "Retry failed assessment",
+            "outline": false,
+            "tags": [
+              "@REQ-012",
+              "@TC-012"
+            ],
+            "req_tags": [
+              "REQ-012"
+            ],
+            "trace_tags": [
+              "REQ-012"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "medium",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "vibe-coding-course.feature",
+              "line": 82
+            }
+          },
+          {
+            "id": null,
+            "name": "Handle target scale data",
+            "outline": false,
+            "tags": [
+              "@NFR-001",
+              "@TC-013"
+            ],
+            "req_tags": [
+              "NFR-001"
+            ],
+            "trace_tags": [
+              "NFR-001"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "medium",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "vibe-coding-course.feature",
+              "line": 89
+            }
+          },
+          {
+            "id": null,
+            "name": "Meet concurrent submission success rate",
+            "outline": false,
+            "tags": [
+              "@NFR-002",
+              "@TC-014"
+            ],
+            "req_tags": [
+              "NFR-002"
+            ],
+            "trace_tags": [
+              "NFR-002"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "strong",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "vibe-coding-course.feature",
+              "line": 96
+            }
+          },
+          {
+            "id": null,
+            "name": "Meet upload and scoring time limits",
+            "outline": false,
+            "tags": [
+              "@NFR-003",
+              "@TC-015"
+            ],
+            "req_tags": [
+              "NFR-003"
+            ],
+            "trace_tags": [
+              "NFR-003"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "strong",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "vibe-coding-course.feature",
+              "line": 103
+            }
+          },
+          {
+            "id": null,
+            "name": "Delete expired records",
+            "outline": false,
+            "tags": [
+              "@NFR-004",
+              "@TC-016"
+            ],
+            "req_tags": [
+              "NFR-004"
+            ],
+            "trace_tags": [
+              "NFR-004"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "strong",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "vibe-coding-course.feature",
+              "line": 110
+            }
+          }
+        ]
+      }
+    },
+    "C2_contract_boundary": {
+      "status": "pass",
+      "reason": "Contract fields are present.",
+      "evidence": {
+        "fields": {
+          "inputs": true,
+          "outputs": true,
+          "errors": true,
+          "states": true,
+          "side_effects": true,
+          "dependencies": true
+        },
+        "missing_fields": [],
+        "contracts": [
+          {
+            "id": "01-system-overview",
+            "provider": "",
+            "consumer": "",
+            "trigger": "",
+            "inputs": [],
+            "outputs": [
+              "present"
+            ],
+            "errors": [
+              "present"
+            ],
+            "states": [
+              "present"
+            ],
+            "side_effects": [
+              "present"
+            ],
+            "dependencies": [
+              "present"
+            ],
+            "observability": [],
+            "source": {
+              "artifact": "architecture/01-system-overview.md"
+            }
+          },
+          {
+            "id": "02-runtime-architecture",
+            "provider": "",
+            "consumer": "",
+            "trigger": "",
+            "inputs": [],
+            "outputs": [
+              "present"
+            ],
+            "errors": [
+              "present"
+            ],
+            "states": [
+              "present"
+            ],
+            "side_effects": [
+              "present"
+            ],
+            "dependencies": [
+              "present"
+            ],
+            "observability": [],
+            "source": {
+              "artifact": "architecture/02-runtime-architecture.md"
+            }
+          },
+          {
+            "id": "03-data-and-consistency",
+            "provider": "",
+            "consumer": "",
+            "trigger": "",
+            "inputs": [],
+            "outputs": [],
+            "errors": [
+              "present"
+            ],
+            "states": [
+              "present"
+            ],
+            "side_effects": [
+              "present"
+            ],
+            "dependencies": [],
+            "observability": [],
+            "source": {
+              "artifact": "architecture/03-data-and-consistency.md"
+            }
+          },
+          {
+            "id": "04-interface-contracts",
+            "provider": "",
+            "consumer": "",
+            "trigger": "",
+            "inputs": [
+              "present"
+            ],
+            "outputs": [
+              "present"
+            ],
+            "errors": [
+              "present"
+            ],
+            "states": [
+              "present"
+            ],
+            "side_effects": [
+              "present"
+            ],
+            "dependencies": [
+              "present"
+            ],
+            "observability": [],
+            "source": {
+              "artifact": "architecture/04-interface-contracts.md"
+            }
+          },
+          {
+            "id": "05-decisions-and-technology",
+            "provider": "",
+            "consumer": "",
+            "trigger": "",
+            "inputs": [
+              "present"
+            ],
+            "outputs": [],
+            "errors": [],
+            "states": [],
+            "side_effects": [
+              "present"
+            ],
+            "dependencies": [
+              "present"
+            ],
+            "observability": [],
+            "source": {
+              "artifact": "architecture/05-decisions-and-technology.md"
+            }
+          },
+          {
+            "id": "06-deployment",
+            "provider": "",
+            "consumer": "",
+            "trigger": "",
+            "inputs": [],
+            "outputs": [],
+            "errors": [
+              "present"
+            ],
+            "states": [
+              "present"
+            ],
+            "side_effects": [
+              "present"
+            ],
+            "dependencies": [
+              "present"
+            ],
+            "observability": [],
+            "source": {
+              "artifact": "architecture/06-deployment.md"
+            }
+          },
+          {
+            "id": "acceptance-contract-projections",
+            "provider": "",
+            "consumer": "",
+            "trigger": "",
+            "inputs": [
+              "present"
+            ],
+            "outputs": [
+              "present"
+            ],
+            "errors": [
+              "present"
+            ],
+            "states": [
+              "present"
+            ],
+            "side_effects": [
+              "present"
+            ],
+            "dependencies": [
+              "present"
+            ],
+            "observability": [],
+            "source": {
+              "artifact": "architecture/acceptance-contract-projections.yaml"
+            }
+          },
+          {
+            "id": "README",
+            "provider": "",
+            "consumer": "",
+            "trigger": "",
+            "inputs": [
+              "present"
+            ],
+            "outputs": [
+              "present"
+            ],
+            "errors": [
+              "present"
+            ],
+            "states": [
+              "present"
+            ],
+            "side_effects": [
+              "present"
+            ],
+            "dependencies": [
+              "present"
+            ],
+            "observability": [],
+            "source": {
+              "artifact": "architecture/README.md"
+            }
+          }
+        ]
+      }
+    },
+    "C3_ai_context_control": {
+      "status": "fail",
+      "reason": "implementation pack context exceeds threshold",
+      "evidence": {
+        "estimated_tokens": 27071,
+        "implementation_pack_tokens": 27071,
+        "full_artifact_tokens": 27186,
+        "open_questions": 0,
+        "todo_markers": 0
+      }
+    },
+    "C4_verifiability": {
+      "status": "pass",
+      "reason": "Static traceability checks passed.",
+      "evidence": {
+        "unmapped_requirements": [],
+        "deferred_or_excluded_requirements": [],
+        "architecture_evidence_gaps": [],
+        "untagged_scenarios": [],
+        "covered_requirements": [
+          "NFR-001",
+          "NFR-002",
+          "NFR-003",
+          "NFR-004",
+          "REQ-001",
+          "REQ-002",
+          "REQ-003",
+          "REQ-004",
+          "REQ-005",
+          "REQ-006",
+          "REQ-007",
+          "REQ-008",
+          "REQ-009",
+          "REQ-010",
+          "REQ-011",
+          "REQ-012"
+        ]
+      }
+    },
+    "C5_risk_decomposition": {
+      "status": "pass",
+      "reason": "Static risk thresholds passed.",
+      "evidence": {
+        "unresolved_high_risks": 0,
+        "risk_like_lines": 3,
+        "risk_classes": {
+          "security_auth": 6,
+          "privacy_data": 4,
+          "destructive_operation": 4,
+          "financial_legal": 2,
+          "concurrency_time": 5,
+          "external_dependency": 4,
+          "performance_slo": 4,
+          "ai_nondeterminism": 1
+        },
+        "high_risk_classes": [
+          "destructive_operation",
+          "financial_legal",
+          "privacy_data",
+          "security_auth"
+        ],
+        "unmitigated_high_risk_classes": [],
+        "items": [
+          {
+            "id": "RISK-001",
+            "class": "ai_nondeterminism",
+            "severity": "medium",
+            "status": "mitigated",
+            "source": {
+              "artifact": "risks"
+            }
+          },
+          {
+            "id": "RISK-002",
+            "class": "concurrency_time",
+            "severity": "medium",
+            "status": "mitigated",
+            "source": {
+              "artifact": "risks"
+            }
+          },
+          {
+            "id": "RISK-003",
+            "class": "destructive_operation",
+            "severity": "high",
+            "status": "mitigated",
+            "source": {
+              "artifact": "risks"
+            }
+          },
+          {
+            "id": "RISK-004",
+            "class": "external_dependency",
+            "severity": "medium",
+            "status": "mitigated",
+            "source": {
+              "artifact": "risks"
+            }
+          },
+          {
+            "id": "RISK-005",
+            "class": "financial_legal",
+            "severity": "high",
+            "status": "mitigated",
+            "source": {
+              "artifact": "risks"
+            }
+          },
+          {
+            "id": "RISK-006",
+            "class": "performance_slo",
+            "severity": "medium",
+            "status": "mitigated",
+            "source": {
+              "artifact": "risks"
+            }
+          },
+          {
+            "id": "RISK-007",
+            "class": "privacy_data",
+            "severity": "high",
+            "status": "mitigated",
+            "source": {
+              "artifact": "risks"
+            }
+          },
+          {
+            "id": "RISK-008",
+            "class": "security_auth",
+            "severity": "high",
+            "status": "mitigated",
+            "source": {
+              "artifact": "risks"
+            }
+          }
+        ],
+        "open_questions": 0
+      }
+    }
+  },
+  "llm_judgement": null,
+  "next_action": {
+    "type": "decompose",
+    "children": [
+      "isolate-destructive-operation",
+      "isolate-financial-legal",
+      "isolate-privacy-data",
+      "isolate-security-auth"
+    ],
+    "notes": [
+      "Generate lower-layer PRDs for failed criteria."
+    ]
+  }
+}

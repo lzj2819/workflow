@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-01-cmp-material-collector",
+  "project_id": "vibe-coding-course",
+  "node_id": "CMP-MATERIAL-COLLECTOR",
+  "parent_node_id": "CMP-MATERIAL-COLLECTOR",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD004"
+  ],
+  "artifact_id": "architecture:CMP-MATERIAL-COLLECTOR:leaf-gate-l2-l2-mod-01-cmp-material-collector",
+  "artifact_type": "architecture",
+  "components": [
+    "CMP-MATERIAL-COLLECTOR",
+    "CMP-CONFIG-STORE",
+    "CMP-DIALOGUE-COLLECTOR",
+    "CMP-PENDING-QUEUE",
+    "CMP-UPLOAD-CLIENT",
+    "CMP-STATUS-PRESENTER",
+    "CMP-MC-FILTER-POLICY",
+    "CMP-MC-MANIFEST-BUILDER",
+    "CMP-MC-DIRECTORY-SCANNER"
+  ],
+  "interfaces": [
+    "CT-001",
+    "IC-M01-03",
+    "FLOW-001",
+    "IC-L2-MC",
+    "IC-L2-MC-01",
+    "IC-L2-MC-02",
+    "IC-M01-03-L2-",
+    "CT-002"
+  ],
+  "dependencies": [
+    "CMP-CONFIG-STORE",
+    "CMP-DIALOGUE-COLLECTOR",
+    "CMP-PENDING-QUEUE",
+    "CMP-UPLOAD-CLIENT",
+    "CMP-STATUS-PRESENTER",
+    "CMP-MC-FILTER-POLICY",
+    "CMP-MC-MANIFEST-BUILDER",
+    "CMP-MC-DIRECTORY-SCANNER"
+  ],
+  "depth": 2,
+  "complexity": 25,
+  "risks": [],
+  "responsibility": "CMP-MATERIAL-COLLECTOR is a terminal L2 implementation boundary.",
+  "children": []
+}

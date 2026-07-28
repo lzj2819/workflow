@@ -1,0 +1,129 @@
+{
+  "contract_id": "CT-005",
+  "title": "SubmissionScored / ScoringFailed",
+  "contract_type": "event",
+  "direction": "async_event",
+  "provider": "MOD-04",
+  "consumer": [
+    "MOD-02",
+    "MOD-05"
+  ],
+  "delivery": "数据库 Outbox；消费失败由投递器重试；读模型可通过重放重建",
+  "sync_async": "async",
+  "versioning": "v=1，向后兼容追加",
+  "idempotency": "按 submission_id + 终态去重；重复事件不改变终态",
+  "error_codes": [],
+  "publishes_events": [],
+  "side_effects": "回写提交状态（scored/scoring_failed）；创建复核记录；派生教师读模型；触发教师端内通知",
+  "source": {
+    "doc": "tutor/L0-root/architecture/04-interface-contracts.md",
+    "sha256": "4599918536e46ca90f566919dc3e1e9f42c59d6da034d771ca44a98bae3efb9f"
+  },
+  "schemas": {
+    "event": {
+      "type": "object",
+      "required": [
+        "submission_id",
+        "outcome",
+        "v"
+      ],
+      "properties": {
+        "submission_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "outcome": {
+          "type": "string",
+          "enum": [
+            "scored",
+            "scoring_failed"
+          ]
+        },
+        "original_grade": {
+          "type": "string",
+          "enum": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ],
+          "description": "outcome=scored 时必填"
+        },
+        "dimension_rationales": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "description": "outcome=scored 时必填；五维度依据",
+          "items": {
+            "type": "object",
+            "required": [
+              "dimension",
+              "rationale"
+            ],
+            "properties": {
+              "dimension": {
+                "type": "string",
+                "enum": [
+                  "需求理解",
+                  "Codex 迭代过程",
+                  "代码质量",
+                  "最终功能",
+                  "文档/展示完整性"
+                ]
+              },
+              "rationale": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "teacher_suggestions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "outcome=scored 时必填；教师专用，默认不暴露给学生"
+        },
+        "scored_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "outcome=scored 时必填"
+        },
+        "failure_reason": {
+          "type": "string",
+          "description": "outcome=scoring_failed 时必填"
+        },
+        "retry_record": {
+          "type": "object",
+          "description": "outcome=scoring_failed 时必填；重试记录",
+          "required": [
+            "attempts"
+          ],
+          "properties": {
+            "attempts": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2
+            },
+            "last_error": {
+              "type": "string"
+            },
+            "retried_at": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": true
+        },
+        "v": {
+          "const": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

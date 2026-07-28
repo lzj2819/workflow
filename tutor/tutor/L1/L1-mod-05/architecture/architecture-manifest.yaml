@@ -1,0 +1,138 @@
+# Architecture Manifest — L1 / MOD-05 teacher-web
+# 由 recursive-architecture-design 生成；字段语义见 references/artifact-spec.zh-CN
+
+manifest_version: "1.0"
+
+package:
+  node_name: teacher-web
+  level: L1
+  target_node_id: MOD-05
+  parent_node_id: MOD-05            # 本次细化的父节点即目标节点本身
+  responsibility: >-
+    教师课程/小组/学生/提交查询（课程范围授权）；批注与最终等级调整（保留原始等级与调整记录）；
+    展示视图生成；评分失败可见；删除确认与审计查看。
+    （逐字引自父包 01-system-overview.md「模块职责」MOD-05 条目）
+  exclusions:
+    - 不接收学生上传、不持有 Submission 聚合与提交状态机、不持有材料文件（MOD-02 数据所有权，03-data-and-consistency）
+    - 不执行课程归属校验、不维护课程/邀请码/名单（MOD-03 职责；MOD-05 仅经 FLOW-011 只读引用课程结束时间）
+    - 不执行 Agent 评分、不产出原始等级/依据/建议、不接触模型服务（MOD-04 职责；CT-010 与 MOD-05 无关）
+    - 不伪造等级：scoring_failed 且无原始等级时不得设置最终等级（CT-008 NO_ORIGINAL_GRADE，DF-2）
+    - 不得创建独立服务/容器/部署单元或公共运行时边界（父层定义 MOD-05 为 DU-2 内部节点，06-deployment）
+    - 不得修改任何父契约（CT-005/006/007/008/009/011/012/014）的标识、字段、所有者、副作用、失败语义与版本
+
+inputs:
+  parent_architecture: architecture/L0/output
+  target_node_id: MOD-05
+  current_prd: prd/L1/L1-mod-05/prd.md
+  parent_prd: prd/L0/vibe-coding-course-prd.md   # 可选输入；实际读取：补充 REQ-009/REQ-010、NFR-001/NFR-004 与 AC-REQ-009-01 / AC-REQ-010-01 / AC-NFR-001-01 / AC-NFR-004-01 原文
+  output_dir: architecture/L1/L1-mod-05
+  mode: new
+
+parent_package_type: top_level_ddd_to_system_package
+parent_package_detection: >-
+  父包根无 architecture-manifest.yaml，存在 output/01-system-overview.md，
+  按 parent-package-adapter 规则 2 识别为顶层 DDD 到系统架构包。
+
+node_match_evidence:
+  - source: architecture/L0/output/01-system-overview.md §模块清单
+    match: "| MOD-05 | teacher-web | BC-REVIEW、BC-RETENTION | REQ-009、REQ-010；NFR-001、NFR-004 |"
+    kind: exact_unique                 # 全包检索 module_id=MOD-05 唯一命中
+  - source: architecture/L0/output/04-interface-contracts.md §组件接口卡
+    match: "component_interfaces 第五条 module_id: MOD-05（provides CT-007/008/009/011；consumes CT-005/006/014；publishes+self-consumes CT-012；internal_reads MOD-03）"
+    kind: exact_unique
+  - source: architecture/L0/output/06-deployment.md §Module 到部署单元映射
+    match: "| MOD-05 | DU-2 | 教师端读多写少，负载低 |"
+    kind: exact_unique
+  - source: prd/L1/L1-mod-05/prd.md frontmatter
+    match: "module_name: MOD-05；REQ-D001 parent_req=REQ-009、REQ-D002 parent_req=REQ-010，与父包 MOD-05 需求追踪（REQ-009、REQ-010）完全一致"
+    kind: cross_confirmation
+
+boundary_fingerprint:
+  parent_artifacts:
+    - "01-system-overview.md：模块清单 MOD-05 行、模块职责、BC-REVIEW/BC-RETENTION 映射与合并理由、SM-003 contributing 定位（modules_without_sm_allocation 登记）"
+    - "02-runtime-architecture.md：DF-1 步骤 11–12、DF-2 步骤 6、DF-3；FLOW-007/008/009/010/011/012；SCENARIO-001/012（教师查看终止）、SCENARIO-016（保留删除主场景，entry=MOD-05）"
+    - "03-data-and-consistency.md：ReviewRecord / PresentationView / DeletionBatch 聚合归 MOD-05；教师读模型派生说明；本地事务边界；跨边界最终一致；保留期规则（retention_due_at = 课程结束时间 + 1 年，MOD-05 计算）"
+    - "04-interface-contracts.md：CT-007 / CT-008 / CT-009 / CT-011 全文（Provider=MOD-05）；CT-005 / CT-006 / CT-012 / CT-014 全文（Consumer/Provider 关系）；错误码汇总；组件接口卡 MOD-05；超时/重试/幂等/版本策略汇总"
+    - "05-decisions-and-technology.md：KD-002（共部署+Outbox）、KD-003（基础级运维）、KD-005（/api/v1+幂等键）；教师前端渲染技术与展示视图导出格式 defer_to_detail_design（触发条件：MOD-05 详细设计）"
+    - "06-deployment.md：DU-2 course-app（MOD-02/03/05 共部署）；保留治理为 DU-2 内定时批处理；访问拒绝留痕（AccessDeniedLogged）"
+    - "acceptance-contract-projections.yaml：AC-REQ-009-01 / AC-REQ-010-01 / AC-NFR-001-01 为 MOD-05 单模块契约；AC-NFR-004-01 disposition=module_local、owning_module=MOD-05、MOD-02 为 execution_dependency"
+    - "父层 DDD 产物（architecture/L0/）：aggregates.md（ReviewRecord / PresentationView / DeletionBatch）、domain-flow.md（F3-1~F3-3、F4-1、F5-1~F5-3、DF-2、DF-3）、bounded-contexts.md（BC-REVIEW、BC-RETENTION）、assumptions.md（A-001、A-003、A-005）"
+  contracts:
+    - "CT-007 教师课程数据查询（Provider，query，read-only；出参含 deletion_batches[]）"
+    - "CT-008 教师批注与最终等级调整（Provider，写；NO_ORIGINAL_GRADE；模块内事件不跨模块投递）"
+    - "CT-009 展示视图生成（Provider，写；NO_AVAILABLE_SUBMISSION；幂等键=教师+小组集合+时间窗）"
+    - "CT-011 删除确认（Provider，同步确认+异步执行；publishes CT-012）"
+    - "CT-005 SubmissionScored/ScoringFailed（Consumer；派生复核记录、读模型、端内通知）"
+    - "CT-006 SubmissionReceived 读模型派生（Consumer）"
+    - "CT-012 RecordsDeleted（Provider + 模块内自消费清除读模型）"
+    - "CT-014 PurgeCompleted（Consumer；更新批次执行状态）"
+    - "FLOW-011 课程结束时间只读引用（internal_read，无网络契约，contract: none）"
+  decisions: [KD-002, KD-003, KD-005, A-001, A-003, A-005]
+  ownership: "MOD-05 拥有 ReviewRecord、PresentationView、DeletionBatch 聚合与教师读模型（派生，可重放重建）；其余聚合所有权不进入本节点"
+  deployment: "DU-2 course-app（与 MOD-02/MOD-03 共部署，共享数据库与本地磁盘；保留治理定时批处理运行于 DU-2 内）"
+
+status: ready_for_human_gate       # 阶段 6 交接完成（2026-07-18）；无 parent-change-request
+
+children:                              # 仅列直接 child_id；按稳定 ID 排序
+  - CMP-PRESENTATION                   # REQ-D002
+  - CMP-REVIEW-COMMAND                 # REQ-D001
+  - CMP-REVIEW-QUERY                   # REQ-D001
+  - CMP-TEACHER-UI                     # REQ-D001/D002
+
+internal_support_components:
+  - component_id: CMP-ACCESS-GATE
+    traces: [REQ-D001, FR-009, CT-007, CT-008, CT-009, CT-011]
+    l2_target: false
+  - component_id: CMP-READMODEL-PROJECTOR
+    traces: [CT-005, CT-006, CT-012, DF-1, DF-2, A-005]
+    l2_target: false
+  - component_id: CMP-RETENTION-GOVERNANCE
+    traces: [NFR-004, FR-016, CT-011, CT-012, CT-014, DF-3, FLOW-011]
+    l2_target: false
+
+outputs:
+  - architecture-manifest.yaml
+  - 01-design-context.md
+  - 02-architecture-decomposition.md
+  - 03-state-and-data.md
+  - 04-contracts-and-runtime.md
+  - 05-local-decisions.md
+  - child-handoff.md
+
+validation:
+  - check: "四项必需输入解析 + 输出目录为空（new 模式安全）"
+    result: pass
+  - check: "目标节点唯一匹配（01 模块清单 / 04 组件接口卡 / 06 部署映射 + L1 PRD frontmatter 交叉确认，4 条证据）"
+    result: pass
+  - check: "当前 PRD 不越父边界（REQ-D001/D002 ⊆ REQ-009/REQ-010；无父契约变更诉求）"
+    result: pass
+  - check: "每个直接 child_id 至少拥有 current REQ-D/NFR-D；内部支撑组件不进入 direct children"
+    result: pass
+  - check: "C1–C6 映射齐备（02§3 / 03§1 / 04§3 / 04§1 / 04§2 / 01§4）"
+    result: pass
+  - check: "父契约逐字段不可变（04 §5 自检：路径/字段/错误码/幂等/版本）"
+    result: pass
+  - check: "状态所有权不越界（03 §5 确认；派生/内部状态不外供）"
+    result: pass
+  - check: "兄弟节点仅引用未重设计；与 MOD-01 无交互（01 Q-01）"
+    result: pass
+  - check: "决策队列清零（decide_now 6/6 已决；return_to_parent 0 项）"
+    result: pass
+  - check: "带 ID 清单按稳定 ID 排序（CMP / ST / M05-IC / LCD）"
+    result: pass
+  - check: "父契约机器可读字段投影（CT-005/006/007/008/009/011/012/014：required_fields、produced_fields、errors、side_effects、dependencies）"
+    result: pass
+  - check: "组件入口与路由绑定（教师浏览器→UI→GATE→QUERY/COMMAND/PRESENTATION/RETENTION，以及跨模块事件入口）"
+    result: pass
+  - check: "本层 local_legal_flows（15 条流均含 entry_condition、next_hop、return_to_caller、terminal_states）"
+    result: pass
+  - check: "机器解析兼容性（7 个 child_id 规范组件、无展示标签污染、inbound required coverage gap=0）"
+    result: pass
+
+incomplete_items:
+  - "LCD-007 教师前端渲染技术 → defer_to_next_level（CMP-TEACHER-UI，L2 细化启动时决定；父层同名暂缓项）"
+  - "LCD-008 展示视图渲染与导出格式 → defer_to_next_level（CMP-PRESENTATION，同上）"
+  - "LCD-009 调整等级是否强制填写理由 → 产品决策补充（父层可选决策；本层按可选实现并预留字段位）"
+  - "数据库产品选型 → 父层 defer_to_detail_design，本层继续搁置（仅要求事务+备份）"
+  - "Q-02 无提交课程可见性 → 开放问题；若产品提出须走 parent-change-request（本层未越界实现）"
+blocking_impact: "直接 child_id 已收敛到 current REQ-D owner；READMODEL-PROJECTOR、RETENTION-GOVERNANCE、ACCESS-GATE 保留为内部支撑。RETENTION-GOVERNANCE 若需 L2，必须先由 L1 PRD 增加 current NFR-D 投影。"

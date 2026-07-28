@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-04-cmp-assessment-engine",
+  "project_id": "vibe-coding-course",
+  "node_id": "CMP-ASSESSMENT-ENGINE",
+  "parent_node_id": "MOD-04",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD001"
+  ],
+  "artifact_id": "architecture:CMP-ASSESSMENT-ENGINE:leaf-gate-l2-l2-mod-04-cmp-assessment-engine",
+  "artifact_type": "architecture",
+  "components": [
+    "CMP-ASSESSMENT-ENGINE",
+    "CMP-SCORING-ORCHESTRATOR",
+    "CMP-MODEL-SERVICE-ACL",
+    "CMP-RUBRIC-PROMPT-COMPOSER",
+    "CMP-RESULT-PUBLISHER",
+    "CMP-AE-EVALUATION-COORDINATOR",
+    "CMP-AE-OUTCOME-CLASSIFIER",
+    "CMP-AE-RESULT-ASSEMBLER",
+    "CMP-AE-RESPONSE-VALIDATOR",
+    "CMP-SCORING-METRICS"
+  ],
+  "interfaces": [
+    "CT-005",
+    "CT-004",
+    "CT-010",
+    "FLOW-004",
+    "FLOW-005",
+    "FLOW-006",
+    "FLOW-007",
+    "FLOW-SUCCESS",
+    "FLOW-FAILURE",
+    "CT-012"
+  ],
+  "dependencies": [
+    "CMP-SCORING-ORCHESTRATOR",
+    "CMP-MODEL-SERVICE-ACL",
+    "CMP-RUBRIC-PROMPT-COMPOSER",
+    "CMP-RESULT-PUBLISHER",
+    "CMP-AE-EVALUATION-COORDINATOR",
+    "CMP-AE-OUTCOME-CLASSIFIER",
+    "CMP-AE-RESULT-ASSEMBLER",
+    "CMP-AE-RESPONSE-VALIDATOR",
+    "CMP-SCORING-METRICS"
+  ],
+  "depth": 2,
+  "complexity": 29,
+  "risks": [],
+  "responsibility": "CMP-ASSESSMENT-ENGINE is a terminal L2 implementation boundary.",
+  "children": []
+}

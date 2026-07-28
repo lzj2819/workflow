@@ -1,0 +1,198 @@
+{
+  "$defs": {
+    "ArtifactRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "artifact_type": {
+          "title": "Artifact Type",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "sha256": {
+          "default": "",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "schema_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Schema Version"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "artifact_type",
+        "path"
+      ],
+      "title": "ArtifactRecord",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "default": "mocktest/v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "mocktest_status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "ERROR"
+      ],
+      "title": "Mocktest Status",
+      "type": "string"
+    },
+    "gate_recommendation": {
+      "enum": [
+        "ALLOW",
+        "BLOCK",
+        "ERROR"
+      ],
+      "title": "Gate Recommendation",
+      "type": "string"
+    },
+    "architecture_defect_count": {
+      "title": "Architecture Defect Count",
+      "type": "integer"
+    },
+    "severe_defect_count": {
+      "title": "Severe Defect Count",
+      "type": "integer"
+    },
+    "uncovered_requirement_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Uncovered Requirement Ids",
+      "type": "array"
+    },
+    "unvalidated_scenario_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Unvalidated Scenario Ids",
+      "type": "array"
+    },
+    "high_risk_components": {
+      "items": {
+        "type": "string"
+      },
+      "title": "High Risk Components",
+      "type": "array"
+    },
+    "evidence_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Evidence Refs",
+      "type": "array"
+    },
+    "errors": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Errors",
+      "type": "array"
+    },
+    "project_id": {
+      "default": "",
+      "title": "Project Id",
+      "type": "string"
+    },
+    "node_id": {
+      "default": "",
+      "title": "Node Id",
+      "type": "string"
+    },
+    "parent_node_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Parent Node Id"
+    },
+    "artifact_id": {
+      "default": "",
+      "title": "Artifact Id",
+      "type": "string"
+    },
+    "artifact_type": {
+      "default": "leaf_gate_evidence",
+      "title": "Artifact Type",
+      "type": "string"
+    },
+    "created_at": {
+      "default": "",
+      "title": "Created At",
+      "type": "string"
+    },
+    "generator": {
+      "default": "validate-arch",
+      "title": "Generator",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "ERROR"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "input_artifacts": {
+      "items": {
+        "$ref": "#/$defs/ArtifactRecord"
+      },
+      "title": "Input Artifacts",
+      "type": "array"
+    },
+    "requirement_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Requirement Ids",
+      "type": "array"
+    },
+    "error_status": {
+      "default": false,
+      "title": "Error Status",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "run_id",
+    "mocktest_status",
+    "gate_recommendation",
+    "architecture_defect_count",
+    "severe_defect_count",
+    "status"
+  ],
+  "title": "LeafGateEvidence",
+  "type": "object"
+}

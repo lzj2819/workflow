@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-04-cmp-assessment-engine",
+  "project_id": "vibe-coding-course",
+  "node_id": "CMP-ASSESSMENT-ENGINE",
+  "parent_node_id": "MOD-04",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD001"
+  ],
+  "artifact_id": "testcases:CMP-ASSESSMENT-ENGINE:leaf-gate-l2-l2-mod-04-cmp-assessment-engine",
+  "artifact_type": "testcases",
+  "testcases": [
+    {
+      "id": "TC-001",
+      "name": "生成 A–E 等级、五个维度依据和教师专用改进建议",
+      "requirement_ids": [
+        "REQ-DD001"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-002",
+      "name": "结果包含等级、每个维度文字依据、建议和评分时间",
+      "requirement_ids": [
+        "REQ-DD001"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-003",
+      "name": "建议默认不暴露给学生",
+      "requirement_ids": [
+        "REQ-DD001"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-004",
+      "name": "仍生成结果，并列出缺失材料对评估的影响",
+      "requirement_ids": [
+        "REQ-DD001"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    }
+  ]
+}

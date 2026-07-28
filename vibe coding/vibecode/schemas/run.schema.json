@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "run.schema.json",
+  "title": "Recursive Workflow Run",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "project_id",
+    "root_node_id",
+    "max_depth",
+    "status",
+    "nodes",
+    "coding_queue",
+    "deliveries",
+    "backfill_batches"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "project_id": {"type": "string", "minLength": 1},
+    "root_node_id": {"type": "string", "minLength": 1},
+    "max_depth": {"type": "integer", "minimum": 0},
+    "status": {"enum": ["PENDING", "RUNNING", "PASS", "FAIL", "ERROR", "COMPLETED"]},
+    "nodes": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "node.schema.json"}
+    },
+    "coding_queue": {
+      "type": "array",
+      "items": {"$ref": "coding-task.schema.json"}
+    },
+    "deliveries": {
+      "type": "object",
+      "additionalProperties": {"$ref": "delivery.schema.json"}
+    },
+    "backfill_batches": {
+      "type": "array",
+      "items": {"$ref": "backfill-batch.schema.json"}
+    }
+  },
+  "additionalProperties": false
+}

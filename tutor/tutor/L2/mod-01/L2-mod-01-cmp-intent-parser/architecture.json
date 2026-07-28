@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-01-cmp-intent-parser",
+  "project_id": "vibe-coding-course",
+  "node_id": "CMP-INTENT-PARSER",
+  "parent_node_id": "CMP-INTENT-PARSER",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD001"
+  ],
+  "artifact_id": "architecture:CMP-INTENT-PARSER:leaf-gate-l2-l2-mod-01-cmp-intent-parser",
+  "artifact_type": "architecture",
+  "components": [
+    "CMP-INTENT-PARSER",
+    "CMP-PENDING-QUEUE",
+    "CMP-STATUS-PRESENTER",
+    "CMP-CONFIG-STORE",
+    "CMP-UPLOAD-CLIENT",
+    "CMP-DIALOGUE-COLLECTOR",
+    "CMP-MATERIAL-COLLECTOR"
+  ],
+  "interfaces": [
+    "IC-M01-01",
+    "IC-M01-02",
+    "FLOW-M01-001",
+    "CT-001",
+    "CT-002",
+    "IC-IP-01",
+    "IC-IP-02",
+    "IC-IP-03",
+    "IC-IP-04"
+  ],
+  "dependencies": [
+    "CMP-PENDING-QUEUE",
+    "CMP-STATUS-PRESENTER",
+    "CMP-CONFIG-STORE",
+    "CMP-UPLOAD-CLIENT",
+    "CMP-DIALOGUE-COLLECTOR",
+    "CMP-MATERIAL-COLLECTOR"
+  ],
+  "depth": 2,
+  "complexity": 22,
+  "risks": [],
+  "responsibility": "CMP-INTENT-PARSER is a terminal L2 implementation boundary.",
+  "children": []
+}

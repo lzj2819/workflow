@@ -1,0 +1,4 @@
+interface:
+  display_name: "Validate Architecture"
+  short_description: "Strict Gherkin-to-architecture validation workflow."
+  default_prompt: "Use $validate-arch to strictly validate this architecture against its Gherkin feature."

@@ -1,0 +1,10 @@
+{
+  "format_version": "1",
+  "source_host": "td01-unconfirmed-host",
+  "exported_at": "2026-07-20T00:00:00Z",
+  "turns": [
+    { "role": "user", "content": "请实现一个命令行待办事项管理器", "timestamp": "2026-07-19T10:00:00Z" },
+    { "role": "assistant", "content": "好的，先创建 todo.py 与命令行入口……", "timestamp": "2026-07-19T10:00:05Z" },
+    { "role": "user", "content": "加上持久化到 JSON 文件", "timestamp": "2026-07-19T10:05:00Z" }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "SCENARIO-001": {
+    "entry_component": "CMP-SCORING-ORCHESTRATOR",
+    "entry_action": "ICT-001",
+    "entry_confidence": "high",
+    "entry_reason": "CT-004 到达后由评分编排器领取评分任务"
+  },
+  "SCENARIO-002": {
+    "entry_component": "CMP-SCORING-ORCHESTRATOR",
+    "entry_action": "ICT-001",
+    "entry_confidence": "high",
+    "entry_reason": "CT-004 到达后由评分编排器领取评分任务"
+  },
+  "SCENARIO-003": {
+    "entry_component": "CMP-SCORING-ORCHESTRATOR",
+    "entry_action": "ICT-001",
+    "entry_confidence": "high",
+    "entry_reason": "缺失材料仍由评分编排器领取任务，并把 missing_items 传入评估链路"
+  },
+  "SCENARIO-004": {
+    "entry_component": "CMP-ASSESSMENT-ENGINE",
+    "entry_action": "ICT-006",
+    "entry_confidence": "high",
+    "entry_reason": "评估失败由评估引擎通过 ICT-006 进入重试语义"
+  },
+  "SCENARIO-005": {
+    "entry_component": "CMP-SCORING-ORCHESTRATOR",
+    "entry_action": "ICT-006",
+    "entry_confidence": "high",
+    "entry_reason": "重试预算耗尽后由编排器协调终态失败和通知"
+  },
+  "SCENARIO-006": {
+    "entry_component": "CMP-SCORING-METRICS",
+    "entry_action": "ICT-008",
+    "entry_confidence": "high",
+    "entry_reason": "按时完成率由评分指标组件通过 ICT-008 查询"
+  },
+  "SCENARIO-007": {
+    "entry_component": "CMP-SCORING-METRICS",
+    "entry_action": "ICT-008",
+    "entry_confidence": "high",
+    "entry_reason": "教师评分覆盖率由评分指标组件通过 ICT-008 查询"
+  },
+  "SCENARIO-008": {
+    "entry_component": "CMP-ASSESSMENT-ENGINE",
+    "entry_action": "ICT-006",
+    "entry_confidence": "high",
+    "entry_reason": "失败到重试再到终态失败的组合场景以 ICT-006 为入口"
+  }
+}

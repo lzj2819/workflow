@@ -1,0 +1,40 @@
+{
+  "contract_id": "AUTH-TOKEN",
+  "title": "访问令牌签发（CT-001 契约族附属端点，不单独编号）",
+  "contract_type": "api",
+  "direction": "sync_api",
+  "provider": "MOD-02",
+  "consumer": "MOD-01",
+  "endpoint": { "method": "POST", "path": "/api/v1/auth/token" },
+  "sync_async": "sync",
+  "versioning": "/api/v1 路径版本",
+  "idempotency": "同一凭据重复换领返回有效令牌；令牌签发记录审计（AuthTokenGrant）",
+  "timeout_retry": "凭据不匹配 → AUTH_INVALID；客户端指数退避重试",
+  "error_codes": ["AUTH_INVALID"],
+  "publishes_events": [],
+  "side_effects": "名单核对（语义同 CT-003）；签发访问令牌并记录签发审计",
+  "notes": "令牌形态/TTL 为实现细节（DD-004：不透明令牌，TTL 30 天）",
+  "source": { "doc": "tutor/L0-root/architecture/04-interface-contracts.md", "sha256": "4599918536e46ca90f566919dc3e1e9f42c59d6da034d771ca44a98bae3efb9f" },
+  "schemas": {
+    "request": {
+      "type": "object",
+      "required": ["invite_code", "student_name", "group_name"],
+      "properties": {
+        "invite_code": { "type": "string", "minLength": 1 },
+        "student_name": { "type": "string", "minLength": 1 },
+        "group_name": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "required": ["access_token", "token_type", "expires_in"],
+      "properties": {
+        "access_token": { "type": "string", "minLength": 1 },
+        "token_type": { "const": "Bearer" },
+        "expires_in": { "type": "integer", "minimum": 1, "description": "秒" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "backfill-batch.schema.json",
+  "title": "Frozen Parent Backfill Batch",
+  "type": "object",
+  "required": [
+    "schema_version", "batch_id", "run_id", "project_id", "parent_node_id",
+    "children", "parent_baseline_hash", "canonical_version", "allowed_write_set",
+    "protected_paths", "planned_changes", "contract_snapshot_id",
+    "contract_snapshot_hash", "rollback_snapshot_id", "rollback_snapshot_hash",
+    "fingerprint", "status", "checks", "check_runs", "gate", "approval", "blocked_reason",
+    "created_at", "applied_at"
+  ],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "batch_id": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "project_id": {"type": "string", "minLength": 1},
+    "parent_node_id": {"type": "string", "minLength": 1},
+    "children": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+    "parent_baseline_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "canonical_version": {"type": "integer", "minimum": 0},
+    "allowed_write_set": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "protected_paths": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "planned_changes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "contract_snapshot_id": {"type": "string", "minLength": 1},
+    "contract_snapshot_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "rollback_snapshot_id": {"type": "string", "minLength": 1},
+    "rollback_snapshot_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "fingerprint": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "status": {"enum": ["PREPARED", "CHECKS_PASSED", "BLOCKED", "APPROVED", "APPLIED"]},
+    "checks": {"type": "object"},
+    "check_runs": {"type": "array", "items": {"type": "object"}},
+    "gate": {"enum": ["PENDING", "PASSED"]},
+    "approval": {"type": ["object", "null"]},
+    "blocked_reason": {"type": ["string", "null"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "applied_at": {"type": ["string", "null"], "format": "date-time"},
+    "parent_delivery_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}

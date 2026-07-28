@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@cucumber/gherkin": "^41.0.0",
+    "@cucumber/messages": "^33.0.3",
+    "js-yaml": "^4.1.0"
+  }
+}

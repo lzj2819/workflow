@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-05-cmp-review-command",
+  "project_id": "vibe-coding-course",
+  "node_id": "CMP-REVIEW-COMMAND",
+  "parent_node_id": "CMP-REVIEW-COMMAND",
+  "artifact_id": "leaf-gate-execution-log:CMP-REVIEW-COMMAND",
+  "artifact_type": "execution_log",
+  "created_at": "2026-07-19T14:42:17Z",
+  "generator": "leaf-gate",
+  "status": "STOP_LAYERING",
+  "input_artifacts": [
+    {
+      "artifact_type": "prd",
+      "path": "prd.json",
+      "sha256": "87325ece6c4e6e1cde149c1df13d41f0caca1a4fee0d02633d383dfa5f2082de"
+    },
+    {
+      "artifact_type": "architecture",
+      "path": "architecture.json",
+      "sha256": "c08b5937de26a09189b307d66fad50d1474d136dbd7f8f3d369ef91db4c19ac0"
+    },
+    {
+      "artifact_type": "testcases",
+      "path": "testcases.json",
+      "sha256": "74449f2a732448b80ffbf6c680f24cae3bf9d8e33bc93f006dbaed4b99165ef8"
+    },
+    {
+      "artifact_type": "mocktest_report",
+      "path": "mocktest_report.json",
+      "sha256": "f682586193e7e2c102184764a41d4701a617b8d88a3405b62cab900944ea80c6"
+    }
+  ],
+  "requirement_ids": [
+    "REQ-DD001"
+  ],
+  "module": "leaf-gate",
+  "start_time": "2026-07-19T14:42:17Z",
+  "end_time": "2026-07-19T14:42:17Z",
+  "duration_ms": null,
+  "output_artifacts": [
+    "leaf_gate_decision.json",
+    "leaf_gate_decision.md",
+    "leaf_gate_metrics.json",
+    "leaf_gate_annotation_template.json"
+  ],
+  "input_hash": "d7c7d9e0c9e500857dd5ccf4e3312bce81605bd9efefaf36649c78da8a23fa15",
+  "output_hash": "e1618d939a87bdc112b4cf3604a0b0bed0890655cdf7b6a815ee04440329430e",
+  "model": null,
+  "model_parameters": null,
+  "random_seed": null,
+  "retry_count": 0,
+  "token_usage": null,
+  "estimated_cost": null,
+  "human_interventions": [],
+  "warning_count": 0,
+  "error_type": null,
+  "error_message": null
+}

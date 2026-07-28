@@ -1,0 +1,39 @@
+{
+  "contract_id": "CT-011",
+  "title": "删除确认",
+  "contract_type": "api",
+  "direction": "sync_api",
+  "provider": "MOD-05",
+  "consumer": "教师浏览器",
+  "endpoint": { "method": "POST", "path": "/api/v1/teacher/deletion-batches/{batch_id}/confirm" },
+  "sync_async": "sync（确认动作）；删除执行为异步批处理",
+  "versioning": "/api/v1 路径版本",
+  "idempotency": "同一批次重复确认返回同一状态，不重复执行",
+  "timeout_retry": "未到期批次拒绝确认（BATCH_NOT_EXPIRED）；执行部分失败保留失败项供重跑",
+  "error_codes": ["AUTH_INVALID", "FORBIDDEN", "NOT_FOUND", "BATCH_NOT_EXPIRED"],
+  "publishes_events": ["CT-012"],
+  "side_effects": "创建删除确认记录；触发异步删除执行；写删除审计记录（DeletionConfirmed → RecordsDeleted）；审计记录先于清除写入",
+  "source": { "doc": "tutor/L0-root/architecture/04-interface-contracts.md", "sha256": "4599918536e46ca90f566919dc3e1e9f42c59d6da034d771ca44a98bae3efb9f" },
+  "schemas": {
+    "request": {
+      "type": "object",
+      "required": ["batch_id", "confirm"],
+      "properties": {
+        "batch_id": { "type": "string", "minLength": 1, "description": "路径参数" },
+        "confirm": { "const": true, "description": "仅 confirm=true 触发执行" },
+        "exclusions": { "type": "array", "items": { "type": "string" }, "description": "教师标记保留的记录" }
+      },
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "required": ["batch_id", "batch_status", "pending_deletion_scope"],
+      "properties": {
+        "batch_id": { "type": "string" },
+        "batch_status": { "type": "string" },
+        "pending_deletion_scope": { "type": ["array", "string"], "description": "待删除范围（submission_ids 列表或范围描述）" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "contract_id": "CT-001",
+  "title": "提交材料包上传",
+  "contract_type": "api",
+  "direction": "sync_api",
+  "provider": "MOD-02",
+  "consumer": "MOD-01",
+  "endpoint": { "method": "POST", "path": "/api/v1/submissions", "transport": "HTTPS multipart 分片；先创建上传会话，逐分片上传，最后提交合并（断点续传）" },
+  "sync_async": "sync（学生在 30 秒目标内等待接收确认，NFR-003）",
+  "versioning": "/api/v1 路径版本；分片协议字段向后兼容追加；不兼容变更升级主版本",
+  "idempotency": "以 submission_uuid 为幂等键；重复上传返回同一 submission_id，不产生重复提交",
+  "timeout_retry": "30 秒超时未确认时客户端用 CT-002 查询真实状态；上传中断服务端标记 upload_failed 并记录原因，客户端断点续传",
+  "error_codes": ["AUTH_INVALID", "VALIDATION_FAILED", "PAYLOAD_TOO_LARGE", "UNSUPPORTED_MEDIA_TYPE", "REJECTED_MEMBERSHIP"],
+  "publishes_events": ["CT-004", "CT-006"],
+  "side_effects": "创建提交记录与材料清单；执行归属校验（CT-003）；推进状态机；生成完整性报告与缺失项标记；校验通过时发布 SubmissionReceived",
+  "limits": { "max_submission_bytes": 524288000, "file_type_whitelist": ["代码", "文本", "图片", "常见文档", "压缩包"] },
+  "source": { "doc": "tutor/L0-root/architecture/04-interface-contracts.md", "sha256": "4599918536e46ca90f566919dc3e1e9f42c59d6da034d771ca44a98bae3efb9f" },
+  "schemas": {
+    "request": {
+      "type": "object",
+      "required": ["submission_uuid", "invite_code", "student_name", "group_name", "assignment", "material_chunks"],
+      "properties": {
+        "submission_uuid": { "type": "string", "format": "uuid", "description": "幂等键，客户端生成" },
+        "invite_code": { "type": "string", "minLength": 1 },
+        "student_name": { "type": "string", "minLength": 1 },
+        "group_name": { "type": "string", "minLength": 1 },
+        "assignment": { "type": "string", "minLength": 1 },
+        "material_chunks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["category"],
+            "properties": {
+              "category": { "type": "string", "enum": ["对话", "代码", "截图", "结果"] },
+              "filename": { "type": "string" },
+              "media_type": { "type": "string" },
+              "size_bytes": { "type": "integer", "minimum": 0 },
+              "content_ref": { "type": "string", "description": "multipart 二进制内容的传输层引用占位；分片协议由 L08 详细设计承载" }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "response_received": {
+      "type": "object",
+      "required": ["submission_id", "received_at", "status", "missing_items"],
+      "properties": {
+        "submission_id": { "type": "string", "minLength": 1 },
+        "received_at": { "type": "string", "format": "date-time" },
+        "status": { "const": "received" },
+        "missing_items": { "type": "array", "items": { "type": "string", "enum": ["对话", "代码", "截图", "结果"] } }
+      },
+      "additionalProperties": false
+    },
+    "response_rejected": {
+      "type": "object",
+      "required": ["status", "rejection_reason"],
+      "properties": {
+        "status": { "const": "rejected" },
+        "rejection_reason": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    }
+  }
+}
