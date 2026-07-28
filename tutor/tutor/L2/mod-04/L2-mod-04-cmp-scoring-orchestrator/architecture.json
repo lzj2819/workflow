@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-04-cmp-scoring-orchestrator",
+  "project_id": "vibe-coding-course",
+  "node_id": "CMP-SCORING-ORCHESTRATOR",
+  "parent_node_id": "CMP-SCORING-ORCHESTRATOR",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD002"
+  ],
+  "artifact_id": "architecture:CMP-SCORING-ORCHESTRATOR:leaf-gate-l2-l2-mod-04-cmp-scoring-orchestrator",
+  "artifact_type": "architecture",
+  "components": [
+    "CMP-SCORING-ORCHESTRATOR",
+    "CMP-ASSESSMENT-ENGINE",
+    "CMP-RESULT-PUBLISHER",
+    "CMP-SO-TERMINAL-COMMIT",
+    "CMP-MODEL-SERVICE-ACL",
+    "CMP-SCORING-METRICS",
+    "CMP-SO-CLAIM-LEASE",
+    "CMP-SO-METRICS-FACADE",
+    "CMP-SO-RETRY-CONTROLLER",
+    "CMP-SO-TASK-INGRESS",
+    "CMP-RUBRIC-PROMPT-COMPOSER"
+  ],
+  "interfaces": [
+    "CT-004",
+    "CT-005",
+    "CT-010",
+    "CT-001",
+    "IC-001",
+    "IC-002",
+    "IC-003",
+    "IC-004",
+    "IC-005",
+    "IC-006"
+  ],
+  "dependencies": [
+    "CMP-ASSESSMENT-ENGINE",
+    "CMP-RESULT-PUBLISHER",
+    "CMP-SO-TERMINAL-COMMIT",
+    "CMP-MODEL-SERVICE-ACL",
+    "CMP-SCORING-METRICS",
+    "CMP-SO-CLAIM-LEASE",
+    "CMP-SO-METRICS-FACADE",
+    "CMP-SO-RETRY-CONTROLLER",
+    "CMP-SO-TASK-INGRESS",
+    "CMP-RUBRIC-PROMPT-COMPOSER"
+  ],
+  "depth": 2,
+  "complexity": 31,
+  "risks": [],
+  "responsibility": "CMP-SCORING-ORCHESTRATOR is a terminal L2 implementation boundary.",
+  "children": []
+}

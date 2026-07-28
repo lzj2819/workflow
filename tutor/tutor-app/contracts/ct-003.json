@@ -1,0 +1,39 @@
+{
+  "contract_id": "CT-003",
+  "title": "课程归属校验",
+  "contract_type": "api",
+  "direction": "sync_api",
+  "provider": "MOD-03",
+  "consumer": "MOD-02",
+  "endpoint": { "method": "POST", "path": "/api/v1/courses/verify-membership", "transport": "DU-2 进程内低延迟调用（同契约语义）" },
+  "sync_async": "sync",
+  "versioning": "/api/v1 路径版本",
+  "idempotency": "同一请求重复执行结果一致；每次提交必须重新调用（REQ-006），不得缓存通过结论",
+  "timeout_retry": "名单服务超时 → 提交保持待校验状态并重试；不向客户端暴露内部错误细节",
+  "error_codes": ["ROSTER_UNAVAILABLE"],
+  "publishes_events": [],
+  "side_effects": "记录校验结果（通过/拒绝原因），逐条校验记录",
+  "source": { "doc": "tutor/L0-root/architecture/04-interface-contracts.md", "sha256": "4599918536e46ca90f566919dc3e1e9f42c59d6da034d771ca44a98bae3efb9f" },
+  "schemas": {
+    "request": {
+      "type": "object",
+      "required": ["invite_code", "student_name", "group_name"],
+      "properties": {
+        "invite_code": { "type": "string", "minLength": 1 },
+        "student_name": { "type": "string", "minLength": 1 },
+        "group_name": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "required": ["verified"],
+      "properties": {
+        "verified": { "type": "boolean" },
+        "course_id": { "type": "string", "description": "verified=true 时必填（outbound_produced_fields）；verified=false 时可为空串或缺省（父包 R1 拒绝应答：verified=false+reason）" },
+        "reason": { "type": "string", "description": "verified=false 时返回（outbound_conditional_fields）" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

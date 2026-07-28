@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block title %}提交详情 · {{ vm.submission_id }}{% endblock %}
+{% block content %}
+{% if notice %}<div class="notice-panel">{{ notice }}</div>{% endif %}
+{% if error %}<div class="error-panel">{{ error }}</div>{% endif %}
+
+<div class="card">
+  <h1>提交详情 {{ vm.submission_id }}</h1>
+  <p>处理状态：<span class="badge {{ vm.status }}">{{ vm.status or '缺失' }}</span></p>
+
+  <h2>材料清单</h2>
+  {% if vm.material_refs %}
+  <table>
+    <thead><tr><th>类别</th><th>文件</th><th>引用</th></tr></thead>
+    <tbody>
+      {% for m in vm.material_refs %}
+      <tr>
+        <td>{{ m.category or '缺失' }}</td>
+        <td>{{ m.filename or '缺失' }}</td>
+        <td>{{ m.ref or m.content_ref or '缺失' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="missing-value">材料清单缺失</p>
+  {% endif %}
+</div>
+
+{% if vm.scoring_failed %}
+<div class="error-panel" id="scoring-failed-panel">
+  <h2>评分失败</h2>
+  <p>失败原因：<strong>{{ vm.failure_reason or '缺失' }}</strong></p>
+  {% if vm.retry_record %}
+  <p>重试结果：</p>
+  <ul>
+    {% for key, value in vm.retry_record.items() %}
+    <li>{{ key }}：{{ value }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="missing-value">重试结果缺失</p>
+  {% endif %}
+  <p class="missing-value">评分失败，不显示等级</p>
+</div>
+{% endif %}
+
+<div class="card">
+  <h2>评分（教师侧可见）</h2>
+  <p>原始等级：
+    {% if vm.original_grade is not none %}
+    <strong class="grade-value">{{ vm.original_grade }}</strong>
+    {% else %}
+    <span class="missing-value">缺失</span>
+    {% endif %}
+  </p>
+  <p>最终等级：
+    {% if vm.final_grade is not none %}
+    <strong class="grade-value">{{ vm.final_grade }}</strong>
+    {% else %}
+    <span class="missing-value">未调整</span>
+    {% endif %}
+  </p>
+
+  <h3>五维依据</h3>
+  {% if vm.dimension_rationales %}
+  <ul>
+    {% for d in vm.dimension_rationales %}
+    <li><strong>{{ d.dimension or '缺失' }}</strong>：{{ d.rationale or '缺失' }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="missing-value">依据缺失</p>
+  {% endif %}
+
+  <h3>教师建议</h3>
+  {% if vm.teacher_suggestions %}
+  <ul>
+    {% for s in vm.teacher_suggestions %}
+    <li>{{ s }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="missing-value">建议缺失</p>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>批注记录</h2>
+  {% if vm.annotations %}
+  <ul>
+    {% for a in vm.annotations %}
+    <li>{{ a.text }}（{{ a.operator }}，{{ a.updated_at }}）</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="missing-value">暂无批注</p>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>复核（保存批注 / 调整最终等级）</h2>
+  <form class="inline" method="post" action="/teacher/submissions/{{ vm.submission_id }}/review" data-lock>
+    <label for="annotation">批注</label>
+    <textarea id="annotation" name="annotation" rows="3">{{ draft.annotation or '' }}</textarea>
+    {% if vm.final_grade_editable %}
+    <label for="final_grade">最终等级</label>
+    <select id="final_grade" name="final_grade">
+      <option value="">不调整</option>
+      {% for g in grades %}
+      <option value="{{ g }}" {% if vm.final_grade == g %}selected{% endif %}>{{ g }}</option>
+      {% endfor %}
+    </select>
+    <label for="adjustment_reason">调整理由（可选）</label>
+    <input type="text" id="adjustment_reason" name="adjustment_reason"
+           value="{{ draft.adjustment_reason or '' }}">
+    {% else %}
+    <p class="missing-value">无原始等级，不能设置最终等级（不得伪造等级）</p>
+    {% endif %}
+    <p><button type="submit">保存复核</button></p>
+  </form>
+</div>
+{% endblock %}

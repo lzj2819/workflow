@@ -1,0 +1,4 @@
+interface:
+  display_name: "Leaf Gate"
+  short_description: "Return a structured layering decision with evidence."
+  default_prompt: "Use $leaf-gate to evaluate structured PRD, architecture, tests, and Mocktest evidence."

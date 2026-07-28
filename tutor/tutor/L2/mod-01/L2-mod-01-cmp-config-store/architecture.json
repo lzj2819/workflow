@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-01-cmp-config-store",
+  "project_id": "vibe-coding-course",
+  "node_id": "CMP-CONFIG-STORE",
+  "parent_node_id": "MOD-01",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD002"
+  ],
+  "artifact_id": "architecture:CMP-CONFIG-STORE:leaf-gate-l2-l2-mod-01-cmp-config-store",
+  "artifact_type": "architecture",
+  "components": [
+    "CMP-CONFIG-STORE",
+    "CMP-CS-CONFIG-PORT",
+    "CMP-CS-STATE-STORE",
+    "CMP-CS-DIRECTORY-PROBE",
+    "CMP-CS-SCHEMA-VALIDATOR",
+    "CMP-STATUS-PRESENTER",
+    "CMP-CS",
+    "CMP-INTENT-PARSER",
+    "CMP-DIALOGUE-COLLECTOR",
+    "CMP-MATERIAL-COLLECTOR",
+    "CMP-PENDING-QUEUE",
+    "CMP-UPLOAD-CLIENT"
+  ],
+  "interfaces": [
+    "IC-M01-02",
+    "IC-M01-05",
+    "CT-001",
+    "IC-CS-001",
+    "IC-CS-002",
+    "IC-CS-003"
+  ],
+  "dependencies": [
+    "CMP-CS-CONFIG-PORT",
+    "CMP-CS-STATE-STORE",
+    "CMP-CS-DIRECTORY-PROBE",
+    "CMP-CS-SCHEMA-VALIDATOR",
+    "CMP-STATUS-PRESENTER",
+    "CMP-CS",
+    "CMP-INTENT-PARSER",
+    "CMP-DIALOGUE-COLLECTOR",
+    "CMP-MATERIAL-COLLECTOR",
+    "CMP-PENDING-QUEUE",
+    "CMP-UPLOAD-CLIENT"
+  ],
+  "depth": 2,
+  "complexity": 29,
+  "risks": [],
+  "responsibility": "CMP-CONFIG-STORE is a terminal L2 implementation boundary.",
+  "children": []
+}

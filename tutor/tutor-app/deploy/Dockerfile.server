@@ -1,0 +1,16 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+COPY shared/ ./shared/
+COPY contracts/ ./contracts/
+COPY server/ ./server/
+# CCR-001：MOD-04 评分清除消费（AssessmentPurgeExecutor）经 DU-2 组合根 relay 注册
+# 同进程消费（KD-002 同库共部署）；DU-3 常驻循环落地后迁回 worker 进程（GAP-02）
+COPY worker/ ./worker/
+RUN pip install --no-cache-dir -r server/requirements.txt
+
+ENV PYTHONPATH="/app/shared:/app/server:/app/worker" \
+    PYTHONUNBUFFERED=1
+
+# DU-2 组合根（T-B03d 已装配全部 router）
+CMD ["python", "-m", "uvicorn", "course_app.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000"]

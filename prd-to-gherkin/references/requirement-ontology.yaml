@@ -1,0 +1,92 @@
+version: "1.0.0"
+name: requirement-ontology
+mode: closed-core-with-namespaced-extensions
+
+node_types:
+  Actor:
+    description: "执行动作或接收结果的角色。"
+    required_properties: [name]
+  Action:
+    description: "角色或系统执行的可识别行为。"
+    required_properties: [verb]
+  Object:
+    description: "动作作用的业务对象。"
+    required_properties: [name]
+  Data:
+    description: "被创建、读取、更新、删除、传输或测量的数据。"
+    required_properties: [name]
+  Condition:
+    description: "行为成立所需的前置条件或守卫条件。"
+    required_properties: [expression]
+  Event:
+    description: "触发行为或状态转换的事件。"
+    required_properties: [name]
+  State:
+    description: "对象或系统在某时刻的可区分状态。"
+    required_properties: [name]
+  Constraint:
+    description: "限制动作、对象、数据或状态的规则。"
+    required_properties: [expression]
+  Temporal:
+    description: "时间点、持续时间、顺序或时间窗口。"
+    required_properties: [expression]
+  Boundary:
+    description: "数量、大小、时间或范围的包含/排除边界。"
+    required_properties: [dimension, operator, value]
+  Policy:
+    description: "来源明确规定的业务、安全、隐私或合规政策。"
+    required_properties: [statement]
+  Interface:
+    description: "组件、端点、请求、响应、事件或协议边界。"
+    required_properties: [name]
+  Exception:
+    description: "来源明确规定的异常条件及其作用范围。"
+    required_properties: [condition]
+  Metric:
+    description: "可度量质量或业务指标。"
+    required_properties: [name, unit]
+  Oracle:
+    description: "可观察、可判定通过或失败的预期结果。"
+    required_properties: [observation_type, expected]
+
+edge_types:
+  PERFORMS: {from: [Actor], to: [Action]}
+  ACTS_ON: {from: [Action], to: [Object, Data, Interface]}
+  REQUIRES: {from: [Action, Event], to: [Condition, State]}
+  TRIGGERS: {from: [Actor, Event, Action], to: [Action, State]}
+  PRODUCES: {from: [Action, Interface], to: [Object, Data, Event, State]}
+  TRANSITIONS_FROM: {from: [Action, Event], to: [State]}
+  TRANSITIONS_TO: {from: [Action, Event], to: [State]}
+  CONSTRAINS: {from: [Constraint, Temporal, Boundary, Policy], to: [Actor, Action, Object, Data, State, Interface, Metric]}
+  EXCEPTION_TO: {from: [Exception], to: [Action, Constraint, Policy, Interface]}
+  OBSERVED_BY: {from: [Action, State, Data, Interface, Metric], to: [Oracle]}
+  MEASURED_BY: {from: [Action, State, Interface], to: [Metric]}
+  DEPENDS_ON: {from: [Action, Condition, State, Metric, Oracle], to: [Action, Condition, State, Data, Interface, Metric]}
+  PRECEDES: {from: [Action, Event, State], to: [Action, Event, State]}
+  AND: {from: ["*"], to: ["*"]}
+  OR: {from: ["*"], to: ["*"]}
+
+node_schema:
+  required: [node_id, type, label, evidence]
+  evidence_item:
+    required: [fact_id, source_ref]
+  optional: [canonical_term, properties, status]
+
+edge_schema:
+  required: [edge_id, type, from, to, evidence]
+  optional: [guard, order, status]
+
+invariants:
+  - "每个语义节点必须使用 node_types 中的类型或批准的命名空间扩展。"
+  - "每条边的 from/to 类型必须满足 edge_types 的定义。"
+  - "每个节点和边至少引用一个 FACT；Oracle 也可引用 VALID_DERIVATION。"
+  - "Ontology 类型不能作为业务事实证据。"
+  - "UNKNOWN、HYPOTHESIS 和 CONFLICT 是状态，不是可进入权威推理的业务节点。"
+  - "新增核心类型或关系必须提升 ontology version 并重新验证受影响模型。"
+
+extension_policy:
+  namespace_format: "<domain>:<TypeName>"
+  requirements:
+    - "扩展定义不得改变核心类型或关系的含义。"
+    - "扩展必须声明父类型、属性、允许关系和审批引用。"
+    - "未批准扩展中的节点不得进入冻结基线。"

@@ -1,0 +1,28 @@
+{
+  "contract_id": "FLOW-011",
+  "title": "课程结束时间只读引用",
+  "contract_type": "internal_read",
+  "direction": "internal_read",
+  "provider": "MOD-03",
+  "consumer": "MOD-05",
+  "endpoint": null,
+  "sync_async": "sync（同 DU-2 进程内只读引用，无网络契约）",
+  "versioning": "不适用（无网络契约；不得升级为网络契约）",
+  "idempotency": "只读，天然幂等",
+  "timeout_retry": "批处理时读取最新值；变更频率极低",
+  "error_codes": [],
+  "publishes_events": [],
+  "side_effects": "None; read-only（retention_due_at = 课程结束时间 + 1 年，由 MOD-05 保留治理批处理计算）",
+  "implementation": "CP-COURSE-ENDTIME 模块内只读端口（MOD-03 CMP-COURSE-ROSTER-ADMIN → MOD-05）",
+  "source": { "doc": "tutor/L0-root/architecture/02-runtime-architecture.md", "sha256": "a5d9d3652cf3b638d0fa6c4790c19641893689ff06bea891603c6734e6193dbe" },
+  "schemas": {
+    "response": {
+      "type": "object",
+      "required": ["course_end_time"],
+      "properties": {
+        "course_end_time": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,119 @@
+# Architecture Manifest — L1 / MOD-03 course-roster
+# 由 recursive-architecture-design 生成；字段语义见 references/artifact-spec.zh-CN
+
+manifest_version: "1.0"
+
+package:
+  node_name: course-roster
+  level: L1
+  target_node_id: MOD-03
+  parent_node_id: MOD-03            # 本次细化的父节点即目标节点本身
+  responsibility: >-
+    课程、邀请码、名单（姓名+小组）维护；每次提交的归属校验（不缓存通过结论）；
+    提供课程结束时间供保留治理引用。
+    （逐字引自父包 01-system-overview.md「模块职责」MOD-03 条目）
+  exclusions:
+    - 不消费任何 API/事件契约，不发布任何事件（父包组件接口卡 consumes_api/consumes_events/publishes_events 均为 []）
+    - 不持有 Submission / AssessmentResult / ReviewRecord / PresentationView / DeletionBatch 聚合（03-data-and-consistency §数据所有权）
+    - 不参与评分执行与教师端展示（MOD-04 / MOD-05 职责）；不执行保留期数据清除（MOD-02 执行、MOD-05 治理）
+    - 不承接成功指标（01-system-overview modules_without_sm_allocation：MOD-03 为支撑能力，含于 SM-001 链路 REJECTED_MEMBERSHIP 统计）
+
+inputs:
+  parent_architecture: architecture/L0/output
+  target_node_id: MOD-03
+  current_prd: prd/L1/L1-mod-03/prd.md
+  parent_prd: 未读取                    # 父包已提供完整的需求/契约/验收投影追踪，无需回读父 PRD
+  output_dir: architecture/L1/L1-mod-03
+  mode: new
+  note: >-
+    用户指令原文提及「生成 L1-mod-01 的架构」，与 PRD（module_name: MOD-03）、
+    输出目录（L1-mod-03）、父包需求追踪（REQ-005/REQ-006）三方证据不一致；
+    经交叉确认按 MOD-03 执行。architecture/L1/L1-mod-01 为已存在的独立包，本运行未触碰。
+
+parent_package_type: top_level_ddd_to_system_package
+parent_package_detection: >-
+  父包根无 architecture-manifest.yaml，存在 01-system-overview.md（顶层系统总览），
+  按 parent-package-adapter 规则 2 识别为顶层 DDD 到系统架构包
+  （给定路径 architecture/L0/output 即该顶层包的输出根）。
+
+node_match_evidence:
+  - source: architecture/L0/output/01-system-overview.md §模块清单
+    match: "| MOD-03 | course-roster | BC-COURSE | REQ-005、REQ-006 | - |"
+    kind: exact_unique                 # 全包检索 module_id=MOD-03 唯一命中
+  - source: architecture/L0/output/01-system-overview.md §模块职责
+    match: "MOD-03 course-roster：课程、邀请码、名单（姓名+小组）维护；每次提交的归属校验（不缓存通过结论）；提供课程结束时间供保留治理引用"
+    kind: exact_unique
+  - source: architecture/L0/output/04-interface-contracts.md §组件接口卡
+    match: "module_id: MOD-03（provides_contracts: [CT-003, CT-013]；consumes_api/consumes_events/publishes_events 均 []；internal_read_by: [MOD-05]）"
+    kind: exact_unique
+  - source: architecture/L0/output/06-deployment.md §Module 到部署单元映射
+    match: "| MOD-03 | DU-2 | 与 MOD-02 同步低延迟调用 |"
+    kind: exact_unique
+  - source: architecture/L0/output/acceptance-contract-projections.yaml §AC-REQ-003-01
+    match: "module_slices 含 module_id: MOD-03（requirements: [REQ-005, REQ-006]，contracts: [CT-003]）"
+    kind: exact_unique
+  - source: prd/L1/L1-mod-03/prd.md frontmatter
+    match: "module_name: MOD-03；REQ-D001/REQ-D002 的 parent_req 依次为 REQ-005/REQ-006，与父包 MOD-03 需求追踪完全一致"
+    kind: cross_confirmation
+
+boundary_fingerprint:
+  parent_artifacts:
+    - "01-system-overview.md：模块清单 MOD-03 行、模块职责、BC-COURSE↔MOD-03 一一对应、外部系统边界（课程名单来源，A-002）、modules_without_sm_allocation MOD-03"
+    - "02-runtime-architecture.md：FLOW-003（CT-003，同 DU-2 低延迟同步）、FLOW-011（MOD-05 internal_read 课程结束时间）、SCENARIO-001 seq 2、DF-1 步骤 4–5（F1-4）、DF-3 步骤 1"
+    - "03-data-and-consistency.md：Course 聚合归 MOD-03（课程/邀请码/名单/课程结束时间）；本地事务边界与不变量（邀请码唯一映射课程；姓名+小组命中名单才通过校验）；Course→保留治理只读引用"
+    - "04-interface-contracts.md：CT-003 / CT-013 全文、通用约定（/api/v1、教师账号会话、写操作幂等）、错误码汇总（ROSTER_UNAVAILABLE、FORBIDDEN+AccessDeniedLogged 等）、组件接口卡 MOD-03、策略汇总"
+    - "05-decisions-and-technology.md：KD-002 / KD-003 / KD-005；数据库产品选型 defer_to_detail_design；名单外部系统对接暂缓（A-002）"
+    - "06-deployment.md：DU-2 course-app（MOD-02/03/05 共部署，共享数据库与本地磁盘）"
+    - "acceptance-contract-projections.yaml：AC-REQ-003-01 disposition=shared 且 module_slices[MOD-03]；AC-REQ-006-01 不在 shared 清单，为 MOD-03 单模块契约（derive 直接投影）"
+  contracts:
+    - "CT-003 课程归属校验（provider 侧实现；标识/字段/owner/失败/幂等/版本语义均不变）"
+    - "CT-013 名单导入（provider 侧实现）"
+    - "FLOW-011 课程结束时间只读引用（无网络契约的 internal_read 边界）"
+  decisions: [KD-002, KD-003, KD-005, A-002, "数据库产品选型 defer_to_detail_design（继承父层暂缓）"]
+  ownership: "Course 聚合（课程/邀请码/名单/课程结束时间）归 MOD-03；本层新增 VerificationRecord（校验记录）为 MOD-03 内部审计状态，所有权仍在 MOD-03 内"
+  deployment: "DU-2 course-app（与 MOD-02/05 同部署单元；不得创建独立服务/容器/部署单元/公共运行时边界）"
+
+status: ready_for_human_gate          # draft → 阶段 6 交接完成后置为 ready_for_human_gate
+
+children: []                           # MOD-03 is an L1 leaf node; no L2 target
+
+internal_support_components:
+  - component_id: CMP-COURSE-ROSTER-ADMIN
+    traces: [CT-013, FR-005, A-002, FLOW-011, DF-3, LCD-004]
+    l2_target: false
+  - component_id: CMP-MEMBERSHIP-VERIFIER
+    traces: [REQ-D001, REQ-D002, CT-003, "D-AC-REQ-003-01", "D-AC-REQ-006-01"]
+    l2_target: false
+
+outputs:
+  - architecture/L1/L1-mod-03/architecture-manifest.yaml
+  - architecture/L1/L1-mod-03/01-design-context.md
+  - architecture/L1/L1-mod-03/02-architecture-decomposition.md
+  - architecture/L1/L1-mod-03/03-state-and-data.md
+  - architecture/L1/L1-mod-03/04-contracts-and-runtime.md
+  - architecture/L1/L1-mod-03/05-local-decisions.md
+  - architecture/L1/L1-mod-03/child-handoff.md
+
+validation:
+  - check: "四必需输入解析与 target 唯一匹配证据"
+    result: "通过（本 manifest inputs / node_match_evidence；output_dir 写入前确认为不存在目录，mode=new 无覆盖）"
+  - check: "REQ-D001/REQ-D002 与 D-AC-REQ-003-01 / D-AC-REQ-006-01 全部分类分配且有子节点承接"
+    result: "通过（01-design-context §3 分配表；02-architecture-decomposition §3 子节点追踪列）"
+  - check: "每个直接 child_id 至少拥有 current REQ-D/NFR-D；内部支撑组件不进入 direct children"
+    result: "通过（CMP-MEMBERSHIP-VERIFIER 承接 REQ-D001/REQ-D002；CMP-COURSE-ROSTER-ADMIN 仅为内部支撑）"
+  - check: "继承契约 CT-003 / CT-013 的标识、owner、字段、失败/幂等/版本语义未改"
+    result: "通过（04-contracts-and-runtime §1 逐字继承，仅做内部实现映射）"
+  - check: "父/兄弟状态所有权未重分配（Course 聚合仍归 MOD-03；未触碰兄弟聚合）"
+    result: "通过（03-state-and-data §1 与 §6 确认）"
+  - check: "决策队列无遗留 decide_now；无 return_to_parent"
+    result: "通过（05-local-decisions §5 队列表；未创建 parent-change-request.md）"
+  - check: "带 ID 清单按稳定 ID 排序（子节点/契约/状态/决策）"
+    result: "通过（CMP-*、CP-*、ST-*、LCD-* 均按字典序）"
+  - check: "未引入新部署单元/服务/事件/消息总线/公共运行时边界"
+    result: "通过（直接 child_id 与内部支撑均在 DU-2 内；publishes_events 保持 []；未新增网络契约）"
+
+incomplete_items:
+  - "观察项 1：D-AC-REQ-006-01 exceptions 的提交状态名 identity_validation_failed 属 MOD-02 提交状态机细化（父包 FLOW-003 表述为『保持待校验并重试』）；对 MOD-03 无契约影响（ROSTER_UNAVAILABLE 语义不变），留 MOD-02 L1 设计核对"
+  - "观察项 2：课程创建/邀请码签发无父级公共契约，v1 采用运维预置（LCD-004）；未来如需教师自助建课 API，须 return_to_parent 新增父级契约"
+  - "观察项 3：课程级数据（名单/校验记录）的保留清除无父级契约（DF-3 仅覆盖提交数据），本地对齐课程结束+1 年（LCD-005）；如需契约化清除流程需父层补充"
+blocking_impact: "无阻塞项；上述观察项不改变本包结构，可在 Human Gate 后进入下一层组件细化"

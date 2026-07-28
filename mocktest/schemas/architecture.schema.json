@@ -1,0 +1,130 @@
+{
+  "$defs": {
+    "ArtifactRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "artifact_type": {
+          "title": "Artifact Type",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "sha256": {
+          "default": "",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "schema_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Schema Version"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "artifact_type",
+        "path"
+      ],
+      "title": "ArtifactRecord",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "architecture/v1",
+      "default": "architecture/v1",
+      "enum": [
+        "architecture/v1"
+      ],
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "project_id": {
+      "title": "Project Id",
+      "type": "string"
+    },
+    "node_id": {
+      "title": "Node Id",
+      "type": "string"
+    },
+    "source_prd_id": {
+      "title": "Source Prd Id",
+      "type": "string"
+    },
+    "artifact_id": {
+      "title": "Artifact Id",
+      "type": "string"
+    },
+    "artifact_type": {
+      "const": "architecture",
+      "default": "architecture",
+      "enum": [
+        "architecture"
+      ],
+      "title": "Artifact Type",
+      "type": "string"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    },
+    "generator": {
+      "default": "validate-arch",
+      "title": "Generator",
+      "type": "string"
+    },
+    "status": {
+      "const": "COMPLETED",
+      "default": "COMPLETED",
+      "enum": [
+        "COMPLETED"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "source": {
+      "$ref": "#/$defs/ArtifactRecord"
+    },
+    "requirement_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Requirement Ids",
+      "type": "array"
+    },
+    "architecture": {
+      "title": "Architecture",
+      "type": "object"
+    }
+  },
+  "required": [
+    "run_id",
+    "project_id",
+    "node_id",
+    "source_prd_id",
+    "artifact_id",
+    "created_at",
+    "source",
+    "architecture"
+  ],
+  "title": "NormalizedArchitecture",
+  "type": "object"
+}

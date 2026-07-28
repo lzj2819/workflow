@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-02-si-xfer",
+  "project_id": "vibe-coding-course",
+  "node_id": "SI-XFER",
+  "parent_node_id": "SI-XFER",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD001",
+    "REQ-DD002"
+  ],
+  "artifact_id": "architecture:SI-XFER:leaf-gate-l2-l2-mod-02-si-xfer",
+  "artifact_type": "architecture",
+  "components": [
+    "SI-XFER",
+    "SI-STORE",
+    "SI-01",
+    "SI-API",
+    "SI-02",
+    "SI-CORE",
+    "SI-VERIFY",
+    "SI-RELAY",
+    "SI-04"
+  ],
+  "interfaces": [
+    "IC-SI-01",
+    "IC-SI-02",
+    "CT-001",
+    "IC-XFER-02",
+    "IC-XFER-03",
+    "IC-XFER-04",
+    "CT-002",
+    "IC-XFER-01",
+    "IC-XFER-05",
+    "API--",
+    "IC-SI-04",
+    "CT-004",
+    "CT-006",
+    "CT-014"
+  ],
+  "dependencies": [
+    "SI-STORE",
+    "SI-01",
+    "SI-API",
+    "SI-02",
+    "SI-CORE",
+    "SI-VERIFY",
+    "SI-RELAY",
+    "SI-04"
+  ],
+  "depth": 2,
+  "complexity": 31,
+  "risks": [],
+  "responsibility": "SI-XFER is a terminal L2 implementation boundary.",
+  "children": []
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "leaf-decision.schema.json",
+  "title": "Leaf Gate Decision",
+  "allOf": [
+    {"$ref": "common-envelope.schema.json"},
+    {
+      "type": "object",
+      "required": ["decision", "proposed_children"],
+      "properties": {
+        "status": {
+          "enum": ["CONTINUE_LAYERING", "STOP_LAYERING", "ERROR"]
+        },
+        "decision": {
+          "enum": ["CONTINUE_LAYERING", "STOP_LAYERING", "ERROR"]
+        },
+        "proposed_children": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["node_id"],
+            "properties": {
+              "node_id": {"type": "string", "minLength": 1},
+              "parent_node_id": {"type": ["string", "null"]},
+              "requirement_ids": {
+                "type": "array",
+                "items": {"type": "string"}
+              }
+            },
+            "additionalProperties": true
+          }
+        }
+      }
+    }
+  ]
+}

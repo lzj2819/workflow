@@ -1,0 +1,60 @@
+name: tutor
+
+# DU-2 course-app + DU-3 assessment-worker + PostgreSQL（DD-002）
+# 本地开发：cp .env.example .env && docker compose -f deploy/docker-compose.yml up --build
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: tutor
+      POSTGRES_PASSWORD: tutor
+      POSTGRES_DB: tutor
+    ports:
+      - "5432:5432"
+    volumes:
+      - tutor-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tutor -d tutor"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  server:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.server
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - path: ../.env
+        required: false
+    environment:
+      DATABASE_URL: postgresql://tutor:tutor@db:5432/tutor
+      MODEL_PROVIDER: fake
+    ports:
+      - "8000:8000"
+    volumes:
+      - tutor-materials:/app/data
+
+  worker:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.worker
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - path: ../.env
+        required: false
+    environment:
+      DATABASE_URL: postgresql://tutor:tutor@db:5432/tutor
+      MODEL_PROVIDER: fake
+      # GAP-02：材料只读根（与 server 同一卷，只读挂载）
+      DATA_DIR: /app/data
+    volumes:
+      - tutor-materials:/app/data:ro
+
+volumes:
+  tutor-db:
+  tutor-materials:

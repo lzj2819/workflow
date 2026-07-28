@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-05-cmp-teacher-ui",
+  "project_id": "vibe-coding-course",
+  "node_id": "CMP-TEACHER-UI",
+  "parent_node_id": "CMP-TEACHER-UI",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD001",
+    "REQ-DD002"
+  ],
+  "artifact_id": "prd:CMP-TEACHER-UI:leaf-gate-l2-l2-mod-05-cmp-teacher-ui",
+  "artifact_type": "prd",
+  "requirements": [
+    {
+      "id": "REQ-DD001",
+      "text": "Inherited and bounded requirement REQ-DD001 for CMP-TEACHER-UI.",
+      "status": "active"
+    },
+    {
+      "id": "REQ-DD002",
+      "text": "Inherited and bounded requirement REQ-DD002 for CMP-TEACHER-UI.",
+      "status": "active"
+    }
+  ],
+  "depth": 2,
+  "max_depth": 2,
+  "parent": {
+    "node_id": "CMP-TEACHER-UI"
+  },
+  "node_history": [
+    {
+      "node_id": "CMP-TEACHER-UI",
+      "depth": 1,
+      "source": "inherited"
+    }
+  ]
+}

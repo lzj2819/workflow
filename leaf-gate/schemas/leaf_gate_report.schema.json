@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Leaf Gate Report",
+  "oneOf": [
+    { "$ref": "leaf_gate_static_report.schema.json" },
+    { "$ref": "leaf_gate_final_report.schema.json" },
+    { "$ref": "leaf_gate_input_error.schema.json" }
+  ]
+}

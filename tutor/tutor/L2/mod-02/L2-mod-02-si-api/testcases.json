@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-02-si-api",
+  "project_id": "vibe-coding-course",
+  "node_id": "SI-API",
+  "parent_node_id": "SI-API",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD003"
+  ],
+  "artifact_id": "testcases:SI-API:leaf-gate-l2-l2-mod-02-si-api",
+  "artifact_type": "testcases",
+  "testcases": [
+    {
+      "id": "TC-001",
+      "name": "返回接收确认并异步创建评分任务",
+      "requirement_ids": [
+        "REQ-DD003"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-002",
+      "name": "接收确认包含提交编号和 received_at",
+      "requirement_ids": [
+        "REQ-DD003"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-003",
+      "name": "状态依次可观察为 received、processing、scored 或 scoring_failed",
+      "requirement_ids": [
+        "REQ-DD003"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-004",
+      "name": "仍为每个任务生成独立编号和状态",
+      "requirement_ids": [
+        "REQ-DD003"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-005",
+      "name": "再次失败标记 scoring_failed 并通知教师",
+      "requirement_ids": [
+        "REQ-DD003"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    }
+  ]
+}

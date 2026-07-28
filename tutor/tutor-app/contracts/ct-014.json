@@ -1,0 +1,75 @@
+{
+  "contract_id": "CT-014",
+  "title": "PurgeCompleted",
+  "contract_type": "event",
+  "direction": "async_event",
+  "provider": "MOD-02",
+  "consumer": "MOD-05",
+  "delivery": "数据库 Outbox；消费失败由投递器重试",
+  "sync_async": "async",
+  "versioning": "v=1，向后兼容追加",
+  "idempotency": "按 batch_id + purged_at 去重；重复事件不重复更新批次状态",
+  "error_codes": [],
+  "publishes_events": [],
+  "side_effects": "更新批次执行状态；失败项保留在批次中供重跑；审计记录不受影响",
+  "freeze_note": "CCR-001 关联（MOD-04 回流将走新 CT-015，本契约不变）；批准前冻结不改",
+  "source": {
+    "doc": "tutor/L0-root/architecture/04-interface-contracts.md",
+    "sha256": "4599918536e46ca90f566919dc3e1e9f42c59d6da034d771ca44a98bae3efb9f"
+  },
+  "schemas": {
+    "event": {
+      "type": "object",
+      "required": [
+        "batch_id",
+        "purged_submission_ids",
+        "failed_items",
+        "purged_at",
+        "v"
+      ],
+      "properties": {
+        "batch_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purged_submission_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "failed_items": {
+          "type": "array",
+          "description": "全部成功时为空数组",
+          "items": {
+            "type": "object",
+            "required": [
+              "submission_id",
+              "reason"
+            ],
+            "properties": {
+              "submission_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "purged_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "v": {
+          "const": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

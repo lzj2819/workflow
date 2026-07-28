@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}学生与提交{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>课程 {{ course_id }} · 小组 {{ group_id }}</h1>
+  <h2>学生</h2>
+  {% if students %}
+  <ul>
+    {% for s in students %}
+    <li>{{ s.name or s.student_id }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="missing-value">暂无学生数据</p>
+  {% endif %}
+  <h2>提交</h2>
+  {% if submissions %}
+  <table>
+    <thead><tr><th>提交</th><th>学生</th><th>状态</th><th></th></tr></thead>
+    <tbody>
+      {% for sub in submissions %}
+      <tr>
+        <td>{{ sub.submission_id }}</td>
+        <td>{{ sub.student_name or sub.student_id }}</td>
+        <td><span class="badge {{ sub.status }}">{{ sub.status }}</span></td>
+        <td><a href="/teacher/submissions/{{ sub.submission_id }}">详情/复核</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="missing-value">暂无提交数据</p>
+  {% endif %}
+</div>
+{% endblock %}

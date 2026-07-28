@@ -1,0 +1,7 @@
+version: 1
+source_prd: ../prd.md
+source_architecture: .
+acceptance_contract_projections:
+  - target_module: SI-XFER
+    parent_contract: D-AC-REQ-003-01
+    mode: shared

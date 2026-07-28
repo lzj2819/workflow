@@ -1,0 +1,90 @@
+version: "1.0.0"
+name: requirement-pattern-library
+output_mode: candidate-only
+
+rules:
+  - pattern_id: PAT-NORM-OBLIGATION
+    family: normative
+    markers_zh: [必须, 应, 应当, 需要]
+    markers_en: [must, shall, should]
+    candidate: {clause_type: rule, modality: obligation}
+  - pattern_id: PAT-NORM-PROHIBITION
+    family: normative
+    markers_zh: [不得, 禁止, 不能]
+    markers_en: [must not, shall not, prohibited]
+    candidate: {clause_type: constraint, modality: prohibition}
+  - pattern_id: PAT-NORM-PERMISSION
+    family: normative
+    markers_zh: [可, 可以, 允许]
+    markers_en: [may, can, allowed]
+    candidate: {clause_type: rule, modality: permission}
+    warning: "Permission 不等于必须实现或默认启用。"
+  - pattern_id: PAT-DECISION
+    family: decision
+    markers_zh: [如果, 当, 则, 否则]
+    markers_en: [if, when, then, otherwise, else]
+    candidate: {relation: conditional-branch}
+  - pattern_id: PAT-BOUNDARY-UPPER
+    family: boundary
+    markers_zh: [最多, 不超过, 小于, 小于等于, 以内]
+    markers_en: [at most, no more than, less than, within]
+    candidate: {node_type: Boundary, direction: upper}
+  - pattern_id: PAT-BOUNDARY-LOWER
+    family: boundary
+    markers_zh: [至少, 不少于, 大于, 大于等于]
+    markers_en: [at least, no less than, greater than]
+    candidate: {node_type: Boundary, direction: lower}
+  - pattern_id: PAT-BOUNDARY-OUTSIDE
+    family: boundary
+    markers_zh: [超过, 超出, 低于]
+    markers_en: [exceeds, beyond, below]
+    candidate: {node_type: Boundary, direction: outside}
+    warning: "只识别输入分区；不得推断边界外响应。"
+  - pattern_id: PAT-TEMPORAL
+    family: temporal
+    markers_zh: [之前, 之后, 期间, 以内, 到达, 起算]
+    markers_en: [before, after, during, within, until, since]
+    candidate: {node_type: Temporal}
+  - pattern_id: PAT-SEQUENCE
+    family: workflow
+    markers_zh: [首先, 然后, 随后, 最后]
+    markers_en: [first, then, next, finally]
+    candidate: {relation: PRECEDES}
+  - pattern_id: PAT-STATE
+    family: state
+    markers_zh: [处于, 变为, 失效, 激活, 完成]
+    markers_en: [is in, becomes, expires, activates, completes]
+    candidate: {node_type: State}
+  - pattern_id: PAT-EXCEPTION
+    family: exception
+    markers_zh: [除非, 例外, 失败时, 发生错误时]
+    markers_en: [unless, except, on failure, on error]
+    candidate: {node_type: Exception, relation: EXCEPTION_TO}
+  - pattern_id: PAT-INTERFACE
+    family: interface
+    markers_zh: [前端, 后端, 接口, 请求, 响应, 事件]
+    markers_en: [frontend, backend, interface, request, response, event]
+    candidate: {node_type: Interface}
+  - pattern_id: PAT-METRIC
+    family: metric
+    markers_zh: [P95, 成功率, 可用性, 响应时间, 吞吐量]
+    markers_en: [P95, success rate, availability, response time, throughput]
+    candidate: {node_type: Metric}
+  - pattern_id: PAT-ORACLE
+    family: oracle
+    markers_zh: [返回, 展示, 保存, 发送, 拒绝, 允许, 变为]
+    markers_en: [returns, displays, stores, sends, rejects, allows, becomes]
+    candidate: {node_type: Oracle}
+
+application_contract:
+  - "Pattern 命中只创建 Candidate，不直接创建 EXPLICIT FACT、Oracle 或 Scenario。"
+  - "候选必须保留命中范围、原始文本、pattern_id 和语言。"
+  - "候选通过 clause segmentation、ontology typing 和 evidence validation 后才能成为 FACT。"
+  - "一个片段可命中多个 Pattern；不得静默选择互斥解释。"
+  - "Pattern 未命中不表示需求不存在，必须执行 LLM residual pass。"
+  - "Pattern 与人工/LLM 解释冲突时记录 AMBIGUITY 或 CONFLICT。"
+  - "词法标记不能单独证明 modality、边界包含性或业务响应。"
+
+candidate_schema:
+  required: [candidate_id, pattern_id, source_ref, matched_text, proposed_structure, status]
+  status_values: [DETECTED, VALIDATED, REJECTED, AMBIGUOUS]

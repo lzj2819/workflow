@@ -1,0 +1,10 @@
+version: 1
+source_prd: ../prd.md
+source_architecture: .
+acceptance_contract_projections:
+  - target_module: CMP-ASSESSMENT-ENGINE
+    parent_contract: D-AC-REQ-008-01
+    mode: shared
+  - target_module: CMP-SCORING-ORCHESTRATOR
+    parent_contract: D-AC-REQ-008-01
+    mode: shared

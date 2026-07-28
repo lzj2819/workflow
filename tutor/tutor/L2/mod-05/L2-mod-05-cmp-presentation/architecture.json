@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-05-cmp-presentation",
+  "project_id": "vibe-coding-course",
+  "node_id": "CMP-PRESENTATION",
+  "parent_node_id": "MOD-05",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD002"
+  ],
+  "artifact_id": "architecture:CMP-PRESENTATION:leaf-gate-l2-l2-mod-05-cmp-presentation",
+  "artifact_type": "architecture",
+  "components": [
+    "CMP-PRESENTATION",
+    "CMP-PRES-OUTPUT-ADAPTER",
+    "CMP-PRES-MISSING-MARKS",
+    "CMP-PRES-BLOCK-ASSEMBLER",
+    "CMP-PRES-GENERATION-COORDINATOR",
+    "CMP-PRES-SNAPSHOT-STORE",
+    "CMP-ACCESS-GATE",
+    "CMP-TEACHER-UI",
+    "CMP-READMODEL-PROJECTOR",
+    "CMP-REVIEW-QUERY",
+    "CMP-PRESENTATION-"
+  ],
+  "interfaces": [
+    "CT-009",
+    "IC-02",
+    "CT-005",
+    "FLOW-004",
+    "CT-009-GATE-PV",
+    "IC-01",
+    "IC-03",
+    "IC-04",
+    "IC-05",
+    "CT-012",
+    "CT-006",
+    "FLOW-001",
+    "FLOW-002",
+    "FLOW-003"
+  ],
+  "dependencies": [
+    "CMP-PRES-OUTPUT-ADAPTER",
+    "CMP-PRES-MISSING-MARKS",
+    "CMP-PRES-BLOCK-ASSEMBLER",
+    "CMP-PRES-GENERATION-COORDINATOR",
+    "CMP-PRES-SNAPSHOT-STORE",
+    "CMP-ACCESS-GATE",
+    "CMP-TEACHER-UI",
+    "CMP-READMODEL-PROJECTOR",
+    "CMP-REVIEW-QUERY",
+    "CMP-PRESENTATION-"
+  ],
+  "depth": 2,
+  "complexity": 35,
+  "risks": [],
+  "responsibility": "CMP-PRESENTATION is a terminal L2 implementation boundary.",
+  "children": []
+}

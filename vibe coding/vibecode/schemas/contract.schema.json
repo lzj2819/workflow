@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "contract.schema.json",
+  "title": "Canonical Semantic Contract",
+  "type": "object",
+  "required": ["schema_version", "contract_id", "version", "interfaces"],
+  "properties": {
+    "schema_version": {"type": "string", "minLength": 1},
+    "contract_id": {"type": "string", "minLength": 1},
+    "version": {"type": "string", "minLength": 1},
+    "interfaces": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "interface_id", "provider", "consumers", "request", "response",
+          "errors", "preconditions", "postconditions", "timeout_ms",
+          "retry_policy", "idempotency", "side_effects"
+        ],
+        "properties": {
+          "interface_id": {"type": "string", "minLength": 1},
+          "provider": {"type": ["string", "null"]},
+          "consumers": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "request": {
+            "type": "object",
+            "required": ["parameters", "data_schema"],
+            "properties": {
+              "parameters": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["name", "type", "required"],
+                  "properties": {
+                    "name": {"type": "string", "minLength": 1},
+                    "type": {"type": "string", "minLength": 1},
+                    "required": {"type": "boolean"}
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "data_schema": {"type": "object"}
+            },
+            "additionalProperties": false
+          },
+          "response": {
+            "type": "object",
+            "required": ["type", "data_schema"],
+            "properties": {
+              "type": {"type": "string", "minLength": 1},
+              "data_schema": {"type": "object"}
+            },
+            "additionalProperties": false
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["code"],
+              "properties": {"code": {"type": "string", "minLength": 1}},
+              "additionalProperties": true
+            }
+          },
+          "preconditions": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "postconditions": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "timeout_ms": {"type": "integer", "minimum": 0},
+          "retry_policy": {"type": "object"},
+          "idempotency": {"type": "string", "minLength": 1},
+          "side_effects": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

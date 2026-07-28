@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "contract-diff-report.schema.json",
+  "type": "object",
+  "required": ["schema_version", "run_id", "status", "violation_count", "diffs"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "status": {"enum": ["PASS", "FAIL", "ERROR"]},
+    "violation_count": {"type": "integer", "minimum": 0},
+    "diffs": {"type": "array", "items": {"type": "object", "required": ["outcome", "breaking_count"]}}
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "node_id": "CMP-DIALOGUE-COLLECTOR",
+  "input_summary": {
+    "requirement_ids": [
+      "REQ-DD003"
+    ],
+    "complexity_metrics": {
+      "requirement_count": 1,
+      "component_count": 9,
+      "interface_count": 9,
+      "dependency_count": 8,
+      "architecture_depth": 2,
+      "current_depth": 2,
+      "node_max_depth": 2,
+      "configured_max_recursion_depth": 4,
+      "effective_max_depth": 2,
+      "complexity": 26,
+      "uncovered_requirement_count": 0,
+      "unverified_scenario_count": 0
+    },
+    "risk_metrics": {
+      "risk_count": 0,
+      "mock_defect_count": 0,
+      "mock_critical_defect_count": 0
+    },
+    "mocktest_summary": {
+      "status": "PASS",
+      "defect_count": 0,
+      "critical_defect_count": 0,
+      "artifact": "mocktest_report.json"
+    },
+    "evidence_refs": [
+      {
+        "artifact_type": "prd",
+        "path": "prd.json",
+        "sha256": "7ab61d67205ac2f3a0c7b3401586493ccfab34c37de24c72b66f036ddbff4fe1"
+      },
+      {
+        "artifact_type": "architecture",
+        "path": "architecture.json",
+        "sha256": "071036b288d459c7ff79debd7d20942b613dc824481ebd93d5b62bcf80826bf5"
+      },
+      {
+        "artifact_type": "testcases",
+        "path": "testcases.json",
+        "sha256": "20483b07cf4827ee9294f8a0ea0b2e626effad00430f6f7707f112c30118d771"
+      },
+      {
+        "artifact_type": "mocktest_report",
+        "path": "mocktest_report.json",
+        "sha256": "74fb26027e3bffc740c8d6969dcdfdfc28094252033af56bd627e946b3cf5615"
+      }
+    ]
+  },
+  "label_options": [
+    "CONTINUE_LAYERING",
+    "STOP_LAYERING",
+    "CANNOT_JUDGE"
+  ],
+  "human_label": null,
+  "rationale": "",
+  "annotator_id": null
+}

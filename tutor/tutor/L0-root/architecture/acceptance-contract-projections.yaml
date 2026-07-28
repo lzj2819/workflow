@@ -1,0 +1,157 @@
+# Acceptance Contract Projections — L0 架构包补充交付物
+#
+# 用途:为 derive(L0 PRD → L1 子 PRD)的完整性门禁提供跨模块验收契约的显式处置声明。
+# 门禁规则:凡 Acceptance Contract 覆盖的 Requirement 归属多个 Module 时,
+# 必须由架构层在本文件中声明该契约为 shared,或为每个模块提供完整的 projected 契约。
+#
+# 处置类型:
+#   shared       —— 契约保持 L0 PRD 单一来源,不拆分。各相关子 PRD 以 shared 方式继承,
+#                   由本文件指定 owning module 及各参与模块的 verification slice;
+#                   子 PRD 不得弱化、重命名或修改 oracle 语义。
+#   module_local —— 契约的 actor 与全部 oracle 均在单一 Module 内闭环,仅登记跨模块依赖,
+#                   不触发 shared 继承。
+#
+# 生成依据:
+#   - prd/L0/vibe-coding-course-prd.md(Acceptance Contracts + Oracle Coverage Ledger)
+#   - architecture/L0/output/01-system-overview.md(Module ↔ Requirement 追踪表)
+#   - architecture/L0/output/04-interface-contracts.md(CT-001~CT-014)
+#
+# 全量盘点结论:仅以下 4 条契约为跨模块(shared);
+# AC-REQ-001-01 / AC-REQ-002-01(MOD-01)、AC-REQ-009-01 / AC-REQ-010-01 / AC-NFR-001-01(MOD-05)、
+# AC-NFR-002-01(MOD-02)均为单模块契约,derive 可按模块归属直接投影,无需本文件声明。
+
+version: 1
+source_prd: prd/L0/vibe-coding-course-prd.md
+source_architecture: architecture/L0/output
+
+contracts:
+
+  # ── 阻塞项本体:一次提交的材料保存 + 归属校验,端到端横跨三个模块 ──────────────
+  - contract_id: AC-REQ-003-01
+    verifies: [REQ-003, REQ-004, REQ-005, REQ-006]
+    ledger_also_covers: [REQ-011]          # Oracle Coverage Ledger 将 REQ-011 挂于本契约
+    disposition: shared
+    owning_module: MOD-02                  # 提交状态机、材料清单、完整性报告、rejected/processing 状态均由 MOD-02 持有
+    participating_modules: [MOD-01, MOD-03]
+    rationale: >
+      oracle 为单次端到端行为(上传 → 材料保存 → 归属校验 → 状态迁移):
+      "校验通过后状态进入 processing / 校验失败为 rejected 且记录原因"同时依赖
+      MOD-03 的校验结论(CT-003)与 MOD-02 的状态机,拆分为模块级契约会弱化整体判据。
+      按 local-refinement-and-mapping 规则,继承的外部契约不得在本地弱化语义,故采用 shared。
+    module_slices:
+      - module_id: MOD-01
+        requirements: [REQ-003, REQ-004]   # 采集侧 ACL(01-system-overview 模块职责)
+        verification_slice: >
+          采集当前作业完整对话与配置目录材料(代码/截图/结果),关联作业、姓名、小组,
+          经 CT-001 分片上传;上传中断时本地保留待上传任务并呈现 upload_failed 原因
+          (对应契约 exceptions 的客户端可观察部分);断点续传重试。
+        contracts: [CT-001, CT-002]
+      - module_id: MOD-02
+        requirements: [REQ-003, REQ-004, REQ-011]
+        verification_slice: >
+          材料持久化与完整性报告;提交详情可列出对话、代码、截图、结果及缺失项
+          (observable_oracles);材料目录为空时仍进入评分并明确标记缺失(boundaries,REQ-011);
+          维护 rejected / processing / upload_failed 状态并记录失败原因;
+          校验通过时发布 SubmissionReceived(CT-004)。
+        contracts: [CT-001, CT-002, CT-003, CT-004]
+      - module_id: MOD-03
+        requirements: [REQ-005, REQ-006]
+        verification_slice: >
+          每次提交经 CT-003 执行课程邀请码 + 姓名 + 小组归属校验,不缓存通过结论(REQ-006,
+          学生修改姓名或小组后重新校验);校验失败时向 MOD-02 返回具体拒绝原因,
+          支撑 rejected 状态及原因记录。
+        contracts: [CT-003]
+
+  # ── 接收确认 + 异步评分任务编排:MOD-02 确认,MOD-04 执行与重试 ────────────────
+  - contract_id: AC-REQ-007-01
+    verifies: [REQ-007, NFR-003]
+    ledger_also_covers: [REQ-012]
+    disposition: shared
+    owning_module: MOD-02                  # 接收确认(received_at)与提交状态机持有方
+    participating_modules: [MOD-04]
+    rationale: >
+      oracle 包含同一状态序列 received → processing → scored/scoring_failed:
+      状态机由 MOD-02 持有,但 processing 之后的推进由 MOD-04 经 CT-005 回写,
+      且"首次失败自动重试一次、再失败标记 scoring_failed 并通知教师"(REQ-012)在 MOD-04。
+      两段判据不可分割,采用 shared。
+    module_slices:
+      - module_id: MOD-02
+        requirements: [REQ-007, NFR-003]
+        verification_slice: >
+          材料包上传完成后 30 秒内返回含提交编号与 received_at 的接收确认;
+          维护 received/processing/scored/scoring_failed 状态序列使其可观察;
+          30 并发下每个任务生成独立编号与状态(boundaries)。
+        contracts: [CT-001, CT-004, CT-005]
+      - module_id: MOD-04
+        requirements: [REQ-012, NFR-003]
+        verification_slice: >
+          消费 SubmissionReceived 异步创建评分任务;Agent 首次失败自动重试一次,
+          再次失败标记 scoring_failed 并触发教师通知(经 CT-005 回写 MOD-02 状态、
+          通知 MOD-05)。
+        contracts: [CT-004, CT-005]
+
+  # ── Agent 评分产出:主体在 MOD-04,缺失材料输入来自 MOD-02 的完整性报告 ───────
+  - contract_id: AC-REQ-008-01
+    verifies: [REQ-008]
+    ledger_also_covers: [REQ-011, REQ-012]
+    disposition: shared
+    owning_module: MOD-04                  # actor 为 Agent 评分服务,等级/依据/建议均由此产出
+    participating_modules: [MOD-02]
+    rationale: >
+      契约主体(等级 A–E、五维度依据、教师专用建议)在 MOD-04 内闭环,
+      但 boundaries "材料不完整时仍生成结果,并列出缺失材料对评估的影响"(REQ-011)
+      依赖 MOD-02 完整性报告与缺失项标记作为输入,故登记为 shared 而非 module_local。
+    module_slices:
+      - module_id: MOD-04
+        requirements: [REQ-008, REQ-012]
+        verification_slice: >
+          基于五维度输出 A–E 等级、每维度文字依据、教师专用改进建议与评分时间;
+          建议默认不暴露给学生;材料不完整时仍生成结果并说明缺失材料对评估的影响;
+          失败按 AC-REQ-007-01 重试一次后标记 scoring_failed。
+        contracts: [CT-004, CT-005, CT-010]
+      - module_id: MOD-02
+        requirements: [REQ-011]
+        verification_slice: >
+          向 MOD-04 提供材料清单与完整性报告(缺失项标记)作为评分输入(CT-004 载荷);
+          缺失标记随后经 CT-006 派生至教师端读模型,使缺失项在教师端可见。
+        contracts: [CT-004, CT-006]
+
+  # ── 时效 NFR:30 秒接收确认(MOD-02)+ 10 分钟评分(MOD-04),pass_rule 合并判定 ──
+  - contract_id: AC-NFR-003-01
+    verifies: [NFR-003]
+    disposition: shared
+    owning_module: MOD-02                  # 测量起点(有效提交上传开始)与接收确认时限的归属方
+    participating_modules: [MOD-04]
+    rationale: >
+      pass_rule 要求"上传确认(≤30s)与评分完成(≤10min)均需满足 >=95%",
+      两个时限分别由 MOD-02 与 MOD-04 承担,任一模块单独通过不构成契约通过,
+      不可拆分,采用 shared。
+    module_slices:
+      - module_id: MOD-02
+        requirements: [NFR-003]
+        verification_slice: >
+          >=95% 有效提交在 30 秒内返回接收确认(CT-001 应答);统计口径:
+          满足时限提交数 / 有效提交总数(排除学生主动取消、未通过身份校验、材料不完整)。
+        contracts: [CT-001, CT-002]
+      - module_id: MOD-04
+        requirements: [NFR-003]
+        verification_slice: >
+          >=95% 有效提交在 10 分钟内完成评分(CT-004 任务创建至 CT-005 outcome=scored,
+          与 01-system-overview SM-002 度量口径一致)。
+        contracts: [CT-004, CT-005]
+
+  # ── 保留与删除:归属 MOD-05,但 purge 执行依赖 MOD-02,显式登记避免误判 ────────
+  - contract_id: AC-NFR-004-01
+    verifies: [NFR-004]
+    disposition: module_local
+    owning_module: MOD-05                  # oracle(教师端不可读 + 删除审计记录)均在 MOD-05 闭环
+    cross_module_dependencies:
+      - module_id: MOD-02
+        role: execution_dependency
+        note: >
+          实际清除由数据持有方 MOD-02 按 CT-012 submission_ids[] 执行并经 CT-014 回传结果;
+          该依赖已在架构层固化(KD-002 / DF-3),不改变契约归属,无需 shared 继承。
+    rationale: >
+      契约的 actor(教师确认)、pass_rule(教师端不可读 + 审计记录含范围/操作者/时间)
+      均由 MOD-05 承担;MOD-02 仅为执行依赖。显式登记此处置,防止 derive 按
+      "执行涉及多模块"规则重复阻塞。

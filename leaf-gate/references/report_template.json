@@ -1,0 +1,57 @@
+{
+  "node_id": "",
+  "phase": "FINAL",
+  "decision": "CONTINUE_LAYERING|STOP_LAYERING",
+  "summary": "",
+  "thresholds": {},
+  "config": {
+    "config_path": null,
+    "profile_path": null,
+    "profile": {},
+    "warnings": []
+  },
+  "static_checks": {
+    "C1_behavior_complexity": {},
+    "C2_contract_boundary": {},
+    "C3_ai_context_control": {},
+    "C4_verifiability": {},
+    "C5_risk_decomposition": {}
+  },
+  "llm_judgement": {
+    "C1_behavior_complexity": {
+      "status": "pass|fail",
+      "confidence": 0.0,
+      "evidence": [],
+      "reason": ""
+    },
+    "C2_contract_boundary": {
+      "status": "pass|fail",
+      "confidence": 0.0,
+      "evidence": [],
+      "reason": ""
+    },
+    "C3_ai_context_control": {
+      "status": "pass|fail",
+      "confidence": 0.0,
+      "evidence": [],
+      "reason": ""
+    },
+    "C4_verifiability": {
+      "status": "pass|fail",
+      "confidence": 0.0,
+      "evidence": [],
+      "reason": ""
+    },
+    "C5_risk_decomposition": {
+      "status": "pass|fail",
+      "confidence": 0.0,
+      "evidence": [],
+      "reason": ""
+    }
+  },
+  "next_action": {
+    "type": "decompose|vibecode",
+    "children": [],
+    "notes": []
+  }
+}

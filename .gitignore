@@ -1,0 +1,33 @@
+# Secrets and local settings
+.env
+.env.*
+*.pem
+*.key
+
+# Python / Node build artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+node_modules/
+dist/
+build/
+
+# Local workflow state and runtime outputs
+.work/
+.worktrees/
+data/
+logs/
+*.log
+
+# Editor / OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Third-party reference PDFs are retained locally; publish citations/notes only.
+参考文献/**/*.pdf

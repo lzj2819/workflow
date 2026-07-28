@@ -1,0 +1,51 @@
+{
+  "contract_id": "CT-008",
+  "title": "教师批注与最终等级调整",
+  "contract_type": "api",
+  "direction": "sync_api",
+  "provider": "MOD-05",
+  "consumer": "教师浏览器",
+  "endpoint": { "method": "PUT", "path": "/api/v1/teacher/submissions/{submission_id}/review" },
+  "sync_async": "sync",
+  "versioning": "/api/v1 路径版本",
+  "idempotency": "客户端生成请求幂等键 request_id；重复提交返回同一复核记录",
+  "timeout_retry": "scoring_failed 且无原始等级时拒绝设置最终等级（NO_ORIGINAL_GRADE，不得伪造等级）；并发修改以后写为准并完整留痕",
+  "error_codes": ["AUTH_INVALID", "FORBIDDEN", "NOT_FOUND", "VALIDATION_FAILED", "NO_ORIGINAL_GRADE"],
+  "publishes_events": [],
+  "side_effects": "写批注、最终等级与调整记录（AnnotationSaved / GradeAdjusted，模块内事件，不跨模块投递）；同时保留原始等级、最终等级、操作者和时间",
+  "notes": "调整理由字段可选保留、不强制（TD-09 / MOD-05 LCD-009 默认，DD-007）",
+  "source": { "doc": "tutor/L0-root/architecture/04-interface-contracts.md", "sha256": "4599918536e46ca90f566919dc3e1e9f42c59d6da034d771ca44a98bae3efb9f" },
+  "schemas": {
+    "request": {
+      "type": "object",
+      "required": ["submission_id", "request_id"],
+      "properties": {
+        "submission_id": { "type": "string", "minLength": 1, "description": "路径参数" },
+        "request_id": { "type": "string", "minLength": 1, "description": "客户端幂等键" },
+        "annotation": { "type": "string", "description": "与 final_grade 至少其一" },
+        "final_grade": { "type": "string", "enum": ["A", "B", "C", "D", "E"] },
+        "adjustment_reason": { "type": "string", "description": "可选，不强制（DD-007）" }
+      },
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "required": ["review_record"],
+      "properties": {
+        "review_record": {
+          "type": "object",
+          "required": ["original_grade", "final_grade", "annotation", "operator", "updated_at"],
+          "properties": {
+            "original_grade": { "type": ["string", "null"], "enum": ["A", "B", "C", "D", "E", null] },
+            "final_grade": { "type": ["string", "null"], "enum": ["A", "B", "C", "D", "E", null] },
+            "annotation": { "type": ["string", "null"] },
+            "operator": { "type": "string", "minLength": 1 },
+            "updated_at": { "type": "string", "format": "date-time" }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-04-cmp-scoring-orchestrator",
+  "project_id": "vibe-coding-course",
+  "node_id": "CMP-SCORING-ORCHESTRATOR",
+  "parent_node_id": "CMP-SCORING-ORCHESTRATOR",
+  "artifact_id": "leaf-gate:CMP-SCORING-ORCHESTRATOR",
+  "artifact_type": "leaf_gate_decision",
+  "created_at": "2026-07-19T14:42:17Z",
+  "generator": "leaf-gate",
+  "input_artifacts": [
+    {
+      "artifact_type": "prd",
+      "path": "prd.json",
+      "sha256": "e0b7b3f6a1ca69d788f25402ed94bac2752d42ed6c588c6bbe7c92a60d13eea9"
+    },
+    {
+      "artifact_type": "architecture",
+      "path": "architecture.json",
+      "sha256": "7c49a00ba26a568aa0236245d5a2c08ebf6a6828be4c8b0d17e78538f5414cf0"
+    },
+    {
+      "artifact_type": "testcases",
+      "path": "testcases.json",
+      "sha256": "b12ea4f0c2b9d65e3185508833315a4153e4a6f17a07b50d4ebcf5ff885ba046"
+    },
+    {
+      "artifact_type": "mocktest_report",
+      "path": "mocktest_report.json",
+      "sha256": "ce76dd39d0493be2658af267eefa0c4717f3252108c3fb54609de8e55fe12f72"
+    }
+  ],
+  "requirement_ids": [
+    "REQ-DD002"
+  ],
+  "evidence_refs": [
+    {
+      "artifact_type": "prd",
+      "path": "prd.json",
+      "sha256": "e0b7b3f6a1ca69d788f25402ed94bac2752d42ed6c588c6bbe7c92a60d13eea9"
+    },
+    {
+      "artifact_type": "architecture",
+      "path": "architecture.json",
+      "sha256": "7c49a00ba26a568aa0236245d5a2c08ebf6a6828be4c8b0d17e78538f5414cf0"
+    },
+    {
+      "artifact_type": "testcases",
+      "path": "testcases.json",
+      "sha256": "b12ea4f0c2b9d65e3185508833315a4153e4a6f17a07b50d4ebcf5ff885ba046"
+    },
+    {
+      "artifact_type": "mocktest_report",
+      "path": "mocktest_report.json",
+      "sha256": "ce76dd39d0493be2658af267eefa0c4717f3252108c3fb54609de8e55fe12f72"
+    }
+  ],
+  "triggered_rules": [],
+  "complexity_metrics": {
+    "requirement_count": 1,
+    "component_count": 11,
+    "interface_count": 10,
+    "dependency_count": 10,
+    "architecture_depth": 2,
+    "current_depth": 2,
+    "node_max_depth": 2,
+    "configured_max_recursion_depth": 4,
+    "effective_max_depth": 2,
+    "complexity": 31,
+    "uncovered_requirement_count": 0,
+    "unverified_scenario_count": 0
+  },
+  "risk_metrics": {
+    "risk_count": 0,
+    "mock_defect_count": 0,
+    "mock_critical_defect_count": 0
+  },
+  "mocktest_summary": {
+    "status": "PASS",
+    "defect_count": 0,
+    "critical_defect_count": 0,
+    "artifact": "mocktest_report.json"
+  },
+  "warnings": [],
+  "status": "STOP_LAYERING",
+  "decision": "STOP_LAYERING",
+  "confidence": 1.0,
+  "rationale": [
+    {
+      "code": "SINGLE_RESPONSIBILITY",
+      "message": "No configured complexity rule requires a further responsibility split.",
+      "evidence": [
+        "triggered_rules=[]"
+      ]
+    },
+    {
+      "code": "INTERFACES_CLEAR",
+      "message": "Architecture interface and dependency counts are within the configured bounds.",
+      "evidence": {
+        "interface_count": 10,
+        "dependency_count": 10
+      }
+    },
+    {
+      "code": "REQUIREMENTS_VERIFIABLE",
+      "message": "Every active requirement is covered by a passing testcase.",
+      "evidence": {
+        "uncovered_requirement_count": 0,
+        "unverified_scenario_count": 0
+      }
+    },
+    {
+      "code": "ARCHITECTURE_RISK_ACCEPTABLE",
+      "message": "Architecture and Mock risk metrics are within the configured bounds.",
+      "evidence": {
+        "risk_count": 0,
+        "mock_defect_count": 0,
+        "mock_critical_defect_count": 0
+      }
+    },
+    {
+      "code": "MOCKTEST_READY",
+      "message": "Mocktest passed with no blocking defect threshold violation.",
+      "evidence": {
+        "status": "PASS",
+        "defect_count": 0,
+        "critical_defect_count": 0
+      }
+    }
+  ],
+  "proposed_children": []
+}

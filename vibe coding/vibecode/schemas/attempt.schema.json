@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "attempt.schema.json",
+  "title": "Node Stage Attempt",
+  "type": "object",
+  "required": [
+    "attempt_id", "node_id", "stage", "status", "started_at", "ended_at",
+    "retry_count", "input_hashes", "output_hashes", "checkpoint_artifacts",
+    "partial_artifacts", "failure_class", "failure_message",
+    "resumed_from_attempt_id", "checkpoint_attempt_id"
+  ],
+  "properties": {
+    "attempt_id": {"type": "string", "minLength": 1},
+    "node_id": {"type": "string", "minLength": 1},
+    "stage": {"type": "string", "minLength": 1},
+    "status": {"enum": ["RUNNING", "PASS", "FAIL", "ERROR"]},
+    "started_at": {"type": "string", "format": "date-time"},
+    "ended_at": {"type": ["string", "null"], "format": "date-time"},
+    "retry_count": {"type": "integer", "minimum": 0},
+    "input_hashes": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+    "output_hashes": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+    "checkpoint_artifacts": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+    "partial_artifacts": {"type": "array", "items": {"type": "string"}},
+    "failure_class": {"anyOf": [{"enum": ["BUSINESS_FAIL", "TOOL_ERROR", "CONTRACT_INCOMPATIBLE", "INTERRUPTED"]}, {"type": "null"}]},
+    "failure_message": {"type": ["string", "null"]},
+    "resumed_from_attempt_id": {"type": ["string", "null"]},
+    "checkpoint_attempt_id": {"type": ["string", "null"]}
+  },
+  "additionalProperties": false
+}

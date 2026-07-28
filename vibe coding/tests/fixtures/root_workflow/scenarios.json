@@ -1,0 +1,8 @@
+{
+  "single_layer_success": {"scenario": "single", "expected_exit": 0},
+  "two_layer_recursion": {"scenario": "recursive", "expected_exit": 0},
+  "mocktest_architecture_defect": {"scenario": "mock_defect", "expected_exit": 2},
+  "interrupted_resume": {"scenario": "interrupt", "expected_exit": 0, "requires_resume": true},
+  "parallel_branch_failure": {"scenario": "branch_failure", "expected_exit": 3},
+  "backfill_contract_conflict": {"scenario": "contract_conflict", "expected_exit": 5}
+}

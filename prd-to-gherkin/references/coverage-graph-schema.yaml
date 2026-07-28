@@ -1,0 +1,75 @@
+version: "1.0.0"
+name: requirement-coverage-graph
+
+node_types:
+  - SOURCE
+  - REQUIREMENT_GROUP
+  - CLAUSE
+  - FACT
+  - REQUIREMENT_IR
+  - DECISION
+  - DERIVATION
+  - TEST_OBLIGATION
+  - ACCEPTANCE_CRITERION
+  - TEST_CONDITION
+  - SCENARIO
+  - EXCLUSION
+
+edge_types:
+  CONTAINS: {from: [SOURCE, REQUIREMENT_GROUP], to: [REQUIREMENT_GROUP, CLAUSE]}
+  EXTRACTED_AS: {from: [CLAUSE], to: [FACT]}
+  STRUCTURED_AS: {from: [FACT], to: [REQUIREMENT_IR]}
+  BLOCKED_BY: {from: [REQUIREMENT_IR, TEST_OBLIGATION], to: [DECISION]}
+  EXCLUDED_BY: {from: [CLAUSE, FACT, REQUIREMENT_IR], to: [EXCLUSION]}
+  DERIVED_AS: {from: [FACT, REQUIREMENT_IR], to: [DERIVATION, TEST_OBLIGATION]}
+  OBLIGATES: {from: [REQUIREMENT_IR, DERIVATION], to: [TEST_OBLIGATION]}
+  ACCEPTED_BY: {from: [TEST_OBLIGATION], to: [ACCEPTANCE_CRITERION]}
+  TESTED_BY: {from: [TEST_OBLIGATION, ACCEPTANCE_CRITERION], to: [TEST_CONDITION]}
+  RENDERED_AS: {from: [TEST_CONDITION], to: [SCENARIO]}
+  COMPOSED_INTO: {from: [TEST_CONDITION, SCENARIO], to: [TEST_CONDITION, SCENARIO]}
+
+node_schema:
+  required: [node_id, type, status]
+  optional: [artifact_ref, source_ref, metadata]
+
+edge_schema:
+  required: [edge_id, type, from, to]
+  optional: [evidence, composition_id]
+
+authoritative_path:
+  required_order:
+    - SOURCE
+    - REQUIREMENT_GROUP
+    - CLAUSE
+    - FACT
+    - REQUIREMENT_IR
+    - TEST_OBLIGATION
+    - TEST_CONDITION
+    - SCENARIO
+  optional_between_ir_and_obligation: [DERIVATION]
+  optional_between_obligation_and_tc: [ACCEPTANCE_CRITERION]
+
+coverage_formulas:
+  source_accounting_rate:
+    numerator: "规范性 CLAUSE 中可到达 FACT 或 EXCLUSION 的节点数"
+    denominator: "规范性 CLAUSE 总数"
+  eligible_fact_test_coverage:
+    numerator: "eligible FACT 中可沿权威路径到达 TEST_CONDITION 的节点数"
+    denominator: "eligible FACT 总数"
+  eligible_ir_test_coverage:
+    numerator: "eligible REQUIREMENT_IR 中可沿权威路径到达 TEST_CONDITION 的节点数"
+    denominator: "eligible REQUIREMENT_IR 总数"
+  test_obligation_tc_coverage:
+    numerator: "AUTHORITATIVE TEST_OBLIGATION 中可到达 TEST_CONDITION 的节点数"
+    denominator: "AUTHORITATIVE TEST_OBLIGATION 总数"
+  tc_scenario_coverage:
+    numerator: "已冻结 TEST_CONDITION 中具有一个 RENDERED_AS 边的节点数"
+    denominator: "已冻结 TEST_CONDITION 总数"
+
+invariants:
+  - "每个权威 Scenario 必须存在至少一条从 SOURCE 出发的完整路径。"
+  - "每个冻结 TC 必须恰好通过一个 RENDERED_AS 边到达一个原子 Scenario。"
+  - "BLOCKED_BY 和 EXCLUDED_BY 路径计入已核对，不计入权威测试覆盖。"
+  - "组合 Scenario 不增加来源覆盖分子，只聚合已有原子路径。"
+  - "覆盖统计必须由图计算，不得手工声明为真值。"
+  - "悬空节点、未知边类型、错误端点类型和断裂权威路径均使门禁失败。"

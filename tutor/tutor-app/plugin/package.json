@@ -1,0 +1,11 @@
+{
+  "name": "tutor-codex-plugin",
+  "version": "0.1.0-phase1",
+  "private": true,
+  "description": "DU-1 MOD-01 codex-plugin（Phase 1 骨架：host adapter 边界、核心端口、配置、测试骨架）",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "test": "node --test"
+  }
+}
