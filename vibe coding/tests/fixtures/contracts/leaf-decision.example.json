@@ -1,0 +1,36 @@
+{
+  "schema_version": "verilayer-contract/v0.1",
+  "run_id": "day1-example-run-001",
+  "project_id": "verilayer-example",
+  "node_id": "L1-example-config",
+  "parent_node_id": "L0-root",
+  "artifact_id": "leaf-gate-L1-example-config",
+  "artifact_type": "leaf_gate_decision",
+  "created_at": "2026-07-28T09:05:00Z",
+  "generator": {"tool": "leaf-gate", "protocol": "1.0"},
+  "status": "CONTINUE_LAYERING",
+  "input_artifacts": [
+    "artifacts/L1-example-config/prd.json",
+    "artifacts/L1-example-config/architecture.json",
+    "artifacts/L1-example-config/testcases.json",
+    "artifacts/L1-example-config/mocktest_report.json"
+  ],
+  "requirement_ids": ["REQ-CONFIG-001"],
+  "content_path": "artifacts/L1-example-config/leaf_gate_decision.json",
+  "content_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+  "decision": "CONTINUE_LAYERING",
+  "downstream_gate": "BLOCK",
+  "proposed_children": [
+    {
+      "node_id": "L2-example-config-store",
+      "parent_node_id": "L1-example-config",
+      "name": "Config Store",
+      "responsibility": "Persist and retrieve validated configuration.",
+      "requirement_ids": ["REQ-CONFIG-001"],
+      "decomposition_rationale": "Persistence ownership is independently implementable.",
+      "expected_interfaces": ["ConfigStore.get", "ConfigStore.put"],
+      "priority": 1
+    }
+  ],
+  "tool_error": null
+}

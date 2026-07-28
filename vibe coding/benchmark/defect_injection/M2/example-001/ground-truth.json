@@ -1,0 +1,21 @@
+{
+  "schema_version": "defect-injection/v1",
+  "benchmark": "M2",
+  "example_id": "example-001",
+  "node_id": "M2-example-config",
+  "injected_defects": [
+    {
+      "defect_id": "M2-001",
+      "defect_type": "DATA_SCHEMA_MISMATCH",
+      "taxonomy_category": "data_schema",
+      "severity": "FAIL",
+      "artifact_path": "after/architecture.json",
+      "interface_id": "CFG-READ-001",
+      "requirement_ids": ["REQ-CONFIG-001"],
+      "scenario_ids": ["M2-TC-001"],
+      "description": "The provider request removed required tenant_id while the consumer contract still requires tenant-scoped reads."
+    }
+  ],
+  "injected_defect_count": 1,
+  "hidden_from_coding": true
+}

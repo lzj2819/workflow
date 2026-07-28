@@ -1,0 +1,13 @@
+{
+  "artifact_type": "architecture",
+  "node_id": "M2-example-config",
+  "interfaces": [
+    {
+      "interface_id": "CFG-READ-001",
+      "provider": "ConfigStore",
+      "consumer": "ConfigAPI",
+      "request": {"config_key": "string"},
+      "response": {"config_version": "string", "payload": "object"}
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "expected_finding_count": 1,
+  "expected_findings": [
+    {
+      "defect_type": "DATA_SCHEMA_MISMATCH",
+      "taxonomy_category": "data_schema",
+      "minimum_severity": "FAIL",
+      "interface_id": "CFG-READ-001",
+      "requirement_ids": ["REQ-CONFIG-001"],
+      "scenario_ids": ["M2-TC-001"],
+      "must_not_be_classified_as": "TOOL_EXECUTION_ERROR"
+    }
+  ]
+}

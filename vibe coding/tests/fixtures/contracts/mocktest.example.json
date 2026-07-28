@@ -1,0 +1,30 @@
+{
+  "schema_version": "verilayer-contract/v0.1",
+  "run_id": "day1-example-run-001",
+  "project_id": "verilayer-example",
+  "node_id": "L1-example-config",
+  "parent_node_id": "L0-root",
+  "artifact_id": "mocktest-report-day1-example-run-001",
+  "artifact_type": "mocktest_report",
+  "created_at": "2026-07-28T09:00:00Z",
+  "generator": {"tool": "validate-arch", "protocol": "mocktest/v1"},
+  "status": "PASS",
+  "input_artifacts": [
+    "artifacts/L1-example-config/architecture.json",
+    "artifacts/L1-example-config/testcases.json"
+  ],
+  "requirement_ids": ["REQ-CONFIG-001"],
+  "content_path": "artifacts/L1-example-config/mocktest_report.json",
+  "content_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "execution": {
+    "completeness": "COMPLETE",
+    "strict_audit_status": "PASS",
+    "component_hops": 2,
+    "validator_results": 1
+  },
+  "semantic_status": "PASS",
+  "downstream_gate": "ALLOW",
+  "coverage": {"total_scenarios": 1, "evaluated_scenarios": 1, "passed_scenarios": 1},
+  "defects": [],
+  "tool_error": null
+}
