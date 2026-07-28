@@ -41,9 +41,9 @@ This is an exact install specification, not a completed lock. After installation
 
 ## Current branch evidence
 
-- A: `verilayer/a-contract-integration`, commit `9f7c47d`, pushed to `origin`.
-- B: `origin/verilayer/b-generation`, latest `d7a5afa`; it is behind A and must rebase to A before opening `B → A` PR.
-- C: `origin/verilayer/c-validation`, latest `4372185`; the models repair exists in its history but is not merged into A. C must rebase to A, stop and report any conflict, and never manually overwrite A's Contract.
-- D: `origin/verilayer/d-coding-experiments`, latest `1e068ae`; D is available and must rebase to A before opening `D → A` PR.
+- A: `verilayer/a-contract-integration`, commit `4c54853`, pushed to `origin`; it freezes the approved raw requirements hash.
+- B: `origin/verilayer/b-generation`, latest `0f8fc8f`; PR #3 is open but B must rebase to A, emit canonical child `node_id`, and provide validator evidence before review.
+- C: `origin/verilayer/c-validation`, latest `3117416`; the independent models candidate is `origin/fix/mocktest-models-package@36956b4` and is not eligible for merge until it is rebased to A and its evidence is UTF-8, path-redacted, and hash-consistent.
+- D: `origin/verilayer/d-coding-experiments`, latest `7884c69`; its pre-freeze environment record is rejected as a baseline. D must rebase to A and create the approved project-local environment before opening `D → A` PR.
 
 All B/C/D PR targets are `verilayer/a-contract-integration`; no team branch may merge directly to `main`.

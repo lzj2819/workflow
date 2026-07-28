@@ -337,3 +337,26 @@
 | Markdown 表格列数 | 无不一致 | 0 个错误 | PASS |
 | 成员文档机器绝对路径 | 0 | 0 | PASS |
 | Tutor 业务代码/历史报告修改 | 0 | 0 | PASS |
+
+## Day 1 Coordination — 2026-07-28
+
+**Current day:** Day 1 — asset reconciliation and contract/environment freeze.
+**Gate:** **NO-GO**. Day 2 Adapter/Executor production work is not authorized.
+
+| Owner | Minimum acceptable task | Status | Branch / review state | Blocker |
+|---|---|---|---|---|
+| A | Maintain the canonical contract, migration/current-state/path-rewrite manifests, and frozen environment input. | IN_PROGRESS | `verilayer/a-contract-integration@4c54853` | A shell has no project Python; full contract test evidence is not yet produced. |
+| B | Rebase; submit Architecture/Testcases proposal with canonical `node_id` and validator evidence. | IN_PROGRESS | `verilayer/b-generation@0f8fc8f`; PR #3 open | Proposal must be rebased to A and corrected before acceptance. |
+| C | Rebase the independent nine-file models repair; provide UTF-8, repository-relative, source-hash-consistent evidence. | BLOCKED | `fix/mocktest-models-package@36956b4` | Candidate rolls back A's Gate state and its submitted evidence is not yet acceptable. |
+| D | Create the frozen project-local environment and provide a real pytest baseline plus interpreter and `pip freeze --all` evidence. | IN_PROGRESS | `verilayer/d-coding-experiments@7884c69` | Earlier installation/test record predates the hash freeze and is not a baseline. |
+
+### Day 1 acceptance evidence still required
+
+- `vibe coding/.venv/Scripts/python.exe -m pytest -q tests/test_contracts.py tests/test_module_runner.py tests/test_root_workflow.py tests/test_artifact_contract.py tests/integration` exits 0; the root subset reports `27 passed`.
+- Accepted B/C/D samples validate with `vibe coding/tests/test_artifact_contract.py` and use the canonical identity/status/error/hash rules.
+- C's independent models PR reconciles all nine files without absolute paths and does not claim `--help` as strict PASS.
+- The migration, current-state, and path-rewrite manifests remain evidence-bounded; Tutor remains read-only fixture material.
+
+### Dependency and next-day rule
+
+B, C, and D tasks may proceed in parallel only within their ownership boundaries. Contract, schema, strict-gate, root-orchestrator, and cross-module output changes require A review. Day 2 starts only after all Day 1 Gate closures are verified; otherwise the next workday remains Day 1 and is limited to contract/environment/path remediation.
