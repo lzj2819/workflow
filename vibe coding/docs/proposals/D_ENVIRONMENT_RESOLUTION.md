@@ -20,13 +20,16 @@ A approved the following exact environment in `docs/DAY1_GATE_STATUS.md` and
 `jsonschema==4.26.0`. A also accepted the D Code/TestResult/Evidence profile as
 `ADDITIVE_ONLY` in `docs/contract-change-log.md`.
 
-The approved-input SHA-256 recorded by A is
-`f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472`. It matches
-the raw LF bytes of the tracked Git blob
-`origin/verilayer/a-contract-integration:vibe coding/requirements-verilayer.txt`.
-This Windows checkout has `core.autocrlf=true`; its CRLF-transformed working file
-hashes to `464c4c0f6b38397fdb33e130fc8d0fbb385a0de607b7192af40c9acf99e76e03`.
-The latter is an EOL-observation value, not a replacement approved input hash.
+The approved raw-bytes input SHA-256 — frozen by A in commit `4c54853` and
+recorded in `docs/DAY1_GATE_STATUS.md` — is
+`464c4c0f6b38397fdb33e130fc8d0fbb385a0de607b7192af40c9acf99e76e03`, computed
+over the checked-out working file `vibe coding/requirements-verilayer.txt`.
+This is the sole installation-evidence hash. The LF-normalized Git-blob value
+`f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472` is a
+content-normalization artifact (this Windows checkout has
+`core.autocrlf=true`); it is not, and never was, an approved raw input hash or
+installation evidence. An earlier revision of this section that described
+`f55ab0…` as the approved input is superseded by A's freeze correction.
 
 The relevant Artifact Contract rule is fail-closed: an unavailable or unverifiable
 environment is an `ERROR`, not a `FAIL` or a successful Coding result. This proposal

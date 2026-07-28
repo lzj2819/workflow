@@ -17,7 +17,9 @@ index URLs, tokens, or private-test details are recorded here.
 | Result | **MATCH** — installation proceeded only after this match |
 
 The LF-normalized Git-blob value `f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472`
-is not used as installation evidence.
+is not, and never was, an approved raw input hash; it is not installation
+evidence. The frozen raw working-file hash `464c4c0f…e76e03` above is the sole
+installation-evidence hash.
 
 ## 2. Environment identity
 
