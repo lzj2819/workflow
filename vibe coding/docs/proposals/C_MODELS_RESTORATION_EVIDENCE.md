@@ -36,13 +36,20 @@ The candidate must run these checks after commit:
 Their exit codes prove only import/CLI reachability. They do not establish
 strict, Mocktest semantic, Leaf, Coding, or downstream-gate PASS.
 
-## Validation record
+## Current local validation record
 
-At candidate commit `dc1e0efe1ac9e3137ca78632e81b4e165af53480`, with
-`PYTHONPATH=mocktest/src` and the locally available dependency-complete Python:
+With `PYTHONPATH=mocktest/src`, the assigned checkout has no
+dependency-complete Python environment. The available system Python lacks the
+declared `pyyaml` dependency, so each command stops at the same import error:
+`ModuleNotFoundError: No module named 'yaml'`.
 
 | Command | Exit code | Interpretation |
 |---|---:|---|
-| `python -c "import mock_framework.models"` | 0 | package import reachable |
-| `python -c "import mock_framework.models.validator"` | 0 | validator import reachable |
-| `python mocktest/.agents/skills/validate-arch/main_session_strict_driver.py --help` | 0 | driver help reachable |
+| `python -c "import mock_framework.models"` | 1 | ENVIRONMENT_ERROR: missing `pyyaml` |
+| `python -c "import mock_framework.models.validator"` | 1 | ENVIRONMENT_ERROR: missing `pyyaml` |
+| `python mocktest/.agents/skills/validate-arch/main_session_strict_driver.py --help` | 1 | ENVIRONMENT_ERROR: missing `pyyaml` |
+
+This is not a models-package failure and does not establish any strict, Leaf,
+Coding, Mocktest semantic, or downstream-gate result. C1 remains
+`IN_PROGRESS` until the project-approved frozen environment can rerun these
+three smoke checks.
