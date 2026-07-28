@@ -1,0 +1,6 @@
+# Day 1 approved VeriLayer experiment environment. Do not commit vibe coding/.venv/.
+pytest==8.3.5
+fastapi==0.115.12
+SQLAlchemy==2.0.41
+pydantic==2.13.4
+jsonschema==4.26.0

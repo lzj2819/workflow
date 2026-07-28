@@ -45,6 +45,19 @@ No proposal under `vibe coding/docs/proposals/` was present when this entry was 
 
 This rule is implemented in `vibe coding/vibecode/artifact_contract.py` and covered by `vibe coding/tests/test_artifact_contract.py`. B/D must not use a different JSON hashing rule.
 
+## v0.3 D profile review — 2026-07-28
+
+- Source reviewed: `origin/verilayer/d-coding-experiments:vibe coding/docs/CODING_EXECUTOR_PROTOCOL.md`.
+
+| D field group | Decision | Outcome | Constraint |
+|---|---|---|---|
+| Code: task/attempt/workspace/allowed paths/generated files/patch/before-after hashes/requirement map/executor provenance | accepted | ADDITIVE_ONLY | all paths remain repository-relative; no Executor implementation is approved by this decision |
+| TestResult: public/private scope, structured argv, timing, exit/timeout, stdout/stderr/JUnit hashes, summary, tested requirements | accepted | ADDITIVE_ONLY | private acceptance is opaque: no private path, test name, content, assertion, or failure detail may enter shared evidence or repair input |
+| Evidence: request/model-call/file/patch/test/repair/leak-audit records | accepted as a nested/attached profile | ADDITIVE_ONLY | the seven canonical artifact types remain unchanged; an Evidence record is attached to Code/TestResult/module-result rather than a new top-level `artifact_type` |
+| Token usage and time/cost values | accepted nullable | ADDITIVE_ONLY | `null` requires an unavailable reason; no estimate may be fabricated |
+| `artifact_type=code_request` as a new canonical type | rejected | MATCH | a request is Adapter-internal input; formal delivery uses existing canonical `code` and `test_result` types |
+| Absolute shared paths, secret values, hidden-test leakage, overwritten attempts | rejected | LEAF_FIX_REQUIRED | the future D validator must fail closed |
+
 ## C strict backend recovery assignment — 2026-07-28
 
 - Owner: C.
