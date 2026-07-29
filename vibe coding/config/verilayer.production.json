@@ -1,0 +1,22 @@
+{
+  "module_versions": {
+    "prd": "day2-skeleton",
+    "architecture": "day2-skeleton",
+    "gherkin": "day2-skeleton",
+    "mocktest": "day2-skeleton",
+    "leaf_gate": "day2-skeleton",
+    "coding": "day2-skeleton",
+    "backfill": "day2-skeleton",
+    "integration": "day2-skeleton"
+  },
+  "commands": {
+    "prd": ["python", "-m", "vibecode.adapters.production_adapter", "--module", "{module}", "--input", "{input}", "--output-dir", "{output_dir}", "--run-id", "{run_id}", "--project-id", "{project_id}", "--node-id", "{node_id}"],
+    "architecture": ["python", "-m", "vibecode.adapters.production_adapter", "--module", "{module}", "--input", "{input}", "--output-dir", "{output_dir}", "--run-id", "{run_id}", "--project-id", "{project_id}", "--node-id", "{node_id}"],
+    "gherkin": ["python", "-m", "vibecode.adapters.production_adapter", "--module", "{module}", "--input", "{input}", "--output-dir", "{output_dir}", "--run-id", "{run_id}", "--project-id", "{project_id}", "--node-id", "{node_id}"],
+    "mocktest": ["python", "-m", "vibecode.adapters.production_adapter", "--module", "{module}", "--input", "{input}", "--output-dir", "{output_dir}", "--run-id", "{run_id}", "--project-id", "{project_id}", "--node-id", "{node_id}"],
+    "leaf_gate": ["python", "-m", "vibecode.adapters.production_adapter", "--module", "{module}", "--input", "{input}", "--output-dir", "{output_dir}", "--run-id", "{run_id}", "--project-id", "{project_id}", "--node-id", "{node_id}"],
+    "coding": ["python", "-m", "vibecode.adapters.production_adapter", "--module", "{module}", "--input", "{input}", "--output-dir", "{output_dir}", "--run-id", "{run_id}", "--project-id", "{project_id}", "--node-id", "{node_id}"],
+    "backfill": ["python", "-m", "vibecode.adapters.production_adapter", "--module", "{module}", "--input", "{input}", "--output-dir", "{output_dir}", "--run-id", "{run_id}", "--project-id", "{project_id}", "--node-id", "{node_id}"],
+    "integration": ["python", "-m", "vibecode.adapters.production_adapter", "--module", "{module}", "--input", "{input}", "--output-dir", "{output_dir}", "--run-id", "{run_id}", "--project-id", "{project_id}", "--node-id", "{node_id}"]
+  }
+}

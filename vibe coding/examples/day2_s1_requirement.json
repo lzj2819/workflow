@@ -1,0 +1,5 @@
+{
+  "requirement_id": "S1-DAY2-SKELETON",
+  "title": "Day 2 controlled-error smoke input",
+  "scope": "This input verifies only production adapter transport and controlled ERROR semantics."
+}

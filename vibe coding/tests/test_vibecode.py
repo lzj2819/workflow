@@ -107,6 +107,7 @@ class SchemaTests(unittest.TestCase):
                 "experiment-metrics.schema.json",
                 "node-tree.schema.json",
                 "contract-diff-report.schema.json",
+                "verilayer-artifact.schema.json",
             },
         )
         status_enum = set(
