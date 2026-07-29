@@ -110,6 +110,22 @@ class RootWorkflowTests(unittest.TestCase):
             for event in json.loads((run_dir / "execution_log.json").read_text(encoding="utf-8")):
                 self.assertTrue(required_log_fields.issubset(event))
 
+    def test_structured_adapter_provenance_does_not_replace_stage_generator(self):
+        with tempfile.TemporaryDirectory() as base:
+            fixture = FixtureAdapter()
+
+            def adapter(module, input_path, output_dir, context):
+                result = fixture(module, input_path, output_dir, context)
+                result["generator"] = {"executor": "test-adapter", "module": module}
+                return result
+
+            self.assertEqual(self.make(base, adapter).run(), EXIT_SUCCESS)
+            report = json.loads((Path(base) / "artifacts/run-1/run_report.json").read_text(encoding="utf-8"))
+            self.assertIn("prd", report["module_durations_ms"])
+            stage = json.loads((Path(base) / "artifacts/run-1/nodes/root/prd/result.json").read_text(encoding="utf-8"))
+            self.assertEqual(stage["generator"], "prd")
+            self.assertEqual(stage["adapter_generator"]["executor"], "test-adapter")
+
     def test_two_layer_recursive_backfill_reaches_root(self):
         with tempfile.TemporaryDirectory() as base:
             workflow = self.make(base, FixtureAdapter("recursive"))

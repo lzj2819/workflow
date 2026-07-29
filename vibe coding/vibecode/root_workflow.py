@@ -391,7 +391,11 @@ class RootWorkflow:
                   "human_interventions": result.get("human_interventions", 0), "warning_count": result.get("warning_count", 0),
                   "error_type": result.get("error_type"), "error_message": result.get("error_message"),
                   "model_call": not passthrough,
-                  **{k: v for k, v in result.items() if k not in {"status", "output_artifacts"}}}
+                  "adapter_generator": result.get("generator"),
+                  # The orchestrator's generator is the stable stage name.
+                  # Adapter provenance may itself be a structured object and
+                  # must not overwrite that key (or become an unhashable metric key).
+                  **{k: v for k, v in result.items() if k not in {"status", "output_artifacts", "generator"}}}
         result_path = output_dir / "result.json"
         self._atomic_json(result_path, record)
         with self._state_lock:
