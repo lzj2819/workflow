@@ -56,14 +56,14 @@ All B/C/D PR targets are `verilayer/a-contract-integration`; no team branch may 
 |---|---:|---|
 | `Get-FileHash vibe coding/requirements-verilayer.txt` on current A | 0 | raw-bytes SHA-256 `f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472` |
 | D PR #4 `sha256sum requirements-verilayer.txt` | 0 | reports Windows checkout observation `464c4c0f6b38397fdb33e130fc8d0fbb385a0de607b7192af40c9acf99e76e03`; not a canonical blob digest, not stale input |
-| D PR #4 `pip freeze --all | sha256sum` | 0 | reports `79e4c5de123d0db2fc070e1cf9d6518258a92466f6b2d91b9218fba826593e90`; unmerged and stale-input-bound, not an accepted current-A lock |
-| D PR #4 root pytest baseline | 0 | reports 27 passed; unmerged and stale-input-bound, not an accepted current-A baseline |
+| D PR #4 `pip freeze --all | sha256sum` | 0 | reports `79e4c5de123d0db2fc070e1cf9d6518258a92466f6b2d91b9218fba826593e90`; historical/unmerged review evidence, not a current-A lock |
+| D PR #4 root pytest baseline | 0 | reports 27 passed; historical/unmerged review evidence, not a current-A baseline |
 | D PR #4 full Gate command including `tests/integration` | 4 | `ENVIRONMENT_ERROR`: target absent; no PASS inferred |
 
 | Subject | Strict execution completeness | Semantic PASS/FAIL | Environment |
 |---|---|---|---|
 | C models restoration (PR #5, merged) | `NOT_RUN` | `NOT_RUN` | `ERROR`: smoke commands exit 1 because `pyyaml` is missing |
-| D environment evidence (PR #4, closed/unmerged) | `NOT_APPLICABLE` | `NOT_APPLICABLE` | `ERROR`: stale input hash; missing integration target |
+| D environment evidence (PR #4, closed/unmerged) | `NOT_APPLICABLE` | `NOT_APPLICABLE` | `ERROR`: current-A environment evidence pending; missing integration target |
 | B fixture/validator evidence (PR #3, open) | `NOT_RUN` | `NOT_RUN` | validator fixtures are not current-A pytest/E2E evidence |
 
 PR #3 is open and unmerged with seven proposal/fixture files; it is acceptable as a Day 1 proposal only. PR #4 is closed and unmerged. PR #5 is closed and merged at `c12c4f5`; restored models do not establish strict PASS. `main_session_strict_driver.py --help` is never strict PASS.
@@ -117,8 +117,8 @@ Day 1 remains **NO-GO** until all four items below have reviewable evidence. Not
 | # | Owner | Required Day 1 evidence |
 |---:|---|---|
 | 1 | A | Contract v0.2 remains the active envelope; v0.3 is only a profile-field decision record. |
-| 2 | D | Environment evidence for the current A baseline: install input is the Git blob digest `f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472`; record install and frozen-environment evidence. Windows checkout observation `464c4c0f6b38397fdb33e130fc8d0fbb385a0de607b7192af40c9acf99e76e03` is retained, not stale input. |
-| 3 | B | PR #3 fixture/proposal review evidence against Contract v0.2. Fresh generated Architecture/Testcases output is not a Day 1 requirement. |
+| 2 | D | Environment evidence on the current remote `verilayer/a-contract-integration` tip: install input is the Git blob digest `f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472`; record freeze/hash and the valid pytest result. Windows checkout observation `464c4c0f6b38397fdb33e130fc8d0fbb385a0de607b7192af40c9acf99e76e03` is retained, not stale input. |
+| 3 | B | Existing PR #3 fixture passes Contract v0.2 validation in D's frozen A environment. Fresh generated Architecture/Testcases output is not a Day 1 requirement. |
 | 4 | C | Three frozen-environment smoke commands: `import mock_framework.models`; `import mock_framework.models.validator`; `main_session_strict_driver.py --help`. These are smoke only, not strict or semantic PASS. |
 
 The following are explicitly deferred to **Day 3 or later**: fresh B output, a complete strict audit/run, semantic PASS/FAIL, Leaf, Coding, and any `tests/integration` suite. If `tests/integration` is named before that suite exists, pytest exit `4` remains an acceptance-spec `ERROR`, never PASS.

@@ -30,7 +30,7 @@ Gate: **NO-GO**
 
 - Current-A requirements raw hash: `f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472`.
 - D's reported raw hash: `464c4c0f6b38397fdb33e130fc8d0fbb385a0de607b7192af40c9acf99e76e03`; not accepted for current A.
-- D reported root pytest exit `0` / 27 passed and contract test exit `0` / 1 passed, but both are stale-input/unmerged evidence.
+- D reported root pytest exit `0` / 27 passed and contract test exit `0` / 1 passed; both are historical/unmerged evidence.
 - D reported full command exit `4` because `tests/integration` is absent; this is `ENVIRONMENT_ERROR`, not a test PASS.
 
 ## Historical required actions (not an active Gate checklist)
