@@ -1,0 +1,12 @@
+{
+  "records": [
+    {
+      "generator": "architecture",
+      "primary_artifact": "experiments/day4-root-trace/architecture-repair-fixture/architecture.repaired.md"
+    },
+    {
+      "generator": "gherkin",
+      "primary_artifact": "experiments/day4-root-trace/architecture-repair-fixture/testcases.feature"
+    }
+  ]
+}

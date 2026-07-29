@@ -48,8 +48,10 @@ class GenerationExecutorTests(unittest.TestCase):
             execute_generation(module="architecture", input_path=source, output_dir=root / "attempt", run_id="r",
                                project_id="p", node_id="n", parent_node_id=None, model="test", runner=fake_runner)
             self.assertIn("validate-arch-package", seen["prompt"])
-            self.assertIn("Public API Service", seen["prompt"])
+            self.assertIn("public-api-service", seen["prompt"])
             self.assertIn("sequenceDiagram", seen["prompt"])
+            self.assertIn("bare canonical child_ids", seen["prompt"])
+            self.assertIn("backtick lists", seen["prompt"])
 
     def test_missing_expected_artifact_is_a_structured_error(self):
         with tempfile.TemporaryDirectory() as tmp:
