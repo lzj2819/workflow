@@ -41,10 +41,10 @@ This is an exact install specification, not a completed lock. D must install fro
 
 ## Current branch evidence
 
-- A: `verilayer/a-contract-integration`, commit `4c54853`, pushed to `origin`; it freezes the approved raw requirements hash.
-- B: `origin/verilayer/b-generation`, latest `0f8fc8f`; PR #3 is open but B must rebase to A, emit canonical child `node_id`, and provide validator evidence before review.
-- C: `origin/verilayer/c-validation`, latest `3117416`; the independent models candidate is `origin/fix/mocktest-models-package@36956b4` and is not eligible for merge until it is rebased to A and its evidence is UTF-8, path-redacted, and hash-consistent.
-- D: `origin/verilayer/d-coding-experiments`, latest `7884c69`; its pre-freeze environment record is rejected as a baseline. D must rebase to A and create the approved project-local environment before opening `D → A` PR.
+- A: evidence baseline `c12c4f5`; PR #5 is already merged at that SHA. Subsequent A governance commits only record the audit and do not alter the baseline evidence.
+- B: PR #3 is open and unmerged; head `3cca4a8`, base `c12c4f5`. Its seven files are proposals/fixtures, not fresh output.
+- C: PR #5 is closed and merged at `c12c4f5`; restored models are present, but the current smoke record remains `ENVIRONMENT_ERROR`.
+- D: PR #4 is closed and unmerged; head `1407c5e`. Its raw input hash `464c4c…e76e03` differs from current-A `f55ab0…ad472`, so it is rejected as current-A environment evidence.
 
 All B/C/D PR targets are `verilayer/a-contract-integration`; no team branch may merge directly to `main`.
 
