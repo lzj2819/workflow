@@ -22,6 +22,29 @@ _SPECS = {
 }
 
 
+def _architecture_contract_evidence(path: Path) -> tuple[list[str], list[str]]:
+    """Extract only parser-visible HTTP interfaces for coding admission evidence."""
+    content = path.read_text(encoding="utf-8", errors="replace")
+    headings = list(re.finditer(r"^###\s+((?:GET|POST|PUT|DELETE|PATCH)\s+/\S+)", content, re.MULTILINE))
+    interfaces: list[str] = []
+    issues: list[str] = []
+    for index, match in enumerate(headings):
+        section_end = headings[index + 1].start() if index + 1 < len(headings) else len(content)
+        section = content[match.end():section_end]
+        interface_id = match.group(1)
+        input_at = section.find("**输入**")
+        output_at = section.find("**输出**")
+        has_input = input_at >= 0 and "```json" in section[input_at:]
+        has_output = output_at > input_at and "```json" in section[output_at:]
+        if has_input and has_output:
+            interfaces.append(interface_id)
+        else:
+            issues.append(f"{interface_id} lacks parser-visible input/output JSON contracts")
+    if not headings:
+        issues.append("architecture has no parser-visible HTTP interface heading")
+    return interfaces, issues
+
+
 def _requirement_ids(source: str) -> list[str]:
     found = sorted(set(re.findall(r"\bREQ-[A-Za-z0-9-]+\b", source)))
     return found or ["REQ-ROOT"]
@@ -77,5 +100,8 @@ def execute_generation(
         "evidence": evidence,
         "error_type": error["code"] if error else None, "error_message": error["message"] if error else None,
     }
+    if module == "architecture" and passed:
+        interfaces, blocking_issues = _architecture_contract_evidence(target)
+        result.update({"interfaces": interfaces, "blocking_issues": blocking_issues})
     (output_dir / "module-result.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return result

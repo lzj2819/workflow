@@ -68,6 +68,22 @@ class GenerationExecutorTests(unittest.TestCase):
             self.assertEqual(result["status"], "ERROR")
             self.assertEqual(result["error_type"], "EXPECTED_ARTIFACT_MISSING")
 
+    def test_architecture_contract_evidence_requires_parser_visible_io(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); source = root / "requirement.json"
+            source.write_text('{"requirement_ids":["REQ-CONTRACT"]}', encoding="utf-8")
+
+            def fake_runner(*, prompt, workspace, model, timeout_seconds):
+                (workspace / "architecture.md").write_text(
+                    "### GET /health\n**输入**\n```json\n{\"event\": \"health\"}\n```\n"
+                    "**输出**\n```json\n{\"status_code\": 200}\n```\n", encoding="utf-8")
+                return {"status": "PASS"}
+
+            result = execute_generation(module="architecture", input_path=source, output_dir=root / "attempt", run_id="r",
+                                        project_id="p", node_id="n", parent_node_id=None, model="test", runner=fake_runner)
+            self.assertEqual(result["interfaces"], ["GET /health"])
+            self.assertEqual(result["blocking_issues"], [])
+
 
 if __name__ == "__main__":
     unittest.main()
