@@ -1,0 +1,26 @@
+{
+  "code_version": "day4-prebackfill-v1",
+  "determinism_note": "Model non-determinism is recorded by run artifacts; no fixture output is used.",
+  "cwd": ".",
+  "timeout_seconds": 900,
+  "module_versions": {
+    "prd": "generation-adapter-v1",
+    "architecture": "generation-adapter-v1",
+    "gherkin": "generation-adapter-v1",
+    "mocktest": "strict-adapter-v1",
+    "leaf_gate": "formal-leaf-adapter-v1",
+    "coding": "root-coding-adapter-v1",
+    "backfill": "human-gated-not-implemented",
+    "integration": "not-implemented"
+  },
+  "commands": {
+    "prd": [".\\.venv\\Scripts\\python.exe", "-m", "vibecode.adapters.generation_adapter", "--module", "prd", "--input", "{input}", "--output-dir", "{output_dir}", "--run-id", "{run_id}", "--project-id", "{project_id}", "--node-id", "{node_id}", "--model", "{model}"],
+    "architecture": [".\\.venv\\Scripts\\python.exe", "-m", "vibecode.adapters.generation_adapter", "--module", "architecture", "--input", "{input}", "--output-dir", "{output_dir}", "--run-id", "{run_id}", "--project-id", "{project_id}", "--node-id", "{node_id}", "--model", "{model}"],
+    "gherkin": [".\\.venv\\Scripts\\python.exe", "-m", "vibecode.adapters.generation_adapter", "--module", "gherkin", "--input", "{input}", "--output-dir", "{output_dir}", "--run-id", "{run_id}", "--project-id", "{project_id}", "--node-id", "{node_id}", "--model", "{model}"],
+    "mocktest": [".\\.venv\\Scripts\\python.exe", "-m", "vibecode.adapters.strict_adapter", "--input", "{input}", "--output-dir", "{output_dir}", "--run-id", "{run_id}", "--project-id", "{project_id}", "--node-id", "{node_id}", "--parent-node-id", "{parent_node_id}", "--model", "{model}"],
+    "leaf_gate": [".\\.venv\\Scripts\\python.exe", "-m", "vibecode.adapters.leaf_adapter", "--input", "{input}", "--output-dir", "{output_dir}", "--run-id", "{run_id}", "--project-id", "{project_id}", "--node-id", "{node_id}", "--parent-node-id", "{parent_node_id}", "--max-depth", "2", "--max-requirements", "1"],
+    "coding": [".\\.venv\\Scripts\\python.exe", "-m", "vibecode.adapters.root_coding_adapter", "--input", "{input}", "--output-dir", "{output_dir}", "--run-id", "{run_id}", "--project-id", "{project_id}", "--node-id", "{node_id}", "--parent-node-id", "{parent_node_id}", "--model", "{model}"],
+    "backfill": [".\\.venv\\Scripts\\python.exe", "-m", "vibecode.adapters.production_adapter", "--module", "backfill", "--input", "{input}", "--output-dir", "{output_dir}", "--run-id", "{run_id}", "--project-id", "{project_id}", "--node-id", "{node_id}"],
+    "integration": [".\\.venv\\Scripts\\python.exe", "-m", "vibecode.adapters.production_adapter", "--module", "integration", "--input", "{input}", "--output-dir", "{output_dir}", "--run-id", "{run_id}", "--project-id", "{project_id}", "--node-id", "{node_id}"]
+  }
+}

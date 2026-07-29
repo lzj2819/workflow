@@ -89,13 +89,17 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _optional_node(value: str | None) -> str | None:
+    return None if value in {None, "", "None", "null"} else value
+
+
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if not args.driver:
         raise SystemExit("VERILAYER_STRICT_DRIVER or --driver is required for real strict execution")
     result = execute_adapter(
         input_path=Path(args.input), output_dir=Path(args.output_dir), run_id=args.run_id,
-        project_id=args.project_id, node_id=args.node_id, parent_node_id=args.parent_node_id,
+        project_id=args.project_id, node_id=args.node_id, parent_node_id=_optional_node(args.parent_node_id),
         model=args.model, driver=Path(args.driver),
     )
     print(json.dumps(result, ensure_ascii=False, indent=2))

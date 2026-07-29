@@ -95,7 +95,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--model", required=True)
     args = parser.parse_args(argv)
     result = execute_adapter(input_path=Path(args.input), output_dir=Path(args.output_dir), run_id=args.run_id,
-                             project_id=args.project_id, node_id=args.node_id, parent_node_id=args.parent_node_id,
+                             project_id=args.project_id, node_id=args.node_id,
+                             parent_node_id=None if args.parent_node_id in {None, "", "None", "null"} else args.parent_node_id,
                              model=args.model)
     print(json.dumps(result, ensure_ascii=False, indent=2))
     # Semantic code/test failures are structured results consumed by RootWorkflow.

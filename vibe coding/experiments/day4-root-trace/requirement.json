@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "task_id": "day4-fresh-root-trace",
+  "depth": 0,
+  "max_depth": 2,
+  "requirement_ids": [
+    "REQ-D4-HEALTH",
+    "REQ-D4-TRACE"
+  ],
+  "requirements": [
+    {
+      "id": "REQ-D4-HEALTH",
+      "text": "Each generated leaf must expose a local FastAPI health response with an observable ok status."
+    },
+    {
+      "id": "REQ-D4-TRACE",
+      "text": "Each generated leaf must expose its node identifier and its public requirement identifiers in that health response."
+    }
+  ],
+  "scope": "Fresh Day 4 orchestration control only. It is not Tutor reuse, a C0-C5 task, hidden-test input, or a production endpoint."
+}
