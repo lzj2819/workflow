@@ -90,3 +90,10 @@ This rule is implemented in `vibe coding/vibecode/artifact_contract.py` and cove
 - The active Day 1 checklist is defined only in `docs/DAY1_GATE_STATUS.md`.
 - Day 1 evidence is limited to Contract v0.2, D frozen-environment evidence using the canonical Git-blob digest, B proposal/fixture review, and C's three smoke commands.
 - Fresh B output, complete strict execution, semantic PASS/FAIL, Leaf, Coding, and `tests/integration` are deferred to Day 3 or later. They must not be used to block or claim Day 1 completion.
+
+## 2026-07-29 Day 1 environment-input closure
+
+- This entry does not modify the frozen v0.2 envelope, schema, identity rule, or status semantics.
+- Current-A smoke revealed that the declared Mocktest runtime imports require `PyYAML==6.0.2`, `rich==13.9.4`, and `gherkin-official==24.1.0`. They were added to `vibe coding/requirements-verilayer.txt` in `8766793`.
+- The current canonical installation input is the Git blob at `8766793:vibe coding/requirements-verilayer.txt`, SHA-256 `370d4e7bd1ae9df0ede903ac4741c5f1fd4c02a53b13eb0e732c380a10ba0bc6`. Earlier requirement hashes remain historical evidence for their earlier inputs only.
+- The four narrowed Day 1 items are closed on that baseline. The resulting GO authorizes Day 2 skeleton work only; it is not strict, semantic, Leaf, Coding, E2E, or experiment evidence.

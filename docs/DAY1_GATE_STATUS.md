@@ -1,8 +1,8 @@
 # Day 1 Gate Status
 
-Status: **NO-GO** as of 2026-07-29. Governance-resolution parent: `verilayer/a-contract-integration@d8041d022edecb2eb2535e486ce20d055c495fc`; evidence baseline: `c12c4f508ba7247c40ee84e40c256f2878600e18`.
+Status: **GO** as of 2026-07-29. Active evidence baseline: `verilayer/a-contract-integration@8766793e9723c56cfbfbeed5ca4fbeaab9b7f85b`; the earlier NO-GO audits remain historical records below.
 
-## Current-A environment evidence audit
+## Historical pre-closure environment audit (superseded)
 
 Current A has no `vibe coding/.venv/Scripts/python.exe`; `vibe coding/tests/integration` does not exist. D PR #4 is closed and unmerged, so its environment records cannot be promoted into current-A evidence.
 
@@ -68,11 +68,11 @@ All B/C/D PR targets are `verilayer/a-contract-integration`; no team branch may 
 
 PR #3 is open and unmerged with seven proposal/fixture files; it is acceptable as a Day 1 proposal only. PR #4 is closed and unmerged. PR #5 is closed and merged at `c12c4f5`; restored models do not establish strict PASS. `main_session_strict_driver.py --help` is never strict PASS.
 
-## 2026-07-29 acceptance-language resolution (supersedes conflicting wording above)
+## 2026-07-29 prior acceptance-language resolution (historical environment input)
 
 The only active artifact envelope is **v0.2**. The v0.3 entry in `docs/contract-change-log.md` is a profile-field decision record; it is not a second envelope, schema version, or Gate approval.
 
-### Canonical installation input
+### Canonical installation input at the prior baseline
 
 The reproducible installation input is the Git blob byte stream at `c12c4f508ba7247c40ee84e40c256f2878600e18:vibe coding/requirements-verilayer.txt`, SHA-256 `f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472`.
 
@@ -108,17 +108,49 @@ All three commands exited `0` in A's current checkout. Blob bytes and current ch
 | C models PR #5 | smoke/strict unrun in frozen A environment | `NOT_RUN` | `NOT_RUN` | `NOT_RUN` |
 | D `verilayer/d-environment-evidence@8cb3582` | current-A rerun missing | `NOT_APPLICABLE` | `NOT_APPLICABLE` | reports 27 passed; not current-A baseline |
 
-**Gate decision: NO-GO.**
+**Gate decision at this historical audit checkpoint: NO-GO. Superseded by the closure record below.**
 
-## Active Day 1 Gate checklist (only active checklist)
+## Active Day 1 Gate checklist (closed)
 
-Day 1 remains **NO-GO** until all four items below have reviewable evidence. Nothing else in this document is an active Day 1 acceptance condition.
+All four narrowed Day 1 items below have reviewable evidence on the active baseline. Nothing else in this document is a Day 1 acceptance condition.
 
 | # | Owner | Required Day 1 evidence |
 |---:|---|---|
-| 1 | A | Contract v0.2 remains the active envelope; v0.3 is only a profile-field decision record. |
-| 2 | D | Environment evidence on the current remote `verilayer/a-contract-integration` tip: install input is the Git blob digest `f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472`; record freeze/hash and the valid pytest result. Windows checkout observation `464c4c0f6b38397fdb33e130fc8d0fbb385a0de607b7192af40c9acf99e76e03` is retained, not stale input. |
-| 3 | B | Existing PR #3 fixture passes Contract v0.2 validation in D's frozen A environment. Fresh generated Architecture/Testcases output is not a Day 1 requirement. |
-| 4 | C | Three frozen-environment smoke commands: `import mock_framework.models`; `import mock_framework.models.validator`; `main_session_strict_driver.py --help`. These are smoke only, not strict or semantic PASS. |
+| 1 | A | Complete: Contract v0.2 remains the active envelope; v0.3 is only a profile-field decision record. |
+| 2 | D | Complete: `8766793` environment evidence uses Git blob digest `370d4e7bd1ae9df0ede903ac4741c5f1fd4c02a53b13eb0e732c380a10ba0bc6`; freeze/hash and valid pytest evidence are recorded below. The CRLF checkout observation `de4f9477b138a00a3c959d33766ef92bff6c03048d06710c59caf4ebb3ca49fb` is retained, not stale input. |
+| 3 | B | Complete: PR #3 head `6272d30` fixtures pass live Contract v0.2 schema and canonical content-hash validation in D's frozen A environment. Fresh generated Architecture/Testcases output is not a Day 1 result. |
+| 4 | C | Complete: the three frozen-environment smoke commands exit 0. They remain smoke only, not strict or semantic PASS. |
 
 The following are explicitly deferred to **Day 3 or later**: fresh B output, a complete strict audit/run, semantic PASS/FAIL, Leaf, Coding, and any `tests/integration` suite. If `tests/integration` is named before that suite exists, pytest exit `4` remains an acceptance-spec `ERROR`, never PASS.
+
+## 2026-07-29 Day 1 closure record (active)
+
+The active environment input was corrected only to include the three runtime
+dependencies proven necessary for the declared Day 1 C smoke commands:
+`PyYAML==6.0.2`, `rich==13.9.4`, and `gherkin-official==24.1.0`. This is an
+environment-input correction, not an Artifact Contract version change.
+
+| Evidence | Result |
+|---|---|
+| A baseline | `8766793e9723c56cfbfbeed5ca4fbeaab9b7f85b` |
+| Python | CPython 3.12.10 |
+| Canonical installation input | Git blob SHA-256 `370d4e7bd1ae9df0ede903ac4741c5f1fd4c02a53b13eb0e732c380a10ba0bc6` |
+| Windows checkout observation | SHA-256 `de4f9477b138a00a3c959d33766ef92bff6c03048d06710c59caf4ebb3ca49fb` |
+| `pip freeze --all` | exit 0; UTF-8/LF SHA-256 `f7477b69477c9b29ee43f8434d26ad6fa533ab46f3e652cd131b620749d8a288` |
+| Valid Day 1 pytest target | exit 0; `28 passed in 27.60s` |
+| B fixture validation | PR #3 head `6272d30`; v0.2 schema exit 0, content-hash exit 0, contract unit test exit 0 (`1 passed`) |
+| C smoke | models import exit 0; validator import exit 0; strict-driver `--help` exit 0 |
+
+The pytest command was executed from `vibe coding/` with `TMP` and `TEMP`
+set to repository-local `.pytest-tmp` because the user-level default temp
+directory is not accessible on this host. The test target itself is unchanged:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest -q tests/test_contracts.py tests/test_module_runner.py tests/test_root_workflow.py tests/test_artifact_contract.py
+```
+
+The coordinator performed the A/B/C/D owner review in the user's authorized
+takeover scope. **Day 1 Gate decision: GO.** This decision authorizes only Day
+2 production skeleton work. It does not claim a strict run, semantic result,
+Leaf decision, Coding Executor, repair result, E2E flow, C0--C5 run, or
+experiment result.
