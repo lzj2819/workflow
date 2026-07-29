@@ -26,11 +26,13 @@ No static check, log, historical report, fixture, xfail, Tutor artifact, or unru
 - `jsonschema==4.26.0`
 - Install source: the approved package index/wheelhouse selected by D at installation time; credentials and index tokens are not recorded.
 - Project-local environment path: `vibe coding/.venv/` only, ignored by Git.
-- Approved input file: `vibe coding/requirements-verilayer.txt` with current-A raw-bytes SHA-256 `f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472` (recomputed by A on 2026-07-29). D PR #4 reports `464c4c…e76e03` for a different checked-out input; it is stale and not current-A installation evidence.
+- Historical input statement, superseded below: the canonical installation digest is the Git-blob SHA-256 `f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472`. D's `464c4c…e76e03` is a Windows checkout observation, not stale input.
 
 This is an exact install specification, not a completed lock. D must install from this exact current-A input, provide `pip freeze --all` and its SHA-256, then rerun commands on the current A baseline before any test result becomes a baseline.
 
 ## Required Gate closures
+
+> **Historical record only — not the active Day 1 checklist.** The following table predates the 2026-07-29 scope correction. In particular, fresh B output, complete strict execution, semantic PASS, Leaf, Coding, and `tests/integration` are Day 3-or-later concerns and are not Day 1 acceptance conditions.
 
 | Blocker | Owner | Acceptance command/evidence | Next step |
 |---|---|---|---|
@@ -53,7 +55,7 @@ All B/C/D PR targets are `verilayer/a-contract-integration`; no team branch may 
 | Evidence / command | Recorded exit | Current-A audit conclusion |
 |---|---:|---|
 | `Get-FileHash vibe coding/requirements-verilayer.txt` on current A | 0 | raw-bytes SHA-256 `f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472` |
-| D PR #4 `sha256sum requirements-verilayer.txt` | 0 | reports `464c4c0f6b38397fdb33e130fc8d0fbb385a0de607b7192af40c9acf99e76e03`; `ENVIRONMENT_ERROR/STALE_INPUT_HASH` |
+| D PR #4 `sha256sum requirements-verilayer.txt` | 0 | reports Windows checkout observation `464c4c0f6b38397fdb33e130fc8d0fbb385a0de607b7192af40c9acf99e76e03`; not a canonical blob digest, not stale input |
 | D PR #4 `pip freeze --all | sha256sum` | 0 | reports `79e4c5de123d0db2fc070e1cf9d6518258a92466f6b2d91b9218fba826593e90`; unmerged and stale-input-bound, not an accepted current-A lock |
 | D PR #4 root pytest baseline | 0 | reports 27 passed; unmerged and stale-input-bound, not an accepted current-A baseline |
 | D PR #4 full Gate command including `tests/integration` | 4 | `ENVIRONMENT_ERROR`: target absent; no PASS inferred |
@@ -107,3 +109,16 @@ All three commands exited `0` in A's current checkout. Blob bytes and current ch
 | D `verilayer/d-environment-evidence@8cb3582` | current-A rerun missing | `NOT_APPLICABLE` | `NOT_APPLICABLE` | reports 27 passed; not current-A baseline |
 
 **Gate decision: NO-GO.**
+
+## Active Day 1 Gate checklist (only active checklist)
+
+Day 1 remains **NO-GO** until all four items below have reviewable evidence. Nothing else in this document is an active Day 1 acceptance condition.
+
+| # | Owner | Required Day 1 evidence |
+|---:|---|---|
+| 1 | A | Contract v0.2 remains the active envelope; v0.3 is only a profile-field decision record. |
+| 2 | D | Environment evidence for the current A baseline: install input is the Git blob digest `f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472`; record install and frozen-environment evidence. Windows checkout observation `464c4c0f6b38397fdb33e130fc8d0fbb385a0de607b7192af40c9acf99e76e03` is retained, not stale input. |
+| 3 | B | PR #3 fixture/proposal review evidence against Contract v0.2. Fresh generated Architecture/Testcases output is not a Day 1 requirement. |
+| 4 | C | Three frozen-environment smoke commands: `import mock_framework.models`; `import mock_framework.models.validator`; `main_session_strict_driver.py --help`. These are smoke only, not strict or semantic PASS. |
+
+The following are explicitly deferred to **Day 3 or later**: fresh B output, a complete strict audit/run, semantic PASS/FAIL, Leaf, Coding, and any `tests/integration` suite. If `tests/integration` is named before that suite exists, pytest exit `4` remains an acceptance-spec `ERROR`, never PASS.

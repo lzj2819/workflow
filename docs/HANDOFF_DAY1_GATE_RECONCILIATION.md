@@ -15,7 +15,7 @@ Gate: **NO-GO**
 | PR | State | Result |
 |---|---|---|
 | [#3 B](https://github.com/lzj2819/workflow/pull/3) | open | proposal/fixture-only; acceptable for review, not fresh output or E2E |
-| [#4 D](https://github.com/lzj2819/workflow/pull/4) | closed, unmerged | stale raw input hash; environment evidence rejected for current A |
+| [#4 D](https://github.com/lzj2819/workflow/pull/4) | closed, unmerged | historical environment record; `464c4c...e76e03` is a Windows checkout observation, not stale input |
 | [#5 C models](https://github.com/lzj2819/workflow/pull/5) | merged | package restoration only; strict/semantic results remain `NOT_RUN` |
 
 ## Result separation
@@ -24,7 +24,7 @@ Gate: **NO-GO**
 |---|---|
 | Strict execution completeness | `NOT_RUN` |
 | Mocktest/Architecture semantic PASS-FAIL | `NOT_RUN` |
-| Environment | `ERROR`: no current-A `.venv`; D evidence stale; `tests/integration` absent |
+| Environment | `ERROR`: no current-A `.venv`; D evidence awaits current-A review; `tests/integration` absent |
 
 ## Input and command evidence
 
@@ -33,7 +33,7 @@ Gate: **NO-GO**
 - D reported root pytest exit `0` / 27 passed and contract test exit `0` / 1 passed, but both are stale-input/unmerged evidence.
 - D reported full command exit `4` because `tests/integration` is absent; this is `ENVIRONMENT_ERROR`, not a test PASS.
 
-## Required actions
+## Historical required actions (not an active Gate checklist)
 
 1. D rebuilds the project-local environment from current-A input, captures freeze/hash/raw command logs, and reruns pytest.
 2. A resolves the nonexistent integration-suite acceptance target before requiring it as a passing command.
@@ -57,3 +57,5 @@ Commands + exit codes: 用保留 `git cat-file blob` stdout 原始 bytes 的兼�
 结果分类：environment ERROR / execution completeness / semantic PASS-FAIL / real pytest: current A = `ERROR` / `NOT_RUN` / `NOT_RUN` / `NOT_RUN`; B PR #3 = not environment evidence / `NOT_RUN` / `NOT_RUN` / fixture only; C PR #5 = smoke unrun / `NOT_RUN` / `NOT_RUN` / `NOT_RUN`; D `8cb3582` = current-A rerun missing / `NOT_APPLICABLE` / `NOT_APPLICABLE` / reported 27 passed, not current-A baseline。
 
 Blocker and required A decision: freeze Git blob bytes as the install input; omit absent `tests/integration` from the current executable Gate; keep v0.2 as sole active envelope; require D current-A environment rerun, B fresh samples, C smoke plus real strict run, and four-owner sign-off. Gate remains **NO-GO**.
+
+This handoff is historical evidence only. The sole active Day 1 checklist is `docs/DAY1_GATE_STATUS.md`; its current scope defers fresh B output, full strict/semantic results, Leaf, Coding, and `tests/integration` to Day 3 or later.

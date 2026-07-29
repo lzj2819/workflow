@@ -84,3 +84,9 @@ This rule is implemented in `vibe coding/vibecode/artifact_contract.py` and cove
 - Canonical environment input is SHA-256 over the Git blob bytes at `c12c4f5:vibe coding/requirements-verilayer.txt`: `f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472`.
 - Earlier wording in this log or the Gate status that labelled D's `464c4c...e76e03` working-file observation stale is superseded. It may be a different Windows checkout byte stream; it is noncanonical, not classified false or stale without byte/EOL-policy proof.
 - `tests/integration` is absent. Its pytest exit `4` is an acceptance-spec `ERROR`; it is not a PASS. The current Day 1 executable Gate omits that path until a real reviewed suite is added.
+
+### 2026-07-29 Day 1 scope correction
+
+- The active Day 1 checklist is defined only in `docs/DAY1_GATE_STATUS.md`.
+- Day 1 evidence is limited to Contract v0.2, D frozen-environment evidence using the canonical Git-blob digest, B proposal/fixture review, and C's three smoke commands.
+- Fresh B output, complete strict execution, semantic PASS/FAIL, Leaf, Coding, and `tests/integration` are deferred to Day 3 or later. They must not be used to block or claim Day 1 completion.
