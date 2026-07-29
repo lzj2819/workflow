@@ -6,3 +6,4 @@ pydantic==2.13.4
 jsonschema==4.26.0
 PyYAML==6.0.2
 rich==13.9.4
+gherkin-official==24.1.0
