@@ -34,6 +34,22 @@ class GenerationExecutorTests(unittest.TestCase):
             evidence = json.loads((output / "generation-evidence.json").read_text(encoding="utf-8"))
             self.assertEqual(evidence["model"]["status"], "PASS")
 
+    def test_strict_compatible_generation_instructions_are_present(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); source = root / "requirement.json"
+            source.write_text('{"requirement_ids":["REQ-STRICT"]}', encoding="utf-8")
+            seen = {}
+
+            def fake_runner(*, prompt, workspace, model, timeout_seconds):
+                seen["prompt"] = prompt
+                (workspace / "architecture.md").write_text("# architecture", encoding="utf-8")
+                return {"status": "PASS"}
+
+            execute_generation(module="architecture", input_path=source, output_dir=root / "attempt", run_id="r",
+                               project_id="p", node_id="n", parent_node_id=None, model="test", runner=fake_runner)
+            self.assertIn("validate-arch-package", seen["prompt"])
+            self.assertIn("Public API Service", seen["prompt"])
+
     def test_missing_expected_artifact_is_a_structured_error(self):
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp) / "requirement.md"

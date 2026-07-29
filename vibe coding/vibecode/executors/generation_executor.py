@@ -17,8 +17,8 @@ from vibecode.executors.model_runner import run_codex
 ModelRunner = Callable[..., dict[str, Any]]
 _SPECS = {
     "prd": ("prd.json", "prd", "Create a JSON PRD with requirement_ids and explicit requirements."),
-    "architecture": ("architecture.md", "architecture", "Create Markdown architecture with named components, entry contract, flows, error behavior, and explicit interfaces."),
-    "gherkin": ("testcases.feature", "testcases", "Create executable Gherkin scenarios with REQ tags, concrete inputs, and observable assertions."),
+    "architecture": ("architecture.md", "architecture", "Create Markdown architecture with named components, entry contract, flows, error behavior, and explicit interfaces. For strict validation, include a `validate-arch-package` JSON comment, a `Component registry` table with `child_id`, `responsibility`, and `dispatch_kind` columns, and name the public entry component exactly `Public API Service`. State which HTTP method/path it handles, include a Client→Public API Service sequence flow, and include a Contract mapping table with a contract_id, Provider, Consumer, explicit inputs, outputs, and errors."),
+    "gherkin": ("testcases.feature", "testcases", "Create executable Gherkin scenarios with REQ tags, concrete inputs, and observable assertions. For strict validation, every When step must say `the client sends METHOD /path to Public API Service`, where METHOD/path are explicit, and every scenario must have a concrete Then response assertion."),
 }
 
 
