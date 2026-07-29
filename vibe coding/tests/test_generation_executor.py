@@ -53,6 +53,8 @@ class GenerationExecutorTests(unittest.TestCase):
             self.assertIn("bare canonical child_ids", seen["prompt"])
             self.assertIn("must never name the same internal child_id", seen["prompt"])
             self.assertIn("backtick lists", seen["prompt"])
+            self.assertIn("### GET /health", seen["prompt"])
+            self.assertIn("top-level required key is `event`", seen["prompt"])
 
     def test_missing_expected_artifact_is_a_structured_error(self):
         with tempfile.TemporaryDirectory() as tmp:
