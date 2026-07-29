@@ -55,6 +55,7 @@ class GenerationExecutorTests(unittest.TestCase):
             self.assertIn("backtick lists", seen["prompt"])
             self.assertIn("### GET /health", seen["prompt"])
             self.assertIn("top-level required key is `event`", seen["prompt"])
+            self.assertIn("never declare `status_code` or `body` as an input", seen["prompt"])
 
     def test_missing_expected_artifact_is_a_structured_error(self):
         with tempfile.TemporaryDirectory() as tmp:
