@@ -4,3 +4,4 @@ fastapi==0.115.12
 SQLAlchemy==2.0.41
 pydantic==2.13.4
 jsonschema==4.26.0
+PyYAML==6.0.2
