@@ -77,6 +77,38 @@ class StrictExecutorTests(unittest.TestCase):
             self.assertEqual(result["status"], "FAIL")
             self.assertEqual(result["error_type"], "STRICT_SEMANTIC_BLOCKED")
 
+    def test_completed_formal_fail_overrides_nonzero_finalize_exit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            feature, architecture, output = root / "task.feature", root / "architecture.md", root / "run"
+            feature.write_text("Feature: x", encoding="utf-8")
+            architecture.write_text("# x", encoding="utf-8")
+
+            def driver(args):
+                output.mkdir(parents=True, exist_ok=True)
+                if args[0] == "next-components":
+                    (output / "pending_components.json").write_text("[]", encoding="utf-8")
+                elif args[0] == "next-validators":
+                    (output / "pending_validators.json").write_text("[]", encoding="utf-8")
+                elif args[0] == "finalize":
+                    formal = output / "formal"; formal.mkdir(exist_ok=True)
+                    (formal / "mocktest_report.json").write_text(
+                        json.dumps({"execution_status": "COMPLETED", "validation_status": "FAIL"}),
+                        encoding="utf-8",
+                    )
+                    (output / "strict_audit.json").write_text(json.dumps({"status": "PASS"}), encoding="utf-8")
+                    return 1
+                return 0
+
+            result = execute_strict(feature_path=feature, architecture_path=architecture, output_dir=output,
+                                    python="python", driver=root / "driver.py", model="test", run_id="r", project_id="p",
+                                    node_id="n", parent_node_id=None, driver_call=driver)
+            self.assertEqual(result["status"], "FAIL")
+            self.assertTrue(result["execution_complete"])
+            self.assertEqual(result["semantic_status"], "FAIL")
+            self.assertEqual(result["strict_audit_status"], "PASS")
+            self.assertEqual(result["finalize_exit"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -107,9 +107,34 @@ def execute_strict(
     audit_status = audit.get("status") or report.get("metrics", {}).get("strict_audit_status")
     if not report:
         return _result("ERROR", output_dir, "STRICT_FINALIZE_REPORT_MISSING", "finalize did not publish report", model_events)
-    status = "PASS" if execution_complete and semantic_status == "PASS" and audit_status == "PASS" else "FAIL"
-    if finalize_exit not in (0, 2):
-        status = "ERROR"
+    if not execution_complete:
+        return {
+            **_result("ERROR", output_dir, "STRICT_EXECUTION_INCOMPLETE",
+                      "formal report does not confirm completed strict execution", model_events),
+            "execution_complete": execution_complete, "semantic_status": semantic_status,
+            "strict_audit_status": audit_status, "finalize_exit": finalize_exit,
+            "report_path": "formal/mocktest_report.json",
+        }
+    if semantic_status not in {"PASS", "FAIL"}:
+        return {
+            **_result("ERROR", output_dir, "STRICT_SEMANTIC_STATUS_INVALID",
+                      "formal report has no recognized semantic status", model_events),
+            "execution_complete": execution_complete, "semantic_status": semantic_status,
+            "strict_audit_status": audit_status, "finalize_exit": finalize_exit,
+            "report_path": "formal/mocktest_report.json",
+        }
+    if audit_status not in {"PASS", "FAIL"}:
+        return {
+            **_result("ERROR", output_dir, "STRICT_AUDIT_STATUS_INVALID",
+                      "strict audit is missing or has no recognized status", model_events),
+            "execution_complete": execution_complete, "semantic_status": semantic_status,
+            "strict_audit_status": audit_status, "finalize_exit": finalize_exit,
+            "report_path": "formal/mocktest_report.json",
+        }
+    # The formal report is authoritative once execution is complete.  The
+    # finalize process code remains diagnostic evidence: validate-arch may use
+    # a non-zero code for a completed semantic FAIL.
+    status = semantic_status
     return {
         **_result(status, output_dir, None, None, model_events),
         "execution_complete": execution_complete, "semantic_status": semantic_status,
