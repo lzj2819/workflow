@@ -1,6 +1,6 @@
-# VeriLayer Artifact Contract v0.2
+# VeriLayer Artifact Contract v0.2 — Canonical Envelope
 
-Status: Day 1 canonical draft, pending B/C/D human-Gate confirmation.
+Status: v0.2 is the frozen canonical envelope. v0.3 is a versioned profile-decision record in `docs/contract-change-log.md`, not a second active envelope/schema version. Day 1 Gate remains **NO-GO** until evidence and four-party sign-off are complete.
 Owner: A (Integration Owner and Contract Owner).  
 Scope: the adapter boundary only; this document does not claim that production Adapters, Coding Executor, or Integration Executor already exist.
 
@@ -121,13 +121,13 @@ A contract-affecting change requires a versioned change request and a `contract-
 - `ADAPTER_NEEDED`, `LEAF_FIX_REQUIRED`, and `CONTRACT_CHANGE_REQUIRED` block the affected edge until A records resolution.
 - B/C/D do not directly change this contract. They submit a field proposal with sample artifact, schema validation result, input/output hashes, compatibility impact, and required downstream action.
 
-## 8.1 Accepted profile extensions, pending implementation
+## 8.1 v0.3 profile decisions — evidence verification pending
 
 - Architecture: components, interfaces, dependencies, data/state, risks, requirement mappings, integration points, and child recursive context.
 - Testcases: Features, scenarios, testcase records, a requirement-model path/hash, and validator evidence. Local `verification_status` never replaces envelope `status`.
 - Mocktest/Leaf: `execution.completeness`, `execution.strict_audit_status`, `semantic_status`, `downstream_gate`, and `proposed_children[].node_id`.
 - `input_artifacts` remains a string array of repository-relative references. Detailed typed references belong in the type-specific payload.
-- Code/TestResult fields are pending D's formal proposal.
+- Code/TestResult field groups are conditionally accepted in the v0.3 change log; their samples and environment evidence are not yet accepted as a Gate PASS.
 
 ## 9. Day 1 review checklist
 

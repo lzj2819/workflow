@@ -3,7 +3,7 @@
 ## v0.2 — 2026-07-28 — Day 1 canonical artifact envelope
 
 - Owner: A (Integration Owner + Contract Owner).
-- Status: proposed for the Day 1 human Gate; no Adapter or Executor implementation is authorized by this entry.
+- Status: historical envelope decision. Its review-status wording is superseded by the 2026-07-29 Gate reconciliation below; no Adapter or Executor implementation is authorized by this entry.
 - Scope: PRD, Architecture, Testcases, Mocktest, Leaf, Code, and TestResult artifacts at Adapter boundaries.
 
 | Change | Compatibility | Required action |
@@ -13,18 +13,18 @@
 | Canonicalize child identity on `node_id` | breaking for producers that emit `child_node_id` as their formal child key | Adapter may dual-read legacy `child_node_id`, then emit the child as `node_id` |
 | Separate business `FAIL` from system/tool/schema `ERROR` | semantic clarification | C/D confirm their failure taxonomy and preserve negative evidence |
 
-## Pending Day 1 review
+## Historical pending-review list
 
 - B: Architecture/Testcases payload fields and requirement-to-scenario mapping.
 - C: strict execution-completeness fields, Leaf evidence, decision payload, and defect taxonomy.
 - D: Code/TestResult/Evidence payload fields, pytest evidence, repair evidence, and hidden-test isolation.
 
-No proposal under `vibe coding/docs/proposals/` was present when this entry was written. A will append a versioned entry before accepting a later proposal that changes this envelope, status semantics, or identity rules.
+This list predates the received B/C/D proposals and is superseded as a status summary by the 2026-07-29 Gate reconciliation. A will append a versioned entry before accepting a later proposal that changes this envelope, status semantics, or identity rules.
 
 ## v0.3 — 2026-07-28 — Profile review and content hash rule
 
 - Owner: A (Integration Owner + Contract Owner).
-- Status: accepted contract decision; implementation remains blocked until the Day 1 Gate.
+- Status: field decisions accepted; profile evidence and human Gate approval remain pending. This is not a Day 1 Gate PASS and does not authorize execution.
 
 | Proposal / change | Decision | Outcome | Required action |
 |---|---|---|---|
@@ -33,7 +33,7 @@ No proposal under `vibe coding/docs/proposals/` was present when this entry was 
 | C strict completeness, strict-audit state, semantic result, downstream gate, and canonical proposed children | accepted as Mocktest/Leaf profile extension | ADDITIVE_ONLY | C must emit `proposed_children[].node_id`; only semantic PASS plus complete strict evidence allows Leaf |
 | C typed `input_artifacts` objects | rejected | MATCH | Keep the canonical envelope as repository-relative string references; use payload references for typed detail |
 | C `tool_error` duplicate field | rejected as a separate canonical field | MATCH | Use the required envelope `error` object for tool/system/schema/path errors |
-| D Code/TestResult/Evidence proposal | pending | CONTRACT_CHANGE_REQUIRED if it changes envelope/status/hash semantics | D must provide an accessible commit/diff and proposal before A can decide |
+| D Code/TestResult/Evidence proposal | superseded by the D review below | see v0.3 D profile review | D must still provide accepted samples and a reviewable environment evidence package |
 | `content_sha256` self-reference | accepted | ADDITIVE_ONLY | apply the canonical rule below in every Adapter and validator |
 
 ### Canonical content hash rule
@@ -61,11 +61,19 @@ This rule is implemented in `vibe coding/vibecode/artifact_contract.py` and cove
 ## C strict backend recovery assignment — 2026-07-28
 
 - Owner: C.
-- Required head: `4e7d1b0` (after `fbd2d40`) or a fast-forward successor.
+- Historical required head: `4e7d1b0` (after `fbd2d40`) or a fast-forward successor.
 - Required PR target: `verilayer/a-contract-integration`, never `main`.
 - Scope: restore only the nine files under `mocktest/src/mock_framework/models/` from the controlled source, with per-file SHA-256 reconciliation. No business-logic rewrite is authorized.
 - Before requesting merge, C must redact member-local absolute paths from committed logs and provide text-readable evidence for:
   - `import mock_framework.models`;
   - `import mock_framework.models.validator`;
   - `main_session_strict_driver.py --help`.
-- Until that PR is reviewed and merged into A's branch, strict execution remains `ERROR`/`tool-package defect`; it must not create a strict audit, invoke Leaf, invoke Coding, or assert an Architecture conclusion.
+- PR #5 is now merged into A. Package restoration does not change the strict result: until a frozen-environment strict run completes, strict completeness is `NOT_RUN`, semantic status is `NOT_RUN`, and Leaf/Coding remain blocked.
+
+## 2026-07-29 Day 1 Gate reconciliation
+
+- Active envelope: **v0.2** only. v0.3 names accepted profile-field decisions in this log; it does not replace the v0.2 schema version.
+- Gate decision: **NO-GO**. Field acceptance, models restoration, a fixture, `--help`, xfail, Tutor material, or an unmerged environment report is not real E2E or Coding authorization.
+- PR #3 (B): open and unmerged. Its seven-file proposal/fixture-only scope is acceptable for Day 1 review, but it is not fresh B output and its samples must validate in the current-A frozen environment.
+- PR #4 (D): closed and unmerged. Its environment records use raw requirements hash `464c4c…e76e03`, which differs from current-A raw hash `f55ab0…ad472`; the records are not accepted as current-A environment evidence.
+- PR #5 (C models): merged into A at `c12c4f5`. This accepts package restoration only; current smoke remains `ENVIRONMENT_ERROR`, and strict completeness/semantic result are both `NOT_RUN`.
