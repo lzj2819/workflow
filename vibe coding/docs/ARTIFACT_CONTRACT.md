@@ -113,6 +113,8 @@ The seven migration fixture types are PRD, architecture, testcases, Mocktest rep
 - For a JSON artifact that contains its own `content_sha256`, remove only that top-level field; serialize the remaining value with sorted keys, compact separators, UTF-8, and `ensure_ascii=false`; hash those canonical bytes.
 - Both `content_path` and `content_sha256` are `null` only when no safely written content file exists. A missing or mismatched hash is an `ERROR`, never a `PASS` or a fabricated value.
 
+This artifact-content hash rule is separate from the Day 1 environment installation-input rule in `docs/DAY1_GATE_STATUS.md`. That rule freezes requirements Git blob bytes and does not alter the active v0.2 envelope or schema.
+
 ## 8. Change control
 
 A contract-affecting change requires a versioned change request and a `contract-diff` result before merge. The permitted outcomes are `MATCH`, `ADDITIVE_ONLY`, `ADAPTER_NEEDED`, `LEAF_FIX_REQUIRED`, and `CONTRACT_CHANGE_REQUIRED`.

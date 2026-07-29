@@ -1,6 +1,6 @@
 # Day 1 Gate Status
 
-Status: **NO-GO** as of 2026-07-29. Current A baseline: `verilayer/a-contract-integration@c12c4f508ba7247c40ee84e40c256f2878600e18`.
+Status: **NO-GO** as of 2026-07-29. Governance-resolution parent: `verilayer/a-contract-integration@d8041d022edecb2eb2535e486ce20d055c495fc`; evidence baseline: `c12c4f508ba7247c40ee84e40c256f2878600e18`.
 
 ## Current-A environment evidence audit
 
@@ -65,3 +65,45 @@ All B/C/D PR targets are `verilayer/a-contract-integration`; no team branch may 
 | B fixture/validator evidence (PR #3, open) | `NOT_RUN` | `NOT_RUN` | validator fixtures are not current-A pytest/E2E evidence |
 
 PR #3 is open and unmerged with seven proposal/fixture files; it is acceptable as a Day 1 proposal only. PR #4 is closed and unmerged. PR #5 is closed and merged at `c12c4f5`; restored models do not establish strict PASS. `main_session_strict_driver.py --help` is never strict PASS.
+
+## 2026-07-29 acceptance-language resolution (supersedes conflicting wording above)
+
+The only active artifact envelope is **v0.2**. The v0.3 entry in `docs/contract-change-log.md` is a profile-field decision record; it is not a second envelope, schema version, or Gate approval.
+
+### Canonical installation input
+
+The reproducible installation input is the Git blob byte stream at `c12c4f508ba7247c40ee84e40c256f2878600e18:vibe coding/requirements-verilayer.txt`, SHA-256 `f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472`.
+
+```powershell
+$p = [Diagnostics.Process]::new(); $p.StartInfo.FileName = 'git'; $p.StartInfo.Arguments = 'cat-file blob "c12c4f508ba7247c40ee84e40c256f2878600e18:vibe coding/requirements-verilayer.txt"'; $p.StartInfo.UseShellExecute = $false; $p.StartInfo.RedirectStandardOutput = $true; [void]$p.Start(); $m = [IO.MemoryStream]::new(); $p.StandardOutput.BaseStream.CopyTo($m); $p.WaitForExit(); $h = [Security.Cryptography.SHA256]::Create(); ([BitConverter]::ToString($h.ComputeHash($m.ToArray())) -replace '-', '').ToLower(); $p.ExitCode
+Get-FileHash "vibe coding/requirements-verilayer.txt" -Algorithm SHA256
+git check-attr -a -- "vibe coding/requirements-verilayer.txt"
+```
+
+All three commands exited `0` in A's current checkout. Blob bytes and current checkout bytes both hash to `f55ab0...ad472`; `core.autocrlf=true` is observed and no explicit attribute is returned for the path. D's reported Windows working-file bytes `464c4c0f6b38397fdb33e130fc8d0fbb385a0de607b7192af40c9acf99e76e03` remain a separate observation. Without D's exact checkout bytes and a frozen EOL policy, A does **not** classify that hash as wrong or stale. It is noncanonical solely because Git blob bytes are the frozen install rule.
+
+### Full-Gate target
+
+`vibe coding/tests/integration` is absent. It is excluded from the executable Day 1 Gate; a command containing it must record pytest exit `4` as an acceptance-spec `ERROR`, never as PASS. The current valid target, still unrun on current A, is:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest -q tests/test_contracts.py tests/test_module_runner.py tests/test_root_workflow.py tests/test_artifact_contract.py
+```
+
+### Closure and result matrix
+
+| Owner | Required acceptance |
+|---|---|
+| B | PR #3 stays proposal/fixture-only until fresh Architecture/Testcases samples pass contract tests in the frozen current-A environment. |
+| C | PR #5 models recovery is merged, but imports, `main_session_strict_driver.py --help`, and a real strict run must complete in that environment. `--help` alone is not strict PASS. |
+| D | install from the canonical blob input, record `pip freeze --all` plus SHA-256, and rerun the valid target on current A. The `8cb3582` 27-test log is review evidence only. |
+| A+B+C+D | accept samples and complete four-owner Gate sign-off. |
+
+| Subject | environment ERROR | strict execution completeness | semantic PASS/FAIL | real pytest |
+|---|---|---|---|---|
+| Current A | `ERROR`: no project-local `.venv` | `NOT_RUN` | `NOT_RUN` | `NOT_RUN` |
+| B PR #3 | not environment evidence | `NOT_RUN` | `NOT_RUN` | fixture/proposal only |
+| C models PR #5 | smoke/strict unrun in frozen A environment | `NOT_RUN` | `NOT_RUN` | `NOT_RUN` |
+| D `verilayer/d-environment-evidence@8cb3582` | current-A rerun missing | `NOT_APPLICABLE` | `NOT_APPLICABLE` | reports 27 passed; not current-A baseline |
+
+**Gate decision: NO-GO.**

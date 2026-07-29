@@ -77,3 +77,10 @@ This rule is implemented in `vibe coding/vibecode/artifact_contract.py` and cove
 - PR #3 (B): open and unmerged. Its seven-file proposal/fixture-only scope is acceptable for Day 1 review, but it is not fresh B output and its samples must validate in the current-A frozen environment.
 - PR #4 (D): closed and unmerged. Its environment records use raw requirements hash `464c4c…e76e03`, which differs from current-A raw hash `f55ab0…ad472`; the records are not accepted as current-A environment evidence.
 - PR #5 (C models): merged into A at `c12c4f5`. This accepts package restoration only; current smoke remains `ENVIRONMENT_ERROR`, and strict completeness/semantic result are both `NOT_RUN`.
+
+### 2026-07-29 addendum: environment-input and full-Gate decision
+
+- v0.2 is the sole active envelope. v0.3 remains only the profile-field decision record above.
+- Canonical environment input is SHA-256 over the Git blob bytes at `c12c4f5:vibe coding/requirements-verilayer.txt`: `f55ab0bdfdba077dce4951ff24396c31dc671f3b88ba22bfa7f05a39311ad472`.
+- Earlier wording in this log or the Gate status that labelled D's `464c4c...e76e03` working-file observation stale is superseded. It may be a different Windows checkout byte stream; it is noncanonical, not classified false or stale without byte/EOL-policy proof.
+- `tests/integration` is absent. Its pytest exit `4` is an acceptance-spec `ERROR`; it is not a PASS. The current Day 1 executable Gate omits that path until a real reviewed suite is added.
