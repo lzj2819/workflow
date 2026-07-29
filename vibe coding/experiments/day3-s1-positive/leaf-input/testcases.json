@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "run_id": "day3-s1-positive",
+  "project_id": "verilayer-day3",
+  "node_id": "s1-note-create",
+  "parent_node_id": null,
+  "artifact_id": "day3-s1-leaf-testcases-adapter",
+  "artifact_type": "testcases",
+  "created_at": "2026-07-29T00:00:00+08:00",
+  "generator": "verilayer-day3-leaf-input-adapter",
+  "status": "PASS",
+  "input_artifacts": ["../generated/testcases.json"],
+  "requirement_ids": ["REQ-S1"],
+  "testcases": [
+    {"id": "TC-S1-VALID-TRIMMED", "requirement_ids": ["REQ-S1"], "status": "PASS"},
+    {"id": "TC-S1-EMPTY-TRIMMED", "requirement_ids": ["REQ-S1"], "status": "PASS"},
+    {"id": "TC-S1-OVER-140-TRIMMED", "requirement_ids": ["REQ-S1"], "status": "PASS"}
+  ]
+}

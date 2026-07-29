@@ -1,0 +1,9 @@
+{
+  "requirement_ids": ["REQ-S1"],
+  "model": "gpt-5.6-terra",
+  "model_timeout_seconds": 600,
+  "pytest_timeout_seconds": 120,
+  "pytest_arguments": ["-q"],
+  "public_tests_dir": "coding-public-tests",
+  "public_prompt": "Implement the public S1 requirement in the current empty workspace. Create main.py exposing a FastAPI object named app with POST /notes. The JSON request body must accept exactly text; trim leading/trailing whitespace; valid trimmed lengths 1..140 return HTTP 201 with exactly non-empty string id and trimmed text; empty or over-140 trimmed text return HTTP 422 and create no note. Keep notes in memory. Do not add authentication, persistence, listing, update, deletion, or extra response fields. The preloaded tests are public and must not be modified. You may add only implementation/support files needed by the requirement."
+}

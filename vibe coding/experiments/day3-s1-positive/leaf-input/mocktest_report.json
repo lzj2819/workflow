@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "run_id": "day3-s1-positive",
+  "project_id": "verilayer-day3",
+  "node_id": "s1-note-create",
+  "parent_node_id": null,
+  "artifact_id": "day3-s1-leaf-mocktest-adapter",
+  "artifact_type": "mocktest_report",
+  "created_at": "2026-07-29T08:47:15.024294+00:00",
+  "generator": "verilayer-day3-leaf-input-adapter",
+  "status": "PASS",
+  "input_artifacts": ["../strict-run-20260729-j/formal/mocktest_report.json"],
+  "requirement_ids": ["REQ-S1"],
+  "defects": [],
+  "source_execution_status": "COMPLETED",
+  "source_validation_status": "PASS",
+  "source_strict_audit_status": "PASS",
+  "source_scenario_coverage": 1.0
+}

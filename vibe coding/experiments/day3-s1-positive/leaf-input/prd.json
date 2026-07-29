@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "run_id": "day3-s1-positive",
+  "project_id": "verilayer-day3",
+  "node_id": "s1-note-create",
+  "parent_node_id": null,
+  "artifact_id": "day3-s1-leaf-prd-adapter",
+  "artifact_type": "prd",
+  "created_at": "2026-07-29T00:00:00+08:00",
+  "generator": "verilayer-day3-leaf-input-adapter",
+  "status": "PASS",
+  "input_artifacts": ["../input/requirement.md"],
+  "requirement_ids": ["REQ-S1"],
+  "requirements": [{"id": "REQ-S1", "source_requirement_id": "REQ-S1-NOTE-CREATE"}],
+  "depth": 1,
+  "max_depth": 4,
+  "node_history": []
+}

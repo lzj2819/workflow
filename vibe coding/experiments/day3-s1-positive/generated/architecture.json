@@ -1,0 +1,120 @@
+{
+  "schema_version": "verilayer-artifact/v0.2",
+  "run_id": "day3-s1-positive",
+  "project_id": "verilayer-day3",
+  "node_id": "s1-note-create",
+  "parent_node_id": null,
+  "artifact_id": "day3-s1-positive-architecture",
+  "artifact_type": "architecture",
+  "status": "PASS",
+  "created_at": "2026-07-29T00:00:00+08:00",
+  "generator": "codex-cli:gpt-5.6-terra",
+  "input_artifacts": [
+    "vibe coding/experiments/day3-s1-positive/input/requirement.md"
+  ],
+  "requirement_ids": [
+    "REQ-S1-NOTE-CREATE"
+  ],
+  "content_path": "vibe coding/experiments/day3-s1-positive/generated/architecture.json",
+  "content_sha256": "ae1d0a8be69187846e935c05a9d285251b557fd95c63fc26a87a44cc9aee5bb0",
+  "error": null,
+  "architecture": {
+    "components": {
+      "entry_component": {
+        "name": "Note Creation Service",
+        "responsibility": "Handles HTTP POST /notes, validates trimmed text, and returns the endpoint response."
+      },
+      "repository": {
+        "name": "In-Memory Note Repository",
+        "boundary": "in-memory only",
+        "responsibility": "Stores the generated id and trimmed text only for valid creation."
+      }
+    },
+    "endpoint": {
+      "method": "POST",
+      "path": "/notes",
+      "request_body_fields": [
+        "text"
+      ],
+      "entry_component": "Note Creation Service",
+      "contract_id": "note.create"
+    },
+    "component_interaction": {
+      "from": "Note Creation Service",
+      "to": "In-Memory Note Repository",
+      "action": "store valid trimmed note",
+      "contract_id": "note.create.store",
+      "invalid_input_calls_repository": false
+    },
+    "internal_contracts": {
+      "note.create.request": {
+        "contract_id": "note.create.request",
+        "provider": "Client",
+        "consumer": "Note Creation Service",
+        "request_fields": [
+          "text"
+        ],
+        "response_fields": [
+          "accepted"
+        ]
+      },
+      "note.create.store": {
+        "contract_id": "note.create.store",
+        "provider": "Note Creation Service",
+        "consumer": "In-Memory Note Repository",
+        "request_fields": [
+          "text"
+        ],
+        "response_fields": [
+          "id",
+          "text"
+        ],
+        "invalid_input_calls_repository": false
+      }
+    },
+    "contracts": {
+      "note.create": {
+        "contract_id": "note.create",
+        "method": "POST",
+        "path": "/notes",
+        "provider": "Note Creation Service",
+        "consumer": "Client",
+        "request_fields_exactly": [
+          "text"
+        ],
+        "responses": {
+          "201": {
+            "json_fields_exactly": [
+              "id",
+              "text"
+            ]
+          },
+          "422": {
+            "creates_note": false
+          }
+        }
+      }
+    },
+    "valid_note_creation": {
+      "trim": "leading and trailing whitespace",
+      "valid_trimmed_text": "1 to 140 non-whitespace characters",
+      "stored_text": "trimmed text",
+      "id": "generated non-empty string",
+      "response": {
+        "status_code": 201,
+        "json_fields_exactly": [
+          "id",
+          "text"
+        ]
+      }
+    },
+    "invalid_input": {
+      "conditions": [
+        "empty after trimming",
+        "more than 140 characters after trimming"
+      ],
+      "response_status_code": 422,
+      "creates_note": false
+    }
+  }
+}

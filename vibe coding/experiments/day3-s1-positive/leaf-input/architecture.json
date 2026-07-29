@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "run_id": "day3-s1-positive",
+  "project_id": "verilayer-day3",
+  "node_id": "s1-note-create",
+  "parent_node_id": null,
+  "artifact_id": "day3-s1-leaf-architecture-adapter",
+  "artifact_type": "architecture",
+  "created_at": "2026-07-29T00:00:00+08:00",
+  "generator": "verilayer-day3-leaf-input-adapter",
+  "status": "PASS",
+  "input_artifacts": ["../generated/architecture.json"],
+  "requirement_ids": ["REQ-S1"],
+  "components": ["Note Creation Service", "In-Memory Note Repository"],
+  "interfaces": ["note.create"],
+  "dependencies": ["Note Creation Service -> In-Memory Note Repository"],
+  "depth": 1,
+  "complexity": 4,
+  "risks": []
+}

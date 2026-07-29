@@ -1,0 +1,10 @@
+{
+  "generator": "codex-cli",
+  "classification": "fresh public calibration",
+  "statement": "This is fresh public calibration, not a fixture, Tutor material, or formal C0-C5 artifact.",
+  "input_artifact": "vibe coding/experiments/day3-s1-positive/input/requirement.md",
+  "scope": "Day 3 S1 calibration result",
+  "not_a_fixture": true,
+  "not_tutor_material": true,
+  "not_a_formal_c0_c5_artifact": true
+}

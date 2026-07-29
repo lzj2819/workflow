@@ -1,0 +1,261 @@
+requirement_model: &frozen_model
+  source:
+    path: vibe coding/experiments/day3-s1-positive/input/requirement.md
+    requirement_id: REQ-S1-NOTE-CREATE
+  baseline:
+    status: FROZEN
+    eligible_requirement_ids:
+      - REQ-S1-R1
+      - REQ-S1-R2
+      - REQ-S1-R3
+  requirement_groups:
+    - requirement_group_id: REQ-S1-NOTE-CREATE
+      source_requirement_id: REQ-S1-NOTE-CREATE
+      clauses:
+        - fact_id: FACT-S1-VALID-TRIMMED
+          status: EXPLICIT
+          source_ref: input/requirement.md:11-13
+          text: A text value with 1 to 140 non-whitespace characters after trimming is stored as trimmed text and returns 201 with exactly a non-empty string id and the stored text.
+        - fact_id: FACT-S1-EMPTY-TRIMMED
+          status: EXPLICIT
+          source_ref: input/requirement.md:14-15
+          text: A text value empty after trimming returns 422 and does not create a note.
+        - fact_id: FACT-S1-OVER-140-TRIMMED
+          status: EXPLICIT
+          source_ref: input/requirement.md:14-15
+          text: A text value longer than 140 characters after trimming returns 422 and does not create a note.
+  requirement_ir:
+    - requirement_id: REQ-S1-R1
+      requirement_group: REQ-S1-NOTE-CREATE
+      status: SOURCE_BACKED
+      requirement_kind: atomic
+      source_fact_ids: [FACT-S1-VALID-TRIMMED]
+    - requirement_id: REQ-S1-R2
+      requirement_group: REQ-S1-NOTE-CREATE
+      status: SOURCE_BACKED
+      requirement_kind: atomic
+      source_fact_ids: [FACT-S1-EMPTY-TRIMMED]
+    - requirement_id: REQ-S1-R3
+      requirement_group: REQ-S1-NOTE-CREATE
+      status: SOURCE_BACKED
+      requirement_kind: atomic
+      source_fact_ids: [FACT-S1-OVER-140-TRIMMED]
+  derivations: []
+  acceptance_criteria:
+    - ac_id: AC-S1-VALID-TRIMMED
+      requirement_id: REQ-S1-R1
+      evidence: [FACT-S1-VALID-TRIMMED]
+      oracle:
+        type: HTTP_RESPONSE
+        expected: 201 with exactly a non-empty string id and the stored trimmed text
+    - ac_id: AC-S1-EMPTY-TRIMMED
+      requirement_id: REQ-S1-R2
+      evidence: [FACT-S1-EMPTY-TRIMMED]
+      oracle:
+        type: HTTP_RESPONSE
+        expected: 422 and no note is created
+    - ac_id: AC-S1-OVER-140-TRIMMED
+      requirement_id: REQ-S1-R3
+      evidence: [FACT-S1-OVER-140-TRIMMED]
+      oracle:
+        type: HTTP_RESPONSE
+        expected: 422 and no note is created
+  test_conditions:
+    - tc_id: TC-S1-VALID-TRIMMED
+      status: FROZEN
+      requirement_id: REQ-S1-R1
+      acceptance_criteria: [AC-S1-VALID-TRIMMED]
+      evidence: [FACT-S1-VALID-TRIMMED]
+      render_mode: SCENARIO
+      step_template:
+        precondition: a client has a request body containing only text "  short note  "
+        action: the client sends POST /notes
+        expected: the service stores text "short note" and returns status 201 with JSON containing exactly a non-empty string id and text "short note"
+    - tc_id: TC-S1-EMPTY-TRIMMED
+      status: FROZEN
+      requirement_id: REQ-S1-R2
+      acceptance_criteria: [AC-S1-EMPTY-TRIMMED]
+      evidence: [FACT-S1-EMPTY-TRIMMED]
+      render_mode: SCENARIO
+      step_template:
+        precondition: a client has a request body containing only text "   "
+        action: the client sends POST /notes
+        expected: the service returns status 422 and does not create a note
+    - tc_id: TC-S1-OVER-140-TRIMMED
+      status: FROZEN
+      requirement_id: REQ-S1-R3
+      acceptance_criteria: [AC-S1-OVER-140-TRIMMED]
+      evidence: [FACT-S1-OVER-140-TRIMMED]
+      render_mode: SCENARIO
+      step_template:
+        precondition: a client has a request body containing only text with 141 non-whitespace characters
+        action: the client sends POST /notes
+        expected: the service returns status 422 and does not create a note
+  scenario_compositions: []
+  open_decisions: []
+  ir_dispositions:
+    - requirement_id: REQ-S1-R1
+      disposition: AC_CREATED
+      ac_ids: [AC-S1-VALID-TRIMMED]
+    - requirement_id: REQ-S1-R2
+      disposition: AC_CREATED
+      ac_ids: [AC-S1-EMPTY-TRIMMED]
+    - requirement_id: REQ-S1-R3
+      disposition: AC_CREATED
+      ac_ids: [AC-S1-OVER-140-TRIMMED]
+  coverage:
+    facts: { total: 3 }
+    requirements: { total: 3 }
+    acceptance_criteria: { total: 3 }
+    test_conditions: { total: 3 }
+  pattern_candidates: []
+  semantic_graph:
+    nodes:
+      - node_id: SEM-ACTOR-CLIENT
+        type: Actor
+        label: client
+        properties: { name: client }
+        evidence:
+          - { fact_id: FACT-S1-VALID-TRIMMED, source_ref: input/requirement.md:9-13 }
+      - node_id: SEM-INTERFACE-CREATE-NOTE
+        type: Interface
+        label: POST /notes
+        properties: { name: POST /notes }
+        evidence:
+          - { fact_id: FACT-S1-VALID-TRIMMED, source_ref: input/requirement.md:9-13 }
+          - { fact_id: FACT-S1-EMPTY-TRIMMED, source_ref: input/requirement.md:9-15 }
+          - { fact_id: FACT-S1-OVER-140-TRIMMED, source_ref: input/requirement.md:9-15 }
+      - node_id: SEM-ACTION-VALID
+        type: Action
+        label: submit valid trimmed text
+        properties: { verb: submit }
+        evidence:
+          - { fact_id: FACT-S1-VALID-TRIMMED, source_ref: input/requirement.md:11-13 }
+      - node_id: SEM-ORACLE-VALID
+        type: Oracle
+        label: created trimmed note response
+        properties:
+          observation_type: HTTP_RESPONSE
+          expected: 201 with exactly a non-empty string id and stored trimmed text
+        evidence:
+          - { fact_id: FACT-S1-VALID-TRIMMED, source_ref: input/requirement.md:11-13 }
+      - node_id: SEM-ACTION-EMPTY
+        type: Action
+        label: submit empty trimmed text
+        properties: { verb: submit }
+        evidence:
+          - { fact_id: FACT-S1-EMPTY-TRIMMED, source_ref: input/requirement.md:14-15 }
+      - node_id: SEM-ORACLE-EMPTY
+        type: Oracle
+        label: rejected empty trimmed text response
+        properties:
+          observation_type: HTTP_RESPONSE
+          expected: 422 and no note is created
+        evidence:
+          - { fact_id: FACT-S1-EMPTY-TRIMMED, source_ref: input/requirement.md:14-15 }
+      - node_id: SEM-ACTION-OVER-140
+        type: Action
+        label: submit over-limit trimmed text
+        properties: { verb: submit }
+        evidence:
+          - { fact_id: FACT-S1-OVER-140-TRIMMED, source_ref: input/requirement.md:14-15 }
+      - node_id: SEM-ORACLE-OVER-140
+        type: Oracle
+        label: rejected over-limit trimmed text response
+        properties:
+          observation_type: HTTP_RESPONSE
+          expected: 422 and no note is created
+        evidence:
+          - { fact_id: FACT-S1-OVER-140-TRIMMED, source_ref: input/requirement.md:14-15 }
+    edges:
+      - edge_id: SEM-E1
+        type: PERFORMS
+        from: SEM-ACTOR-CLIENT
+        to: SEM-ACTION-VALID
+        evidence:
+          - { fact_id: FACT-S1-VALID-TRIMMED, source_ref: input/requirement.md:9-13 }
+      - edge_id: SEM-E2
+        type: ACTS_ON
+        from: SEM-ACTION-VALID
+        to: SEM-INTERFACE-CREATE-NOTE
+        evidence:
+          - { fact_id: FACT-S1-VALID-TRIMMED, source_ref: input/requirement.md:9-13 }
+      - edge_id: SEM-E3
+        type: OBSERVED_BY
+        from: SEM-ACTION-VALID
+        to: SEM-ORACLE-VALID
+        evidence:
+          - { fact_id: FACT-S1-VALID-TRIMMED, source_ref: input/requirement.md:11-13 }
+      - edge_id: SEM-E4
+        type: ACTS_ON
+        from: SEM-ACTION-EMPTY
+        to: SEM-INTERFACE-CREATE-NOTE
+        evidence:
+          - { fact_id: FACT-S1-EMPTY-TRIMMED, source_ref: input/requirement.md:9-15 }
+      - edge_id: SEM-E5
+        type: OBSERVED_BY
+        from: SEM-ACTION-EMPTY
+        to: SEM-ORACLE-EMPTY
+        evidence:
+          - { fact_id: FACT-S1-EMPTY-TRIMMED, source_ref: input/requirement.md:14-15 }
+      - edge_id: SEM-E6
+        type: ACTS_ON
+        from: SEM-ACTION-OVER-140
+        to: SEM-INTERFACE-CREATE-NOTE
+        evidence:
+          - { fact_id: FACT-S1-OVER-140-TRIMMED, source_ref: input/requirement.md:9-15 }
+      - edge_id: SEM-E7
+        type: OBSERVED_BY
+        from: SEM-ACTION-OVER-140
+        to: SEM-ORACLE-OVER-140
+        evidence:
+          - { fact_id: FACT-S1-OVER-140-TRIMMED, source_ref: input/requirement.md:14-15 }
+  coverage_graph:
+    nodes:
+      - { node_id: SRC-S1, type: SOURCE, status: AUTHORITATIVE }
+      - { node_id: RG-S1, type: REQUIREMENT_GROUP, status: AUTHORITATIVE }
+      - { node_id: CL-S1-VALID, type: CLAUSE, status: AUTHORITATIVE }
+      - { node_id: CL-S1-EMPTY, type: CLAUSE, status: AUTHORITATIVE }
+      - { node_id: CL-S1-OVER-140, type: CLAUSE, status: AUTHORITATIVE }
+      - { node_id: FACT-S1-VALID-TRIMMED, type: FACT, status: AUTHORITATIVE }
+      - { node_id: FACT-S1-EMPTY-TRIMMED, type: FACT, status: AUTHORITATIVE }
+      - { node_id: FACT-S1-OVER-140-TRIMMED, type: FACT, status: AUTHORITATIVE }
+      - { node_id: REQ-S1-R1, type: REQUIREMENT_IR, status: ELIGIBLE }
+      - { node_id: REQ-S1-R2, type: REQUIREMENT_IR, status: ELIGIBLE }
+      - { node_id: REQ-S1-R3, type: REQUIREMENT_IR, status: ELIGIBLE }
+      - { node_id: TO-S1-VALID, type: TEST_OBLIGATION, status: AUTHORITATIVE }
+      - { node_id: TO-S1-EMPTY, type: TEST_OBLIGATION, status: AUTHORITATIVE }
+      - { node_id: TO-S1-OVER-140, type: TEST_OBLIGATION, status: AUTHORITATIVE }
+      - { node_id: AC-S1-VALID-TRIMMED, type: ACCEPTANCE_CRITERION, status: AUTHORITATIVE }
+      - { node_id: AC-S1-EMPTY-TRIMMED, type: ACCEPTANCE_CRITERION, status: AUTHORITATIVE }
+      - { node_id: AC-S1-OVER-140-TRIMMED, type: ACCEPTANCE_CRITERION, status: AUTHORITATIVE }
+      - { node_id: TC-S1-VALID-TRIMMED, type: TEST_CONDITION, status: FROZEN }
+      - { node_id: TC-S1-EMPTY-TRIMMED, type: TEST_CONDITION, status: FROZEN }
+      - { node_id: TC-S1-OVER-140-TRIMMED, type: TEST_CONDITION, status: FROZEN }
+      - { node_id: SC-S1-VALID-TRIMMED, type: SCENARIO, status: AUTHORITATIVE }
+      - { node_id: SC-S1-EMPTY-TRIMMED, type: SCENARIO, status: AUTHORITATIVE }
+      - { node_id: SC-S1-OVER-140-TRIMMED, type: SCENARIO, status: AUTHORITATIVE }
+    edges:
+      - { edge_id: CG-01, type: CONTAINS, from: SRC-S1, to: RG-S1 }
+      - { edge_id: CG-02, type: CONTAINS, from: RG-S1, to: CL-S1-VALID }
+      - { edge_id: CG-03, type: CONTAINS, from: RG-S1, to: CL-S1-EMPTY }
+      - { edge_id: CG-04, type: CONTAINS, from: RG-S1, to: CL-S1-OVER-140 }
+      - { edge_id: CG-05, type: EXTRACTED_AS, from: CL-S1-VALID, to: FACT-S1-VALID-TRIMMED }
+      - { edge_id: CG-06, type: EXTRACTED_AS, from: CL-S1-EMPTY, to: FACT-S1-EMPTY-TRIMMED }
+      - { edge_id: CG-07, type: EXTRACTED_AS, from: CL-S1-OVER-140, to: FACT-S1-OVER-140-TRIMMED }
+      - { edge_id: CG-08, type: STRUCTURED_AS, from: FACT-S1-VALID-TRIMMED, to: REQ-S1-R1 }
+      - { edge_id: CG-09, type: STRUCTURED_AS, from: FACT-S1-EMPTY-TRIMMED, to: REQ-S1-R2 }
+      - { edge_id: CG-10, type: STRUCTURED_AS, from: FACT-S1-OVER-140-TRIMMED, to: REQ-S1-R3 }
+      - { edge_id: CG-11, type: OBLIGATES, from: REQ-S1-R1, to: TO-S1-VALID }
+      - { edge_id: CG-12, type: OBLIGATES, from: REQ-S1-R2, to: TO-S1-EMPTY }
+      - { edge_id: CG-13, type: OBLIGATES, from: REQ-S1-R3, to: TO-S1-OVER-140 }
+      - { edge_id: CG-14, type: ACCEPTED_BY, from: TO-S1-VALID, to: AC-S1-VALID-TRIMMED }
+      - { edge_id: CG-15, type: ACCEPTED_BY, from: TO-S1-EMPTY, to: AC-S1-EMPTY-TRIMMED }
+      - { edge_id: CG-16, type: ACCEPTED_BY, from: TO-S1-OVER-140, to: AC-S1-OVER-140-TRIMMED }
+      - { edge_id: CG-17, type: TESTED_BY, from: AC-S1-VALID-TRIMMED, to: TC-S1-VALID-TRIMMED }
+      - { edge_id: CG-18, type: TESTED_BY, from: AC-S1-EMPTY-TRIMMED, to: TC-S1-EMPTY-TRIMMED }
+      - { edge_id: CG-19, type: TESTED_BY, from: AC-S1-OVER-140-TRIMMED, to: TC-S1-OVER-140-TRIMMED }
+      - { edge_id: CG-20, type: RENDERED_AS, from: TC-S1-VALID-TRIMMED, to: SC-S1-VALID-TRIMMED }
+      - { edge_id: CG-21, type: RENDERED_AS, from: TC-S1-EMPTY-TRIMMED, to: SC-S1-EMPTY-TRIMMED }
+      - { edge_id: CG-22, type: RENDERED_AS, from: TC-S1-OVER-140-TRIMMED, to: SC-S1-OVER-140-TRIMMED }
+<<: *frozen_model
