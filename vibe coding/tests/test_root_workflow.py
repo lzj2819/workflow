@@ -5,6 +5,7 @@ import tempfile
 import threading
 import time
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 from vibecode.root_workflow import (
@@ -78,6 +79,20 @@ class FixtureAdapter:
 
 
 class RootWorkflowTests(unittest.TestCase):
+    def test_command_adapter_preserves_completed_strict_result_after_nonzero_exit(self):
+        with tempfile.TemporaryDirectory() as base:
+            output = Path(base) / "mocktest"
+            output.mkdir()
+            (output / "module-result.json").write_text(json.dumps({
+                "status": "PASS", "execution_complete": True,
+                "semantic_status": "PASS", "strict_audit_status": "PASS",
+            }), encoding="utf-8")
+            adapter = command_adapter({"mocktest": ["mocktest-command"]})
+            with patch("vibecode.root_workflow.subprocess.run", return_value=subprocess.CompletedProcess([], 1)):
+                result = adapter("mocktest", Path(base) / "input.json", output, {})
+            self.assertEqual(result["status"], "PASS")
+            self.assertEqual(result["command_exit"], 1)
+
     def make(self, base, adapter, **overrides):
         source = Path(base) / "requirement.json"
         if not source.exists():

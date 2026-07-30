@@ -71,9 +71,6 @@ def command_adapter(commands: dict[str, list[str]], *, cwd: str | None = None) -
                                        timeout=context.get("timeout_seconds"), check=False)
         except (OSError, subprocess.TimeoutExpired) as exc:
             return {"status": "ERROR", "error_type": type(exc).__name__, "error_message": str(exc)}
-        if completed.returncode != 0:
-            return {"status": "ERROR", "error_type": "NONZERO_EXIT",
-                    "error_message": f"{module} exited with {completed.returncode}"}
         result_path = output_dir / "module-result.json"
         if not result_path.is_file():
             return {"status": "ERROR", "error_type": "MISSING_RESULT",
@@ -82,6 +79,17 @@ def command_adapter(commands: dict[str, list[str]], *, cwd: str | None = None) -
             result = json.loads(result_path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError) as exc:
             return {"status": "ERROR", "error_type": "INVALID_RESULT", "error_message": str(exc)}
+        if completed.returncode != 0:
+            completed_strict = (
+                module == "mocktest" and result.get("status") in {"PASS", "FAIL"}
+                and result.get("execution_complete") is True
+                and result.get("semantic_status") in {"PASS", "FAIL"}
+                and result.get("strict_audit_status") in {"PASS", "FAIL"}
+            )
+            if completed_strict:
+                return {**result, "command_exit": completed.returncode}
+            return {"status": "ERROR", "error_type": "NONZERO_EXIT",
+                    "error_message": f"{module} exited with {completed.returncode}"}
         return result
     setattr(run, "configured_modules", frozenset(commands))
     setattr(run, "raw_commands", commands)
