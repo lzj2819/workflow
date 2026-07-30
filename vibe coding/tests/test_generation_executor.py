@@ -49,6 +49,7 @@ class GenerationExecutorTests(unittest.TestCase):
                                project_id="p", node_id="n", parent_node_id=None, model="test", runner=fake_runner)
             self.assertIn("validate-arch-package", seen["prompt"])
             self.assertIn("public-api-service", seen["prompt"])
+            self.assertIn("without a display name, backticks, or parentheses", seen["prompt"])
             self.assertIn("sequenceDiagram", seen["prompt"])
             self.assertIn("bare canonical child_ids", seen["prompt"])
             self.assertIn("must never name the same internal child_id", seen["prompt"])
