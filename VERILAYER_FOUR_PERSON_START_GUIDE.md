@@ -6,6 +6,10 @@
 
 > 复用修订：既有 tutor/tutor-app 是真实叶编码、多波集成和 E2E 的工程 pilot。其上游 JSON 来自 `structured-input-preparer` 且 run 为手动协调，因此不替代 production root workflow。Day 3 改为双轨校准：CMP-CONFIG-STORE 复现已知 strict 负例，独立 fresh S1 验证正向 Coding/Test/repair。
 
+> 实施状态同步（2026-07-30）：fresh S1 的公开编码测试已 PASS（`repair=0`）；Day 4 已出现 root CONTINUE 和 health child STOP 的局部证据，但后续 Coding Admission 暴露接口证据缺失，之后仍有 Mocktest FAIL/ERROR，最新运行停在 Mocktest FAIL。完整闭环尚未达成，Day 4 继续按 **NO-GO** 管理。
+
+> Mocktest 反馈闭环：C 必须先交付 `mocktest_report` 和处置建议。`PASS + ALLOW` 才交 Leaf Gate；`FAIL/FIX_ARCH` 退回 B 只改 Architecture 并生成新 hash 后重跑；`ERROR` 退回证据/绑定/入口/环境修复。Feature/Gherkin 冻结，B 不得通过改写它们绕过 Mocktest。
+
 ## 1. 今天应该怎样开始
 
 四个人不要同时从各自模块直接写代码。正确顺序是：

@@ -30,6 +30,7 @@
 - hidden tests 必须与模型输入和叶子 workspace 物理隔离。
 - Token 不可得时写 `null`，不得估造。
 - 最低正式实验：C0–C5 × S1/M1/M2/L1 × 1 seed = 24 runs。
+- Coding Admission 只接受同一版本的 `Mocktest PASS + ALLOW` 与 Leaf `STOP_LAYERING` 证据；任何 `FAIL/FIX_ARCH`、`ERROR` 或缺失报告的 bundle 一律拒收并返回上游。
 - Day 6 冻结代码、Prompt、Schema、任务和模型参数。
 - `tutor/tutor-app` 已有真实代码、测试、叶任务/完成包和集成报告，可作为代码行为 oracle 与迁移案例；其编码过程是人工/多 worktree 协作，不能当作统一 Coding Executor 或 C0–C5 的既有实验结果。
 - Tutor 总范围是 22 个设计节点、16 套 L2 prepared 五件套、17 个实现叶和 12 个 backfill；D 只消费 17 个叶完成包中的工程模式，不把它们计为自动 Coding run。

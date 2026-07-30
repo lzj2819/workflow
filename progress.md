@@ -1,5 +1,16 @@
 # Progress Log
 
+## Session: 2026-07-30 — documentation and status synchronization
+
+### Completed
+
+- 已将 Mocktest 的 `report → Architecture 修复 → 重新验证` 闭环写入主计划、工作流总文档、成员边界与状态文件。
+- 已按 `.coord-worktree` 的运行记录校正实施状态：Day 3 S1 PASS（repair=0）；Day 4 尚未完成完整 PASS→STOP→Coding→Integration 闭环，维持 NO-GO。
+
+### Next
+
+- 保留现有失败运行；修复 Architecture parser 可见接口证据及后续 Mocktest 问题后，从受影响步骤恢复，禁止修改冻结 Feature/Gherkin 以绕过门禁。
+
 ## Session: 2026-07-28 — Phase 13 package-sanitation
 
 ### Started

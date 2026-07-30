@@ -30,6 +30,7 @@
 - `tutor/tutor-app` 已有 16 份 Mocktest/Leaf 产物可作为迁移样本，但其中 Mocktest 报告由 `structured-input-preparer` 生成，属于 prepared evidence，不能当作 strict component-hop/validator/audit 已执行的证明。
 - Tutor 总范围是 22 个设计节点、16 套 L2 prepared 五件套、17 个实现叶和 12 个 backfill；C 不得把这些不同口径混成“16 个完整自动运行”。
 - 既有 Leaf 决策可用于字段映射和回归基线；正式实验仍必须由 fresh Architecture/Testcases 重新经过 strict Mocktest 和 Leaf-gate。
+- 每次 Mocktest 必须交付 `mocktest_report`、结论和处置建议：仅 `PASS + ALLOW` 可进 Leaf；`FAIL/FIX_ARCH` 交 B 修架构，`ERROR` 修证据/绑定/入口/环境后重跑。不得把 ERROR 统计为 FAIL 或默认放行。
 - Tutor 的 16 个 L2 STOP 来自显式 terminal/owner policy，MOD-03 也有人为叶子决定；这些标签不能作为正式 Leaf accuracy/κ ground truth。
 - CMP-CONFIG-STORE 的历史真实 strict 结果是 execution complete、strict audit PASS，但 architecture FAIL；Day 3 应复现并阻断，而不是预设为正向叶子。
 

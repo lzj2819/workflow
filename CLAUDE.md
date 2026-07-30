@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 这是 **VeriLayer** 研究项目的"完整工作流"仓库：一套分层开发（layered development）流水线的技能与运行时代码集合，用于论文实验（C0-C5 配置对比、RQ1-RQ5）。根目录**不是 git 仓库**（仅 `prd-to-gherkin/` 自带 `.git`）。
 
-**根目录的冻结规则**：`task_plan.md`、`findings.md`、`progress.md` 是 planning-with-files 状态文件，用于跨会话恢复目标。当前计划阶段（见 `VERILAYER_10_DAY_IMPLEMENTATION_PLAN.md`）明确**不修改业务代码**，新文件位置须标为"拟新增"。恢复工作时只推进 `task_plan.md` 中标记 `in_progress` 的 phase。
+**工作树与状态规则**：根目录的 `task_plan.md`、`findings.md`、`progress.md` 是跨会话状态文件；实际实施和提交以 `.coord-worktree/` 为准。恢复工作时先核对该工作树的 Git 状态、最新运行证据和当前 `in_progress` phase；不可将计划中的“拟新增”误报为已实现。
 
 ## 流水线架构（big picture）
 
@@ -35,6 +35,8 @@ prd-generation ──────┤                              ├→ mocktes
 - Tutor 只作 migration fixture、工程 oracle 和 case study：分别登记 22 个设计节点、16 套 L2 五件套、17 个实现叶和 12 个 backfill；不得把 Tutor 或其轻微改写任务放入正式 C0-C5 benchmark。
 - Tutor 的 L2 STOP 受 terminal/product-owner policy 强制，不得作为 Leaf accuracy/κ ground truth。
 - Day 3 使用双轨校准：CMP-CONFIG-STORE 是负向验证轨，复现 strict execution complete + architecture FAIL 并阻断下游；独立 fresh S1 是正向编码轨，验证 PASS→STOP→Coding→pytest→repair。
+- Mocktest 必须先生成 `mocktest_report` 和处置建议：只有 `PASS + ALLOW` 能进入 Leaf Gate；`FAIL/FIX_ARCH` 只回写 Architecture 并重跑，`ERROR` 先恢复缺失证据、绑定、入口或工具条件。Feature/Gherkin 在此回路中冻结。
+- `FAIL` 是有效的架构负面结论，`ERROR` 是证据或执行不足；两者都不允许进入 Leaf Gate、Coding 或实验成功统计。
 - 分发 Tutor 前必须生成清洁副本，排除 `.env`、`data/`、`.git/`、`.worktrees/`、缓存和 `.superdesign/`，并保留 secret scan 与 SHA-256 manifest。
 
 ## 常用命令

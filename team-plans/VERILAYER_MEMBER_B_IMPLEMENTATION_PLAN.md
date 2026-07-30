@@ -26,6 +26,7 @@
 - Day 1 只冻结合同、示例和 validators；A 的合同通过后，Day 2 才编写生产 Adapter。
 - Tutor 总范围是 22 个设计节点、16 套 L2 prepared 五件套、17 个实现叶和 12 个 backfill；B 重点审计其中 22 份 L0/L1/L2 Feature 与 16 套 Architecture/Testcases。它们是 migration regression，不是真实生成器证据。
 - CMP-CONFIG-STORE 是已知 strict 负例；Day 3 不能预设它通过架构验证或继续 Coding。
+- 收到 `FAIL/FIX_ARCH` 报告时，只修订 Architecture 及其可解析接口/契约证据，生成新 artifact/hash 后交回 C 重跑；Feature/Gherkin 在该反馈回路中冻结。
 
 ## 3. 开工前必须阅读
 

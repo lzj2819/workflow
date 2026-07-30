@@ -1,5 +1,11 @@
 # Findings & Decisions
 
+## 2026-07-30 — Mocktest feedback loop and current evidence
+
+- Mocktest 的报告是 Architecture 修复输入，不是 Leaf Gate 的直接前置；`FAIL/FIX_ARCH` 只改 Architecture，`ERROR` 先修复证据、身份绑定、入口或工具条件，二者都不得进入 Leaf/Coding。
+- Day 3 fresh S1 公开编码测试 PASS 且 `repair=0`；需用独立的可重复初始失败 fixture 演示 repair，不能人为破坏已通过的结果。
+- Day 4 曾观察到 root strict PASS/CONTINUE 与 health child strict PASS/STOP，但 Coding Admission 发现缺少 parser 可见接口证据；后续有 Mocktest FAIL/ERROR，最新 `20260730-k` 为 Mocktest FAIL。因此当前仍是 Day 4 NO-GO，而不是端到端成功。
+
 ## 2026-07-28 — Phase 13 package-sanitation
 
 - 共享配置与证据仅使用仓库相对路径；本机的 `$veriRoot` 不写入共享文件。

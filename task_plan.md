@@ -1,5 +1,11 @@
 # Task Plan: VeriLayer 四人十天完整 Vibecoding 实施计划
 
+## Current Implementation Sync — 2026-07-30
+
+- [x] 将 Mocktest 报告回写 Architecture 的闭环同步到主计划、总文档、成员 A-D 任务边界与本状态文件。
+- [x] 根据 `.coord-worktree` 运行证据校正 Day 3/Day 4 状态：S1 公开测试 PASS（repair=0）；Day 4 尚无完整 Coding/Integration 闭环，保持 NO-GO。
+- [ ] 在修复 parser 可见 Architecture 接口证据及其后续 Mocktest `FAIL/FIX_ARCH` 或 `ERROR` 后，从受影响步骤恢复 Day 4；仅 `PASS + ALLOW → Leaf STOP` 可交 Coding。
+
 ## Goal
 
 基于仓库真实状态，交付一份不修改代码、可由四人直接执行的十天实施、实验和论文协作计划，覆盖冻结的 P0、C0-C5、真实 Coding/Test/Integration 闭环、Go/No-Go 与降级策略。

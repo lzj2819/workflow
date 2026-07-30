@@ -29,6 +29,7 @@
 - C0–C5 必须共享同一 Coding Executor、模型、参数、Prompt 和预算。
 - 既有 Tutor 范围必须分开登记：22 个设计节点包、16 套 L2 prepared 五件套、17 个实现叶子和 12 个 backfill 完成包；只作为 migration fixture、oracle 和 case study。
 - tutor-r01 是手动协调 run，不证明 production `run-workflow`；不得登记为当前 E2E 或正式实验结果。
+- Mocktest `FAIL/FIX_ARCH` 或 `ERROR` 时，阻断递归、Leaf 与 Coding；保存失败运行和输入 hash，待 B 或 C 修复后以新版本重跑，绝不回填为已完成。
 
 ## 3. 开工前必须阅读
 

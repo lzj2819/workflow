@@ -1,7 +1,7 @@
 # VeriLayer 四人十天完整 Vibecoding 实施计划
 
 > 状态：基于 tutor/tutor-app 全量复核的可执行修订版  
-> 日期：2026-07-28  
+> 日期：2026-07-30（实施证据同步版）
 > 范围：实施、实验和论文协作计划；本文件不代表任何 P0 已实现。  
 > 技术边界：Python + FastAPI + pytest + SQLite/内存存储 + REST API + Modular Monolith。  
 
@@ -20,6 +20,13 @@
 11. Tutor 的代码、测试、预期行为和强制 STOP 标签均已公开，不能进入正式 C0-C5 benchmark、Leaf 准确率或 κ 计算；正式任务和 hidden tests 必须物理隔离。
 12. 开工前必须清洁交付包：排除 `.env`、`data/`、`.git/`、`.worktrees/`、缓存和 `.superdesign/`，执行 secret scan 并生成 SHA-256 manifest。
 13. VeriLayer 实验环境与 tutor reference regression 环境分别冻结，不要求强行共用一个 Python；共享证据只保存逻辑环境 ID、相对路径和依赖 hash。
+
+### 0.1 实施状态更新（2026-07-30）
+
+- Day 3 的 fresh S1 正向校准已通过公开编码测试，`repair=0`；该结果不能伪造为“已验证 repair”，修复能力须由独立、可重复的初始失败 fixture 演示。
+- Day 4 已观察到 root 的 strict PASS、`CONTINUE_LAYERING`，以及一个 health 子节点的 strict PASS、`STOP_LAYERING`；但后续 Coding Admission 发现 Architecture 缺少 parser 可见的接口证据。随后运行仍有 Mocktest FAIL/ERROR，最新 `20260730-k` 停在 Mocktest FAIL。因此尚未形成完整的 `PASS → STOP → Coding → Integration` 实证闭环，Day 4 仍为 **NO-GO**。
+- Mocktest 不得直接流向 Leaf Gate：它必须生成 `mocktest_report` 和处置建议。`FAIL/FIX_ARCH` 仅允许 B 修改 Architecture 并产生新 hash 后重跑；`ERROR` 先恢复证据、身份绑定、入口或工具条件后重跑。只有 `PASS + ALLOW` 才可进入 Leaf Gate，Feature/Gherkin 在此闭环中冻结。
+- Day 6 前建立 `RQ × C0-C5 × metric × evidence × figure` 登记表和脱敏 evidence manifest；论文中严格区分执行完整性、架构 PASS/FAIL、证据不足 ERROR 与 Coding/Integration 成功。
 
 ## 1. 建议目录布局
 
