@@ -1,0 +1,70 @@
+baseline:
+  status: FROZEN
+  eligible_requirement_ids: [REQ-S1-R1]
+requirement_groups:
+  - requirement_group_id: RG-S1-001
+    clauses:
+      - fact_id: FACT-S1-001
+        status: EXPLICIT
+        text: A user can save a non-empty note and the submitted text is stored.
+requirement_ir:
+  - requirement_id: REQ-S1-R1
+    requirement_group: RG-S1-001
+    requirement_kind: atomic
+    status: SOURCE_BACKED
+acceptance_criteria:
+  - ac_id: AC-S1-001
+    requirement_id: REQ-S1-R1
+    oracle: {type: persisted_text, expected: submitted text is stored}
+    evidence: [FACT-S1-001]
+test_conditions:
+  - tc_id: TC-S1-001
+    requirement_id: REQ-S1-R1
+    acceptance_criteria: [AC-S1-001]
+    evidence: [FACT-S1-001]
+    render_mode: SCENARIO
+    step_template:
+      precondition: the note form is available
+      action: the user saves a non-empty note
+      expected: the note is stored with the submitted text
+ir_dispositions:
+  - requirement_id: REQ-S1-R1
+    disposition: AC_CREATED
+    ac_ids: [AC-S1-001]
+scenario_compositions: []
+semantic_graph:
+  nodes:
+    - node_id: ONT-S1-ACTOR
+      type: Actor
+      label: user
+      properties: {name: user}
+      evidence: [{fact_id: FACT-S1-001, source_ref: s1-contract:1}]
+    - node_id: ONT-S1-ACTION
+      type: Action
+      label: save note
+      properties: {verb: save}
+      evidence: [{fact_id: FACT-S1-001, source_ref: s1-contract:1}]
+  edges:
+    - edge_id: ONT-S1-EDGE
+      type: PERFORMS
+      from: ONT-S1-ACTOR
+      to: ONT-S1-ACTION
+      evidence: [{fact_id: FACT-S1-001, source_ref: s1-contract:1}]
+coverage_graph:
+  nodes:
+    - {node_id: SRC-S1, type: SOURCE, status: AUTHORITATIVE}
+    - {node_id: RG-S1-001, type: REQUIREMENT_GROUP, status: AUTHORITATIVE}
+    - {node_id: CL-S1-001, type: CLAUSE, status: AUTHORITATIVE}
+    - {node_id: FACT-S1-001, type: FACT, status: AUTHORITATIVE}
+    - {node_id: REQ-S1-R1, type: REQUIREMENT_IR, status: ELIGIBLE}
+    - {node_id: TO-S1-001, type: TEST_OBLIGATION, status: AUTHORITATIVE}
+    - {node_id: TC-S1-001, type: TEST_CONDITION, status: FROZEN}
+    - {node_id: SC-S1-001, type: SCENARIO, status: AUTHORITATIVE}
+  edges:
+    - {edge_id: CG-S1-01, type: CONTAINS, from: SRC-S1, to: RG-S1-001}
+    - {edge_id: CG-S1-02, type: CONTAINS, from: RG-S1-001, to: CL-S1-001}
+    - {edge_id: CG-S1-03, type: EXTRACTED_AS, from: CL-S1-001, to: FACT-S1-001}
+    - {edge_id: CG-S1-04, type: STRUCTURED_AS, from: FACT-S1-001, to: REQ-S1-R1}
+    - {edge_id: CG-S1-05, type: OBLIGATES, from: REQ-S1-R1, to: TO-S1-001}
+    - {edge_id: CG-S1-06, type: TESTED_BY, from: TO-S1-001, to: TC-S1-001}
+    - {edge_id: CG-S1-07, type: RENDERED_AS, from: TC-S1-001, to: SC-S1-001}
