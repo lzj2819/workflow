@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "contract-diff.schema.json",
+  "title": "Semantic Contract Difference Report",
+  "type": "object",
+  "required": [
+    "schema_version", "status", "outcome", "parent_contract_id",
+    "child_contract_id", "parent_hash", "child_hash", "breaking_count",
+    "compatible_count", "differences", "validation_errors"
+  ],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "status": {"enum": ["PASS", "FAIL", "ERROR"]},
+    "outcome": {"enum": ["MATCH", "ADDITIVE_ONLY", "ADAPTER_NEEDED", "LEAF_FIX_REQUIRED", "CONTRACT_CHANGE_REQUIRED"]},
+    "parent_contract_id": {"type": ["string", "null"]},
+    "child_contract_id": {"type": ["string", "null"]},
+    "parent_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "child_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "breaking_count": {"type": "integer", "minimum": 0},
+    "compatible_count": {"type": "integer", "minimum": 0},
+    "differences": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "interface_id", "path", "breaking", "parent", "child"],
+        "properties": {
+          "type": {"type": "string", "minLength": 1},
+          "interface_id": {"type": "string", "minLength": 1},
+          "path": {"type": "string", "minLength": 1},
+          "breaking": {"type": "boolean"},
+          "parent": {},
+          "child": {}
+        },
+        "additionalProperties": false
+      }
+    },
+    "validation_errors": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": false
+}

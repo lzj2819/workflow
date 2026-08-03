@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-02-si-xfer",
+  "project_id": "vibe-coding-course",
+  "node_id": "SI-XFER",
+  "parent_node_id": "SI-XFER",
+  "artifact_id": "leaf-gate-execution-log:SI-XFER",
+  "artifact_type": "execution_log",
+  "created_at": "2026-07-19T14:42:16Z",
+  "generator": "leaf-gate",
+  "status": "STOP_LAYERING",
+  "input_artifacts": [
+    {
+      "artifact_type": "prd",
+      "path": "prd.json",
+      "sha256": "3cad0779254472a60bb8568c62161599a82470e262aa3a9f87b0c17de1788847"
+    },
+    {
+      "artifact_type": "architecture",
+      "path": "architecture.json",
+      "sha256": "58f7eae97554df6a94b365596be567147cd04c47089725a7c62ae78c0c711025"
+    },
+    {
+      "artifact_type": "testcases",
+      "path": "testcases.json",
+      "sha256": "5672b13f7ffb297749672fe0538fd2467f5779f48e3be4767b96c342f35281b7"
+    },
+    {
+      "artifact_type": "mocktest_report",
+      "path": "mocktest_report.json",
+      "sha256": "d062c5492bff411fb8ad84bc1428f970b18bbfb505ad6351b7f589abc62aef05"
+    }
+  ],
+  "requirement_ids": [
+    "REQ-DD001",
+    "REQ-DD002"
+  ],
+  "module": "leaf-gate",
+  "start_time": "2026-07-19T14:42:16Z",
+  "end_time": "2026-07-19T14:42:16Z",
+  "duration_ms": null,
+  "output_artifacts": [
+    "leaf_gate_decision.json",
+    "leaf_gate_decision.md",
+    "leaf_gate_metrics.json",
+    "leaf_gate_annotation_template.json"
+  ],
+  "input_hash": "71b06374140d116c4edfefd431ac9e7584ad3f6e353da57405b5dbd0f472610b",
+  "output_hash": "3a8ab1c1068d2e274d1895cd5f466080b14f3a671c9dd8c9156ee43d2c6b8a04",
+  "model": null,
+  "model_parameters": null,
+  "random_seed": null,
+  "retry_count": 0,
+  "token_usage": null,
+  "estimated_cost": null,
+  "human_interventions": [],
+  "warning_count": 0,
+  "error_type": null,
+  "error_message": null
+}

@@ -1,0 +1,15 @@
+{
+  "name": "prd-to-gherkin",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "self-test": "node --test tests/*.test.mjs",
+    "test:mocktest": "python tests/mocktest_loader_contract.py"
+  },
+  "dependencies": {
+    "@cucumber/gherkin": "41.0.0",
+    "@cucumber/messages": "33.0.3"
+  }
+}

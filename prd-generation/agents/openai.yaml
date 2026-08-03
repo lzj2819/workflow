@@ -1,0 +1,4 @@
+interface:
+  display_name: "PRD Generation"
+  short_description: "Generate or derive evidence-preserving, oracle-ready PRDs."
+  default_prompt: "Create or derive an atomic, oracle-complete PRD; close all blocking decisions, preserve parent semantics, and do not generate test cases or Gherkin."

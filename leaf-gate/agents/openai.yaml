@@ -1,0 +1,4 @@
+interface:
+  display_name: "Leaf Gate"
+  short_description: "Enforce Mocktest repair closure, then decide layering."
+  default_prompt: "Use $leaf-gate to verify canonical v2 artifacts and the Mocktest repair/revalidation chain before returning a deterministic layering decision."

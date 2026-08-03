@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}课程列表{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>课程列表</h1>
+  {% if courses %}
+  <ul>
+    {% for course in courses %}
+    <li>
+      <a href="/teacher/courses/{{ course.course_id }}">
+        {{ course.name or course.course_id }}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="missing-value">暂无课程数据</p>
+  {% endif %}
+</div>
+{% if deletion_batches %}
+<div class="card">
+  <h2>删除批次</h2>
+  <table>
+    <thead>
+      <tr><th>批次</th><th>状态</th><th>保留到期时间</th><th>范围</th><th>排除标记</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for b in deletion_batches %}
+      <tr>
+        <td>{{ b.batch_id }}</td>
+        <td><span class="badge">{{ b.batch_status }}</span></td>
+        <td>{{ b.retention_due_at }}</td>
+        <td>{{ b.scope }}</td>
+        <td>
+          {% for e in b.exclusions %}<span class="missing-mark">保留 {{ e }}</span>{% endfor %}
+          {% if not b.exclusions %}<span class="missing-value">无</span>{% endif %}
+        </td>
+        <td><a href="/teacher/deletion-batches/{{ b.batch_id }}">查看/确认</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+{% endblock %}

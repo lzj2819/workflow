@@ -1,0 +1,426 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "canonical-architecture.schema.json",
+  "title": "Canonical Architecture v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "artifact_schema_version", "run_id", "project_id", "node_id",
+    "parent_node_id", "artifact_id", "artifact_type", "created_at", "generator", "status",
+    "architecture_status", "ready_for_downstream", "source_prd_id", "input_artifacts",
+    "requirement_ids", "architecture_mode", "operation", "depth", "max_depth", "node_history",
+    "authority_scope", "section_order", "components", "interfaces", "dependencies", "complexity",
+    "risks", "modules", "payload", "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "artifact_schema_version": {"const": "architecture/v2"},
+    "run_id": {"type": "string", "minLength": 1},
+    "project_id": {"type": "string", "minLength": 1},
+    "node_id": {"$ref": "#/$defs/artifact_node_id"},
+    "parent_node_id": {"anyOf": [{"$ref": "#/$defs/artifact_node_id"}, {"type": "null"}]},
+    "artifact_id": {"type": "string", "pattern": "^ARCH-[A-Za-z0-9][A-Za-z0-9._:-]*$"},
+    "artifact_type": {"const": "architecture"},
+    "created_at": {"type": "string"},
+    "generator": {"const": "prd-to-architecture-skill"},
+    "status": {"enum": ["PASS", "FAIL", "ERROR"]},
+    "architecture_status": {"enum": ["draft", "approved", "complete"]},
+    "ready_for_downstream": {"type": "boolean"},
+    "source_prd_id": {"type": "string", "minLength": 1},
+    "input_artifacts": {"type": "array", "items": {"$ref": "#/$defs/input_artifact"}},
+    "requirement_ids": {"$ref": "#/$defs/string_array"},
+    "architecture_mode": {"enum": ["top_level", "decompose"]},
+    "operation": {"enum": ["new", "revise", "migrate"]},
+    "depth": {"type": "integer", "minimum": 0},
+    "max_depth": {"type": "integer", "minimum": 0},
+    "node_history": {"type": "array"},
+    "authority_scope": {"$ref": "#/$defs/authority_scope"},
+    "section_order": {
+      "const": [
+        "Design Context",
+        "Authority and Boundary",
+        "Requirement Allocation",
+        "Decomposition and Node Registry",
+        "State and Data Ownership",
+        "Interfaces and Contracts",
+        "Runtime Flows",
+        "Technology and Deployment",
+        "Decisions and Alternatives",
+        "Risks, Assumptions, and Open Questions",
+        "Traceability and Child Handoff",
+        "Review and Human Gate"
+      ]
+    },
+    "components": {"type": "array", "items": {"$ref": "#/$defs/component_projection"}},
+    "interfaces": {"type": "array", "items": {"$ref": "#/$defs/interface_projection"}},
+    "dependencies": {"type": "array", "items": {"$ref": "#/$defs/dependency_projection"}},
+    "complexity": {"type": "integer", "minimum": 0},
+    "risks": {"type": "array", "items": {"$ref": "#/$defs/risk"}},
+    "modules": {"type": "array", "items": {"$ref": "#/$defs/module_projection"}},
+    "payload": {"$ref": "#/$defs/payload"},
+    "content_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact_node_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"},
+    "node_id": {"type": "string", "pattern": "^(SYS|MOD|CMP|SUB|ADP)-[A-Z0-9][A-Z0-9._-]*$"},
+    "string_array": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "input_artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id", "artifact_type", "artifact_schema_version", "path", "sha256"],
+      "properties": {
+        "artifact_id": {"type": "string"},
+        "artifact_type": {"type": "string"},
+        "artifact_schema_version": {"type": "string"},
+        "path": {"type": "string"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "authority_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["can_define", "must_preserve", "forbidden"],
+      "properties": {
+        "can_define": {"$ref": "#/$defs/string_array"},
+        "must_preserve": {"$ref": "#/$defs/string_array"},
+        "forbidden": {"$ref": "#/$defs/string_array"}
+      }
+    },
+    "external_system": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "responsibility", "source_refs"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^EXT-[A-Z0-9][A-Z0-9._-]*$"},
+        "name": {"type": "string"},
+        "responsibility": {"type": "string"},
+        "source_refs": {"$ref": "#/$defs/string_array"}
+      }
+    },
+    "design_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "scope", "goals", "non_goals", "responsibility", "exclusions", "external_systems"],
+      "properties": {
+        "summary": {"type": "string"},
+        "scope": {"type": "string"},
+        "goals": {"$ref": "#/$defs/string_array"},
+        "non_goals": {"$ref": "#/$defs/string_array"},
+        "responsibility": {"type": "string"},
+        "exclusions": {"$ref": "#/$defs/string_array"},
+        "external_systems": {"type": "array", "items": {"$ref": "#/$defs/external_system"}}
+      }
+    },
+    "allocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requirement_id", "classification", "owner_node_ids", "source_refs", "reason"],
+      "properties": {
+        "requirement_id": {"type": "string", "minLength": 1},
+        "classification": {"enum": ["inherited", "allocated", "local", "out_of_scope"]},
+        "owner_node_ids": {"$ref": "#/$defs/string_array"},
+        "source_refs": {"$ref": "#/$defs/string_array"},
+        "reason": {"type": "string"}
+      }
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "kind", "responsibility", "exclusions", "requirement_ids", "state_ids", "dependency_ids", "source_refs", "rationale"],
+      "properties": {
+        "id": {"$ref": "#/$defs/node_id"},
+        "name": {"type": "string"},
+        "kind": {"enum": ["module", "component", "subcomponent", "adapter"]},
+        "responsibility": {"type": "string", "minLength": 1},
+        "exclusions": {"$ref": "#/$defs/string_array"},
+        "requirement_ids": {"$ref": "#/$defs/string_array"},
+        "state_ids": {"$ref": "#/$defs/string_array"},
+        "dependency_ids": {"$ref": "#/$defs/string_array"},
+        "source_refs": {"$ref": "#/$defs/string_array"},
+        "rationale": {"type": "string"}
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "owner_node_id", "reader_node_ids", "writer_node_ids", "lifecycle", "consistency_boundary", "retention_and_privacy", "source_refs"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^STATE-[A-Z0-9][A-Z0-9._-]*$"},
+        "name": {"type": "string"},
+        "owner_node_id": {"$ref": "#/$defs/node_id"},
+        "reader_node_ids": {"$ref": "#/$defs/string_array"},
+        "writer_node_ids": {"$ref": "#/$defs/string_array"},
+        "lifecycle": {"type": "string"},
+        "consistency_boundary": {"type": "string"},
+        "retention_and_privacy": {"type": "string"},
+        "source_refs": {"$ref": "#/$defs/string_array"}
+      }
+    },
+    "contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "provider_id", "consumer_ids", "trigger", "protocol", "interaction_style", "schema_fields", "side_effects", "dependency_ids", "error_semantics", "timeout", "retry", "idempotency", "version", "requirement_ids", "source_refs", "inherited"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^(API|EVT|QRY|CMD|CBK|FILE|INT)-[A-Z0-9][A-Z0-9._-]*$"},
+        "type": {"enum": ["api", "event", "query", "command", "callback", "file_exchange", "internal"]},
+        "provider_id": {"type": "string", "minLength": 1},
+        "consumer_ids": {"$ref": "#/$defs/string_array"},
+        "trigger": {"type": "string"},
+        "protocol": {"type": "string"},
+        "interaction_style": {"enum": ["sync", "async"]},
+        "schema_fields": {"$ref": "#/$defs/string_array"},
+        "side_effects": {"type": "string"},
+        "dependency_ids": {"$ref": "#/$defs/string_array"},
+        "error_semantics": {"type": "string"},
+        "timeout": {"type": "string"},
+        "retry": {"type": "string"},
+        "idempotency": {"type": "string"},
+        "version": {"type": "string"},
+        "requirement_ids": {"$ref": "#/$defs/string_array"},
+        "source_refs": {"$ref": "#/$defs/string_array"},
+        "inherited": {"type": "boolean"}
+      }
+    },
+    "flow_step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["order", "from_id", "to_id", "contract_id", "action", "failure_behavior"],
+      "properties": {
+        "order": {"type": "integer", "minimum": 1},
+        "from_id": {"type": "string"},
+        "to_id": {"type": "string"},
+        "contract_id": {"type": ["string", "null"]},
+        "action": {"type": "string"},
+        "failure_behavior": {"type": "string"}
+      }
+    },
+    "flow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "kind", "requirement_ids", "steps", "source_refs"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^FLOW-[A-Z0-9][A-Z0-9._-]*$"},
+        "name": {"type": "string"},
+        "kind": {"enum": ["success", "failure", "recovery", "lifecycle"]},
+        "requirement_ids": {"$ref": "#/$defs/string_array"},
+        "steps": {"type": "array", "items": {"$ref": "#/$defs/flow_step"}},
+        "source_refs": {"$ref": "#/$defs/string_array"}
+      }
+    },
+    "technology": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "choice", "affected_node_ids", "driver_refs", "rationale", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^TECH-[A-Z0-9][A-Z0-9._-]*$"},
+        "choice": {"type": "string"},
+        "affected_node_ids": {"$ref": "#/$defs/string_array"},
+        "driver_refs": {"$ref": "#/$defs/string_array"},
+        "rationale": {"type": "string"},
+        "status": {"enum": ["accepted", "rejected", "inherited", "delegated"]}
+      }
+    },
+    "deployment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "node_ids", "scaling", "isolation", "operations", "source_refs"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^DEPLOY-[A-Z0-9][A-Z0-9._-]*$"},
+        "name": {"type": "string"},
+        "node_ids": {"$ref": "#/$defs/string_array"},
+        "scaling": {"type": "string"},
+        "isolation": {"type": "string"},
+        "operations": {"type": "string"},
+        "source_refs": {"$ref": "#/$defs/string_array"}
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "classification", "question", "decision", "alternatives", "consequences", "affected_node_ids", "source_refs", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^(AD|LAD)-[A-Z0-9][A-Z0-9._-]*$"},
+        "classification": {"enum": ["decide_now", "defer_to_detail_design", "defer_to_next_level", "return_to_parent", "return_to_ddd", "implementation_detail"]},
+        "question": {"type": "string"},
+        "decision": {"type": "string"},
+        "alternatives": {"$ref": "#/$defs/string_array"},
+        "consequences": {"$ref": "#/$defs/string_array"},
+        "affected_node_ids": {"$ref": "#/$defs/string_array"},
+        "source_refs": {"$ref": "#/$defs/string_array"},
+        "status": {"enum": ["decided", "waiting_user", "deferred", "returned", "not_architecture_level"]}
+      }
+    },
+    "risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "description", "severity", "mitigation", "status", "source_refs"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^RISK-[A-Z0-9][A-Z0-9._-]*$"},
+        "description": {"type": "string"},
+        "severity": {"enum": ["low", "medium", "high", "critical"]},
+        "mitigation": {"type": "string"},
+        "status": {"enum": ["open", "mitigated", "accepted", "closed"]},
+        "source_refs": {"$ref": "#/$defs/string_array"}
+      }
+    },
+    "trace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "target_ids", "relation", "evidence_refs"],
+      "properties": {
+        "source_id": {"type": "string"},
+        "target_ids": {"$ref": "#/$defs/string_array"},
+        "relation": {"enum": ["allocated_to", "realized_by", "constrained_by", "verified_by", "inherits"]},
+        "evidence_refs": {"$ref": "#/$defs/string_array"}
+      }
+    },
+    "change_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "trigger_requirement_id", "affected_parent_field", "current_rule", "proposed_change", "impact", "blocked_decision_ids", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^PCR-[A-Z0-9][A-Z0-9._-]*$"},
+        "trigger_requirement_id": {"type": "string"},
+        "affected_parent_field": {"type": "string"},
+        "current_rule": {"type": "string"},
+        "proposed_change": {"type": "string"},
+        "impact": {"type": "string"},
+        "blocked_decision_ids": {"$ref": "#/$defs/string_array"},
+        "status": {"const": "waiting_parent"}
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reviewer", "evidence_ref", "semantic_hash"],
+      "properties": {
+        "status": {"enum": ["pending", "approved", "rejected"]},
+        "reviewer": {"type": "string"},
+        "evidence_ref": {"type": "string"},
+        "semantic_hash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "contract_realization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_id", "realizing_node_ids", "notes"],
+      "properties": {
+        "contract_id": {"type": "string"},
+        "realizing_node_ids": {"$ref": "#/$defs/string_array"},
+        "notes": {"type": "string"}
+      }
+    },
+    "child_handoff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recommended_target_ids", "required_ancestor_context"],
+      "properties": {
+        "recommended_target_ids": {"$ref": "#/$defs/string_array"},
+        "required_ancestor_context": {"$ref": "#/$defs/string_array"}
+      }
+    },
+    "node_match_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["strategy", "source_artifact_id", "matched_id"],
+      "properties": {
+        "strategy": {"enum": ["exact_stable_id", "migration_exact_name"]},
+        "source_artifact_id": {"type": "string"},
+        "matched_id": {"$ref": "#/$defs/node_id"}
+      }
+    },
+    "immutable_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selected_node", "contracts", "state_ownership", "technology_decisions", "deployment_units", "decisions"],
+      "properties": {
+        "selected_node": {"$ref": "#/$defs/node"},
+        "contracts": {"type": "array", "items": {"$ref": "#/$defs/contract"}},
+        "state_ownership": {"type": "array", "items": {"$ref": "#/$defs/state"}},
+        "technology_decisions": {"type": "array", "items": {"$ref": "#/$defs/technology"}},
+        "deployment_units": {"type": "array", "items": {"$ref": "#/$defs/deployment"}},
+        "decisions": {"type": "array", "items": {"$ref": "#/$defs/decision"}}
+      }
+    },
+    "parent_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parent_artifact_id", "parent_node_id", "target_node_id", "node_match_evidence", "boundary_fingerprint", "immutable_snapshot"],
+      "properties": {
+        "parent_artifact_id": {"type": "string"},
+        "parent_node_id": {"$ref": "#/$defs/artifact_node_id"},
+        "target_node_id": {"$ref": "#/$defs/node_id"},
+        "node_match_evidence": {"$ref": "#/$defs/node_match_evidence"},
+        "boundary_fingerprint": {"$ref": "#/$defs/sha256"},
+        "immutable_snapshot": {"$ref": "#/$defs/immutable_snapshot"}
+      }
+    },
+    "component_projection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "name", "kind", "responsibility", "requirement_ids"],
+      "properties": {
+        "id": {"$ref": "#/$defs/node_id"}, "name": {"type": "string"},
+        "kind": {"enum": ["module", "component", "subcomponent", "adapter"]},
+        "responsibility": {"type": "string"}, "requirement_ids": {"$ref": "#/$defs/string_array"}
+      }
+    },
+    "interface_projection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "type", "provider_id", "consumer_ids", "inherited"],
+      "properties": {
+        "id": {"type": "string"}, "type": {"type": "string"}, "provider_id": {"type": "string"},
+        "consumer_ids": {"$ref": "#/$defs/string_array"}, "inherited": {"type": "boolean"}
+      }
+    },
+    "dependency_projection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "from_id", "to_id", "source"],
+      "properties": {
+        "id": {"type": "string"}, "from_id": {"type": "string"}, "to_id": {"type": "string"},
+        "source": {"enum": ["node_dependency", "contract_dependency"]}
+      }
+    },
+    "module_projection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "name", "granularity", "responsibility", "exclusions", "requirement_refs", "dependencies"],
+      "properties": {
+        "id": {"$ref": "#/$defs/node_id"}, "name": {"type": "string"},
+        "granularity": {"enum": ["deployable_module", "component"]},
+        "responsibility": {"type": "string"}, "exclusions": {"$ref": "#/$defs/string_array"},
+        "requirement_refs": {"$ref": "#/$defs/string_array"}, "dependencies": {"$ref": "#/$defs/string_array"}
+      }
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "design_context", "parent_binding", "requirement_allocations", "nodes", "state_ownership",
+        "contracts", "inherited_contracts", "contract_realizations", "runtime_flows",
+        "technology_decisions", "deployment_units", "decisions", "risks", "assumptions",
+        "open_questions", "traceability", "child_handoff", "change_requests", "review"
+      ],
+      "properties": {
+        "design_context": {"$ref": "#/$defs/design_context"},
+        "parent_binding": {"anyOf": [{"$ref": "#/$defs/parent_binding"}, {"type": "null"}]},
+        "requirement_allocations": {"type": "array", "items": {"$ref": "#/$defs/allocation"}},
+        "nodes": {"type": "array", "items": {"$ref": "#/$defs/node"}},
+        "state_ownership": {"type": "array", "items": {"$ref": "#/$defs/state"}},
+        "contracts": {"type": "array", "items": {"$ref": "#/$defs/contract"}},
+        "inherited_contracts": {"type": "array", "items": {"$ref": "#/$defs/contract"}},
+        "contract_realizations": {"type": "array", "items": {"$ref": "#/$defs/contract_realization"}},
+        "runtime_flows": {"type": "array", "items": {"$ref": "#/$defs/flow"}},
+        "technology_decisions": {"type": "array", "items": {"$ref": "#/$defs/technology"}},
+        "deployment_units": {"type": "array", "items": {"$ref": "#/$defs/deployment"}},
+        "decisions": {"type": "array", "items": {"$ref": "#/$defs/decision"}},
+        "risks": {"type": "array", "items": {"$ref": "#/$defs/risk"}},
+        "assumptions": {"$ref": "#/$defs/string_array"},
+        "open_questions": {"$ref": "#/$defs/string_array"},
+        "traceability": {"type": "array", "items": {"$ref": "#/$defs/trace"}},
+        "child_handoff": {"$ref": "#/$defs/child_handoff"},
+        "change_requests": {"type": "array", "items": {"$ref": "#/$defs/change_request"}},
+        "review": {"$ref": "#/$defs/review"}
+      }
+    }
+  }
+}

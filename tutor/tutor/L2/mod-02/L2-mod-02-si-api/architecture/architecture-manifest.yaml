@@ -1,0 +1,79 @@
+package:
+  node_name: intake-api
+  layer: L2
+  target_node_id: SI-API
+  responsibility: >
+    在 MOD-02 的既有 DU-2 course-app 内承载 CT-001、CT-002 与
+    POST /api/v1/auth/token 的接入、认证、幂等入口和 30 秒同步接收确认；
+    通过父包内部端口协作 SI-XFER、SI-VERIFY、SI-CORE，并输出请求级可观测信号。
+  exclusions:
+    - 不拥有 Submission、UploadSession、MaterialFile 或 Outbox 状态。
+    - 不执行课程名单数据的存储或缓存；每次校验沿用 CT-003 实时语义。
+    - 不执行 Agent 评分、评分重试、教师端查询展示或保留治理。
+    - 不改变父层公共契约、兄弟模块职责、技术栈、存储平台或部署边界。
+
+inputs:
+  current_prd: C:/Users/Lenovo/Desktop/codex_plugin/prd/L2-PRD/mod-02/L2-mod-02-si-api/prd.md
+  parent_architecture: C:/Users/Lenovo/Desktop/codex_plugin/architecture/L1/L1-mod-02
+  parent_prd: null
+  ancestor_architectures:
+    - C:/Users/Lenovo/Desktop/codex_plugin/architecture/L0/output
+  output_dir: C:/Users/Lenovo/Desktop/codex_plugin/architecture/L2/mod-02/L2-mod-02-si-api
+  mode: new
+  existing_architecture: null
+  human_constraints: "按用户确认的四 child 设计生成；保持父包边界不变"
+
+parent:
+  parent_package_type: recursive-child-package
+  parent_node_id: SI-API
+  parent_node_name: intake-api
+  node_match_evidence:
+    source: C:/Users/Lenovo/Desktop/codex_plugin/architecture/L1/L1-mod-02/child-handoff.md
+    location: "下一层 target_node_id 清单表"
+    matched_row: "| SI-API | intake-api 接入层 | CT-001/CT-002/auth-token 端点、认证、幂等接入、30 秒编排 |"
+    match_count: 1
+    cross_check:
+      - "architecture-manifest.yaml children 中唯一 direct child: SI-API"
+      - "02-architecture-decomposition.md 直接子节点登记中唯一 SI-API 行"
+  boundary_fingerprint:
+    parent_artifacts:
+      - architecture-manifest.yaml: "target_node_id=SI-API; DU-2; children; ST-06"
+      - 01-design-context.md: "SI-API 职责、REQ-D003、NFR-003、SM-001"
+      - 03-state-and-data.md: "ST-06 AuthTokenGrant ownership"
+      - 04-contracts-and-runtime.md: "CT-001/CT-002/auth-token; IC-SI-01/03/04"
+      - child-handoff.md: "SI-API direct-child row and required ancestor context"
+    contract_ids: [CT-001, CT-002, CT-003, CT-004, CT-005, CT-006, CT-012, CT-014, IC-SI-01, IC-SI-03, IC-SI-04]
+    state_ids: [ST-01, ST-02, ST-03, ST-06]
+    decision_ids: [KD-002, KD-003, KD-004, KD-005, LCD-001, LCD-003, LCD-004, LCD-009]
+    deployment_refs: [DU-2, "NFR-002 30 concurrent submissions", "NFR-003 30-second confirmation"]
+  direct_boundaries:
+    upstream: ["MOD-01 via CT-001/CT-002/auth-token"]
+    downstream: ["SI-XFER via IC-SI-01", "SI-VERIFY via IC-SI-03", "SI-CORE via IC-SI-04"]
+    referenced_support: [SI-STORE, SI-RELAY]
+    siblings_not_redesigned: [MOD-01, MOD-03, MOD-04, MOD-05]
+  relevant_flows: [FLOW-001, FLOW-002, FLOW-003, FLOW-004, FLOW-006, FLOW-008]
+  inherited_decisions_and_constraints:
+    fixed: [KD-002, KD-003, KD-004, KD-005, LCD-001, LCD-003, LCD-009]
+    refinable: ["30 秒预算内部切片", "路由/中间件顺序", "请求级可观测字段映射"]
+    delegated: ["SI-API 内部 child 划分、内部端口、局部失败恢复策略"]
+    unresolved: []
+
+current_prd_trace:
+  requirement_mapping:
+    - current_id: REQ-DD003
+      parent_id: REQ-D003
+      classification: allocated
+      acceptance_contract: D-AC-REQ-007-01
+  metric_mapping:
+    - current_id: SM-001
+      parent_id: SM-001
+      classification: inherited
+
+children: []  # L2 leaf override: no L3/L4 decomposition
+status: leaf_ready
+leaf_gate_override:
+  decision: STOP_LAYERING
+  status: leaf_ready
+  authority: product_owner
+  rationale: "?????? L2 ??????????????? vibe coding?????????????"
+  no_further_layering: true

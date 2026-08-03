@@ -1,0 +1,254 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://verilayer.local/schemas/leaf-gate-run.schema.json",
+  "title": "Canonical Leaf Gate v2 Registry",
+  "oneOf": [
+    {"$ref": "#/$defs/inputManifest"},
+    {"$ref": "#/$defs/semanticJudgement"},
+    {"$ref": "#/$defs/report"},
+    {"$ref": "#/$defs/nextActionArtifact"},
+    {"$ref": "#/$defs/executionLog"},
+    {"$ref": "#/$defs/bundleManifest"}
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "stringArray": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["project_id", "node_id", "parent_node_id", "source_prd_id"],
+      "properties": {
+        "project_id": {"type": "string", "minLength": 1},
+        "node_id": {"type": "string", "minLength": 1},
+        "parent_node_id": {"type": ["string", "null"]},
+        "source_prd_id": {"type": "string", "minLength": 1}
+      }
+    },
+    "artifactRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id", "artifact_schema_version", "path", "sha256"],
+      "properties": {
+        "artifact_id": {"type": "string", "minLength": 1},
+        "artifact_schema_version": {"type": "string", "minLength": 1},
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "sourceArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "artifact_id", "artifact_schema_version", "sha256"],
+      "properties": {
+        "role": {"enum": ["prd", "architecture", "testcases", "mocktest_report", "mocktest_evidence"]},
+        "artifact_id": {"type": "string"},
+        "artifact_schema_version": {"type": "string"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_leaf_complexity", "max_leaf_contracts", "max_leaf_states", "max_recursion_depth", "min_semantic_confidence", "semantic_judgement"],
+      "properties": {
+        "max_leaf_complexity": {"type": "integer", "minimum": 0},
+        "max_leaf_contracts": {"type": "integer", "minimum": 0},
+        "max_leaf_states": {"type": "integer", "minimum": 0},
+        "max_recursion_depth": {"type": "integer", "minimum": 0},
+        "min_semantic_confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "semantic_judgement": {"enum": ["DISABLED", "OPTIONAL", "REQUIRED"]}
+      }
+    },
+    "repairCycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["failed_report_sha256", "before_architecture_sha256", "after_architecture_sha256", "finding_ids", "affected_testcase_ids", "revalidated_testcase_ids", "final_report_sha256"],
+      "properties": {
+        "failed_report_sha256": {"$ref": "#/$defs/sha256"},
+        "before_architecture_sha256": {"$ref": "#/$defs/sha256"},
+        "after_architecture_sha256": {"$ref": "#/$defs/sha256"},
+        "finding_ids": {"$ref": "#/$defs/stringArray"},
+        "affected_testcase_ids": {"$ref": "#/$defs/stringArray"},
+        "revalidated_testcase_ids": {"$ref": "#/$defs/stringArray"},
+        "final_report_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "inputManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "artifact_schema_version", "run_id", "project_id", "node_id", "parent_node_id", "source_prd_id", "current_artifacts", "repair_history", "policy", "semantic_judgement"],
+      "properties": {
+        "schema_version": {"const": "1.0"},
+        "artifact_schema_version": {"const": "leaf-gate-input/v2"},
+        "run_id": {"type": "string", "minLength": 1},
+        "project_id": {"type": "string", "minLength": 1},
+        "node_id": {"type": "string", "minLength": 1},
+        "parent_node_id": {"type": ["string", "null"]},
+        "source_prd_id": {"type": "string", "minLength": 1},
+        "current_artifacts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["prd", "architecture", "testcases", "mocktest_report", "mocktest_evidence"],
+          "properties": {
+            "prd": {"$ref": "#/$defs/artifactRef"},
+            "architecture": {"$ref": "#/$defs/artifactRef"},
+            "testcases": {"$ref": "#/$defs/artifactRef"},
+            "mocktest_report": {"$ref": "#/$defs/artifactRef"},
+            "mocktest_evidence": {"$ref": "#/$defs/artifactRef"}
+          }
+        },
+        "repair_history": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["completeness", "mode", "cycles"],
+          "properties": {
+            "completeness": {"const": "COMPLETE"},
+            "mode": {"enum": ["FIRST_PASS", "REPAIRED"]},
+            "cycles": {"type": "array", "items": {"$ref": "#/$defs/repairCycle"}}
+          }
+        },
+        "policy": {"$ref": "#/$defs/policy"},
+        "semantic_judgement": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/artifactRef"}]}
+      }
+    },
+    "criterion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "confidence", "reason", "evidence_refs"],
+      "properties": {
+        "status": {"enum": ["PASS", "FAIL"]},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "reason": {"type": "string"},
+        "evidence_refs": {"$ref": "#/$defs/stringArray"}
+      }
+    },
+    "semanticJudgement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "artifact_schema_version", "node_id", "judge", "criteria"],
+      "properties": {
+        "schema_version": {"const": "1.0"},
+        "artifact_schema_version": {"const": "leaf-gate-judgement/v2"},
+        "node_id": {"type": "string"},
+        "judge": {"type": "string"},
+        "criteria": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["C1_behavior", "C2_boundary", "C3_context", "C4_verifiability", "C5_gain"],
+          "properties": {
+            "C1_behavior": {"$ref": "#/$defs/criterion"},
+            "C2_boundary": {"$ref": "#/$defs/criterion"},
+            "C3_context": {"$ref": "#/$defs/criterion"},
+            "C4_verifiability": {"$ref": "#/$defs/criterion"},
+            "C5_gain": {"$ref": "#/$defs/criterion"}
+          }
+        }
+      }
+    },
+    "child": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["child_node_id", "name", "kind", "responsibility", "exclusions", "requirement_ids", "state_ids", "dependency_ids", "contract_ids", "rationale", "source_refs", "priority"],
+      "properties": {
+        "child_node_id": {"type": "string"}, "name": {"type": "string"}, "kind": {"type": "string"},
+        "responsibility": {"type": "string"}, "exclusions": {"$ref": "#/$defs/stringArray"},
+        "requirement_ids": {"$ref": "#/$defs/stringArray"}, "state_ids": {"$ref": "#/$defs/stringArray"},
+        "dependency_ids": {"$ref": "#/$defs/stringArray"}, "contract_ids": {"$ref": "#/$defs/stringArray"},
+        "rationale": {"type": "string"}, "source_refs": {"$ref": "#/$defs/stringArray"},
+        "priority": {"type": "integer", "minimum": 1}
+      }
+    },
+    "nextAction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "target_stage", "affected_testcase_ids", "error_code", "notes"],
+      "properties": {
+        "type": {"enum": ["RETURN_TO_ARCHITECTURE", "RETURN_TO_VALIDATION", "FIX_INPUT_CONTRACT", "DECOMPOSE", "VIBECODE", "MANUAL_REVIEW"]},
+        "target_stage": {"type": "string"},
+        "affected_testcase_ids": {"$ref": "#/$defs/stringArray"},
+        "error_code": {"type": ["string", "null"]},
+        "notes": {"$ref": "#/$defs/stringArray"}
+      }
+    },
+    "report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "artifact_schema_version", "run_id", "identity", "source_artifacts", "input_fingerprint", "admission", "evaluation", "decision", "next_action", "overall", "errors", "content_sha256"],
+      "properties": {
+        "schema_version": {"const": "1.0"}, "artifact_schema_version": {"const": "leaf-gate-report/v2"},
+        "run_id": {"type": "string"}, "identity": {"$ref": "#/$defs/identity"},
+        "source_artifacts": {"type": "array", "items": {"$ref": "#/$defs/sourceArtifact"}},
+        "input_fingerprint": {"$ref": "#/$defs/sha256"},
+        "admission": {
+          "type": "object", "additionalProperties": false,
+          "required": ["state", "reason_codes", "repair_history_mode", "affected_testcase_ids"],
+          "properties": {
+            "state": {"enum": ["ADMITTED", "RETURN_TO_ARCHITECTURE", "RETURN_TO_VALIDATION", "INVALID"]},
+            "reason_codes": {"$ref": "#/$defs/stringArray"},
+            "repair_history_mode": {"enum": ["FIRST_PASS", "REPAIRED", "UNKNOWN"]},
+            "affected_testcase_ids": {"$ref": "#/$defs/stringArray"}
+          }
+        },
+        "evaluation": {
+          "type": "object", "additionalProperties": false,
+          "required": ["state", "policy", "metrics", "triggered_rules"],
+          "properties": {
+            "state": {"enum": ["NOT_EVALUATED", "COMPLETED", "ERROR"]},
+            "policy": {"type": "object"}, "metrics": {"type": "object"},
+            "triggered_rules": {"$ref": "#/$defs/stringArray"}
+          }
+        },
+        "decision": {
+          "type": "object", "additionalProperties": false,
+          "required": ["value", "confidence", "rationale_codes", "proposed_children"],
+          "properties": {
+            "value": {"enum": ["CONTINUE_LAYERING", "STOP_LAYERING", null]},
+            "confidence": {"type": ["number", "null"]},
+            "rationale_codes": {"$ref": "#/$defs/stringArray"},
+            "proposed_children": {"type": "array", "items": {"$ref": "#/$defs/child"}}
+          }
+        },
+        "next_action": {"$ref": "#/$defs/nextAction"},
+        "overall": {"enum": ["CONTINUE_LAYERING", "STOP_LAYERING", "RETURN_TO_ARCHITECTURE", "RETURN_TO_VALIDATION", "FIX_INPUT_CONTRACT", "MANUAL_REVIEW"]},
+        "errors": {"type": "array", "items": {"type": "object"}},
+        "content_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "nextActionArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "artifact_schema_version", "run_id", "report_sha256", "type", "target_stage", "affected_testcase_ids", "error_code", "notes", "content_sha256"],
+      "properties": {
+        "schema_version": {"const": "1.0"},
+        "artifact_schema_version": {"const": "leaf-gate-next-action/v2"},
+        "run_id": {"type": "string"},
+        "report_sha256": {"$ref": "#/$defs/sha256"},
+        "type": {"enum": ["RETURN_TO_ARCHITECTURE", "RETURN_TO_VALIDATION", "FIX_INPUT_CONTRACT", "DECOMPOSE", "VIBECODE", "MANUAL_REVIEW"]},
+        "target_stage": {"type": "string"},
+        "affected_testcase_ids": {"$ref": "#/$defs/stringArray"},
+        "error_code": {"type": ["string", "null"]},
+        "notes": {"$ref": "#/$defs/stringArray"},
+        "content_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "executionLog": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "artifact_schema_version", "run_id", "admission_state", "evaluation_state", "overall", "events", "content_sha256"],
+      "properties": {
+        "schema_version": {"const": "1.0"}, "artifact_schema_version": {"const": "leaf-gate-execution-log/v2"},
+        "run_id": {"type": "string"}, "admission_state": {"type": "string"}, "evaluation_state": {"type": "string"},
+        "overall": {"type": "string"}, "events": {"type": "array"}, "content_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "bundleManifest": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "artifact_schema_version", "run_id", "files", "bundle_sha256"],
+      "properties": {
+        "schema_version": {"const": "1.0"}, "artifact_schema_version": {"const": "leaf-gate-bundle/v2"},
+        "run_id": {"type": "string"},
+        "files": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"type": "string"}, "sha256": {"$ref": "#/$defs/sha256"}}}},
+        "bundle_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "node_id": "CMP-ASSESSMENT-ENGINE",
+  "input_summary": {
+    "requirement_ids": [
+      "REQ-DD001"
+    ],
+    "complexity_metrics": {
+      "requirement_count": 1,
+      "component_count": 10,
+      "interface_count": 10,
+      "dependency_count": 9,
+      "architecture_depth": 2,
+      "current_depth": 2,
+      "node_max_depth": 2,
+      "configured_max_recursion_depth": 4,
+      "effective_max_depth": 2,
+      "complexity": 29,
+      "uncovered_requirement_count": 0,
+      "unverified_scenario_count": 0
+    },
+    "risk_metrics": {
+      "risk_count": 0,
+      "mock_defect_count": 0,
+      "mock_critical_defect_count": 0
+    },
+    "mocktest_summary": {
+      "status": "PASS",
+      "defect_count": 0,
+      "critical_defect_count": 0,
+      "artifact": "mocktest_report.json"
+    },
+    "evidence_refs": [
+      {
+        "artifact_type": "prd",
+        "path": "prd.json",
+        "sha256": "3e086cdb052127f1db1b6551580976be666a394bf01e0baa22b3ff8c5b542f50"
+      },
+      {
+        "artifact_type": "architecture",
+        "path": "architecture.json",
+        "sha256": "706a55b3bdca68e51a0de31b2caae81605f828f29be05af6b9918fbf55baee0b"
+      },
+      {
+        "artifact_type": "testcases",
+        "path": "testcases.json",
+        "sha256": "49b23ce46e0970ce84360312b20fcf6f472d3b027f7c527d3bbf91576da80c75"
+      },
+      {
+        "artifact_type": "mocktest_report",
+        "path": "mocktest_report.json",
+        "sha256": "40e3851f99edf89572fd780a35e796fbf2399f60290342e5e63ef59f06127197"
+      }
+    ]
+  },
+  "label_options": [
+    "CONTINUE_LAYERING",
+    "STOP_LAYERING",
+    "CANNOT_JUDGE"
+  ],
+  "human_label": null,
+  "rationale": "",
+  "annotator_id": null
+}

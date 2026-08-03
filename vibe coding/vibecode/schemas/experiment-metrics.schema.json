@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "experiment-metrics.schema.json",
+  "type": "object",
+  "required": ["total_duration_ms", "module_durations_ms", "parallel_wall_time_ms", "sequential_time_ms", "sequential_time_label", "total_tokens", "total_cost", "model_call_count", "retry_count", "human_intervention_count", "node_count", "max_depth_reached", "continue_layering_count", "stop_layering_count", "mock_defect_count", "coding_acceptance", "contract_violation_count", "failed_stage", "final_status"],
+  "properties": {
+    "total_duration_ms": {"type": "number", "minimum": 0},
+    "module_durations_ms": {"type": "object"},
+    "model_call_count": {"type": "integer", "minimum": 0},
+    "final_status": {"enum": ["PENDING", "RUNNING", "PASS", "FAIL", "ERROR", "CONTINUE_LAYERING", "STOP_LAYERING", "COMPLETED"]}
+  }
+}

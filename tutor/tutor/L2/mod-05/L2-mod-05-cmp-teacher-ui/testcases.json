@@ -1,0 +1,129 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-05-cmp-teacher-ui",
+  "project_id": "vibe-coding-course",
+  "node_id": "CMP-TEACHER-UI",
+  "parent_node_id": "CMP-TEACHER-UI",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD001",
+    "REQ-DD002"
+  ],
+  "artifact_id": "testcases:CMP-TEACHER-UI:leaf-gate-l2-l2-mod-05-cmp-teacher-ui",
+  "artifact_type": "testcases",
+  "testcases": [
+    {
+      "id": "TC-001",
+      "name": "展示提交材料、处理状态、Agent 原始等级、依据、建议、批注和最终等级编辑入口",
+      "requirement_ids": [
+        "REQ-DD001"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-002",
+      "name": "教师可保存批注和调整后的等级",
+      "requirement_ids": [
+        "REQ-DD001"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-003",
+      "name": "系统同时保留原始等级、最终等级、操作者和时间",
+      "requirement_ids": [
+        "REQ-DD001"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-004",
+      "name": "展示失败原因和重试结果，而不是伪造等级",
+      "requirement_ids": [
+        "REQ-DD001"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-005",
+      "name": "拒绝读取并记录访问拒绝",
+      "requirement_ids": [
+        "REQ-DD001"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-006",
+      "name": "生成展示视图，包含项目结果、过程摘要、评分和教师批注",
+      "requirement_ids": [
+        "REQ-DD002"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-007",
+      "name": "展示视图中的小组与所选小组一致",
+      "requirement_ids": [
+        "REQ-DD002"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-008",
+      "name": "视图可在教师网页端打开",
+      "requirement_ids": [
+        "REQ-DD002"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-009",
+      "name": "展示缺失标记，不隐藏缺口",
+      "requirement_ids": [
+        "REQ-DD002"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-010",
+      "name": "阻止生成并说明原因",
+      "requirement_ids": [
+        "REQ-DD002"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    }
+  ]
+}

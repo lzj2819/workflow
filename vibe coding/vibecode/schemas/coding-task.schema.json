@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "coding-task.schema.json",
+  "title": "Admitted Leaf Coding Task",
+  "type": "object",
+  "required": [
+    "schema_version", "task_id", "run_id", "project_id", "node_id",
+    "status", "created_at", "evidence_artifacts", "evidence_hashes", "attempts"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "minLength": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "project_id": {"type": "string", "minLength": 1},
+    "node_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["PENDING", "RUNNING", "FAIL", "ERROR", "COMPLETED"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "evidence_artifacts": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "evidence_hashes": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+    "attempts": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": false
+}

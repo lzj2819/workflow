@@ -1,0 +1,14 @@
+{
+  "module_versions": {"prd": "fixture-1", "architecture": "fixture-1", "gherkin": "fixture-1", "mocktest": "fixture-1", "leaf_gate": "fixture-1", "coding": "fixture-1", "backfill": "fixture-1", "integration": "fixture-1"},
+  "backfill_approvals": {"root": {"approver": "fixture-integration-owner", "note": "Fixture-only recorded human gate"}},
+  "commands": {
+    "prd": ["python", "tests/fixtures/root_workflow/command_adapter.py", "--module", "{module}", "--input", "{input}", "--output-dir", "{output_dir}", "--node-id", "{node_id}", "--scenario", "single"],
+    "architecture": ["python", "tests/fixtures/root_workflow/command_adapter.py", "--module", "{module}", "--input", "{input}", "--output-dir", "{output_dir}", "--node-id", "{node_id}", "--scenario", "single"],
+    "gherkin": ["python", "tests/fixtures/root_workflow/command_adapter.py", "--module", "{module}", "--input", "{input}", "--output-dir", "{output_dir}", "--node-id", "{node_id}", "--scenario", "single"],
+    "mocktest": ["python", "tests/fixtures/root_workflow/command_adapter.py", "--module", "{module}", "--input", "{input}", "--output-dir", "{output_dir}", "--node-id", "{node_id}", "--scenario", "single"],
+    "leaf_gate": ["python", "tests/fixtures/root_workflow/command_adapter.py", "--module", "{module}", "--input", "{input}", "--output-dir", "{output_dir}", "--node-id", "{node_id}", "--scenario", "single"],
+    "coding": ["python", "tests/fixtures/root_workflow/command_adapter.py", "--module", "{module}", "--input", "{input}", "--output-dir", "{output_dir}", "--node-id", "{node_id}", "--scenario", "single"],
+    "backfill": ["python", "tests/fixtures/root_workflow/command_adapter.py", "--module", "{module}", "--input", "{input}", "--output-dir", "{output_dir}", "--node-id", "{node_id}", "--scenario", "single"],
+    "integration": ["python", "tests/fixtures/root_workflow/command_adapter.py", "--module", "{module}", "--input", "{input}", "--output-dir", "{output_dir}", "--node-id", "{node_id}", "--scenario", "single"]
+  }
+}

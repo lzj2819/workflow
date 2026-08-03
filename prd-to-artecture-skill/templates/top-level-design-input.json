@@ -1,0 +1,122 @@
+{
+  "design_schema_version": "architecture-design/v1",
+  "architecture_mode": "top_level",
+  "design_context": {
+    "summary": "Order system architecture",
+    "scope": "Current-release order recording",
+    "goals": ["Reliable writes"],
+    "non_goals": ["Bulk imports"],
+    "responsibility": "Define the system boundary and first-level modules",
+    "exclusions": ["Implementation code"],
+    "external_systems": [
+      {
+        "id": "EXT-IDP",
+        "name": "Identity Provider",
+        "responsibility": "Authenticate operators",
+        "source_refs": ["REQ-001"]
+      }
+    ]
+  },
+  "requirement_allocations": [
+    {
+      "requirement_id": "REQ-001",
+      "classification": "allocated",
+      "owner_node_ids": ["MOD-ORDER"],
+      "source_refs": ["REQ-001"],
+      "reason": "The module owns the write boundary"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "MOD-ORDER",
+      "name": "Order Module",
+      "kind": "module",
+      "responsibility": "Own order recording",
+      "exclusions": ["Identity storage"],
+      "requirement_ids": ["REQ-001"],
+      "state_ids": ["STATE-ORDER"],
+      "dependency_ids": [],
+      "source_refs": ["REQ-001"],
+      "rationale": "One write owner"
+    }
+  ],
+  "state_ownership": [
+    {
+      "id": "STATE-ORDER",
+      "name": "Order",
+      "owner_node_id": "MOD-ORDER",
+      "reader_node_ids": ["MOD-ORDER"],
+      "writer_node_ids": ["MOD-ORDER"],
+      "lifecycle": "created to retained",
+      "consistency_boundary": "one transaction",
+      "retention_and_privacy": "retain according to policy",
+      "source_refs": ["REQ-001"]
+    }
+  ],
+  "contracts": [
+    {
+      "id": "API-ORDER-CREATE",
+      "type": "api",
+      "provider_id": "MOD-ORDER",
+      "consumer_ids": ["EXT-IDP"],
+      "trigger": "valid request",
+      "protocol": "HTTPS",
+      "interaction_style": "sync",
+      "schema_fields": ["operator_id", "order_id"],
+      "side_effects": "creates an order",
+      "dependency_ids": [],
+      "error_semantics": "typed 4xx/5xx",
+      "timeout": "2s",
+      "retry": "none",
+      "idempotency": "Idempotency-Key",
+      "version": "1",
+      "requirement_ids": ["REQ-001"],
+      "source_refs": ["REQ-001"]
+    }
+  ],
+  "contract_realizations": [],
+  "runtime_flows": [
+    {
+      "id": "FLOW-ORDER-CREATE",
+      "name": "Create order",
+      "kind": "success",
+      "requirement_ids": ["REQ-001"],
+      "steps": [
+        {
+          "order": 1,
+          "from_id": "EXT-IDP",
+          "to_id": "MOD-ORDER",
+          "contract_id": "API-ORDER-CREATE",
+          "action": "submit an authenticated order",
+          "failure_behavior": "return a typed error"
+        }
+      ],
+      "source_refs": ["REQ-001"]
+    }
+  ],
+  "technology_decisions": [],
+  "deployment_units": [],
+  "decisions": [],
+  "risks": [],
+  "assumptions": [],
+  "open_questions": [],
+  "traceability": [
+    {
+      "source_id": "REQ-001",
+      "target_ids": ["MOD-ORDER", "API-ORDER-CREATE"],
+      "relation": "allocated_to",
+      "evidence_refs": ["REQ-001"]
+    }
+  ],
+  "child_handoff": {
+    "recommended_target_ids": ["MOD-ORDER"],
+    "required_ancestor_context": ["system boundary", "public contracts"]
+  },
+  "change_requests": [],
+  "review": {
+    "status": "approved",
+    "reviewer": "architecture-owner",
+    "evidence_ref": "review:replace-me"
+  }
+}
+

@@ -1,0 +1,62 @@
+# Architecture Manifest — L2 / CMP-UPLOAD-CLIENT
+manifest_version: "1.0"
+
+package:
+  node_name: CMP-UPLOAD-CLIENT
+  level: L2
+  target_node_id: CMP-UPLOAD-CLIENT
+  parent_node_id: MOD-01
+  responsibility: >-
+    在学生本机插件内实现 CT-001/CT-002 consumer 侧上传：换取访问令牌；按创建上传会话、逐分片、
+    合并的协议发送材料包；维护 UploadCheckpoint；30 秒未确认时转 CT-002 查询；网络中断后用同一
+    submission_uuid 断点续传。
+  exclusions:
+    - 不改变 CT-001、CT-002 或 auth/token 附属端点的字段、路径、owner、失败语义、幂等语义或版本
+    - 不拥有 MOD-02 的 Submission、服务端提交状态机或材料服务端存储
+    - 不决定 PendingTask 生命周期、不解析自然语言、不采集对话或目录材料
+    - 不创建服务、容器、消息总线、独立部署单元或新的跨模块契约
+
+inputs:
+  parent_architecture: "C:\\Users\\Lenovo\\Desktop\\codex_plugin\\architecture\\L1\\L1-mod-01"
+  target_node_id: CMP-UPLOAD-CLIENT
+  current_prd: "C:\\Users\\Lenovo\\Desktop\\codex_plugin\\prd\\L2-PRD\\mod-01\\L2-mod-01-cmp-upload-client\\prd.md"
+  parent_prd: null
+  ancestor_architectures:
+    - "C:\\Users\\Lenovo\\Desktop\\codex_plugin\\architecture\\L1\\L1-mod-01"
+  output_dir: "C:\\Users\\Lenovo\\Desktop\\codex_plugin\\architecture\\L2\\mod-01\\L2-mod-01-cmp-upload-client"
+  mode: new
+
+artifacts:
+  - 01-design-context.md
+  - 02-architecture-decomposition.md
+  - 03-state-and-data.md
+  - 04-contracts-and-runtime.md
+  - 05-local-decisions.md
+
+parent_package_type: recursive_child_package
+status: leaf_ready
+outputs:
+  - architecture-manifest.yaml
+  - 01-design-context.md
+  - 02-architecture-decomposition.md
+  - 03-state-and-data.md
+  - 04-contracts-and-runtime.md
+  - 05-local-decisions.md
+  - child-handoff.md
+
+validation:
+  checks:
+    - { check: "父包识别、目标节点唯一匹配与五个当前层输入解析", result: pass }
+    - { check: "四个 child_id、ST-05 所有权和父 CT-001/CT-002 语义一致", result: pass }
+    - { check: "IC-UP-001~006 均声明 required/produced、错误、依赖和 next_hop", result: pass }
+    - { check: "成功、失败恢复、超时查询与拒绝生命周期均已定义", result: pass }
+  method: "逐项对照 L1 父包、L2 PRD、本包当前层五个架构产物和机器可读契约"
+
+blocking_impact: "无阻塞项；未改变父边界，可进入一次 Human Gate"
+
+leaf_gate_override:
+  decision: STOP_LAYERING
+  status: leaf_ready
+  authority: product_owner
+  rationale: "?????? L2 ??????????????? vibe coding?????????????"
+  no_further_layering: true

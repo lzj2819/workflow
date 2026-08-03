@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-05-cmp-presentation",
+  "project_id": "vibe-coding-course",
+  "node_id": "CMP-PRESENTATION",
+  "parent_node_id": "MOD-05",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD002"
+  ],
+  "artifact_id": "prd:CMP-PRESENTATION:leaf-gate-l2-l2-mod-05-cmp-presentation",
+  "artifact_type": "prd",
+  "requirements": [
+    {
+      "id": "REQ-DD002",
+      "text": "Inherited and bounded requirement REQ-DD002 for CMP-PRESENTATION.",
+      "status": "active"
+    }
+  ],
+  "depth": 2,
+  "max_depth": 2,
+  "parent": {
+    "node_id": "MOD-05"
+  },
+  "node_history": [
+    {
+      "node_id": "MOD-05",
+      "depth": 1,
+      "source": "inherited"
+    }
+  ]
+}

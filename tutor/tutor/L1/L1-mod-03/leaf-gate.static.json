@@ -1,0 +1,779 @@
+{
+  "node_id": "L1-mod-03",
+  "phase": "FINAL",
+  "decision": "STOP_LAYERING",
+  "summary": "Further layering has no material benefit.",
+  "thresholds": {
+    "max_requirements": 8,
+    "max_components": 6,
+    "max_interfaces": 6,
+    "max_dependencies": 8,
+    "max_architecture_depth": 4,
+    "max_complexity": 12,
+    "max_risks": 3,
+    "max_recursion_depth": 4,
+    "max_mock_defects": 0,
+    "max_mock_critical_defects": 0,
+    "leaf_score_pass": 10,
+    "leaf_score_warn": 20,
+    "max_scenario_points": 15,
+    "max_expanded_cases": 20,
+    "max_steps_per_scenario": 12,
+    "max_req_tags_per_scenario": 3,
+    "max_open_questions": 0,
+    "max_high_risks": 0,
+    "max_estimated_tokens": 24000,
+    "max_implementation_pack_tokens": 18000,
+    "max_full_artifact_tokens": 50000,
+    "min_llm_confidence": 0.75
+  },
+  "config": {
+    "config_path": "outputs\\vibe-coding-course\\L1\\L1-mod-03\\leaf-gate.config.json",
+    "profile_path": null,
+    "profile": {
+      "trace_terms": [],
+      "trace_synonyms": {},
+      "architecture_markers": [],
+      "risk_class_patterns": {},
+      "high_risk_classes": [],
+      "active_requirement_statuses": [
+        "active"
+      ]
+    },
+    "warnings": []
+  },
+  "static_checks": {
+    "artifacts": {
+      "node_dir": "outputs\\vibe-coding-course\\L1\\L1-mod-03",
+      "prd": "outputs\\vibe-coding-course\\L1\\L1-mod-03\\prd.md",
+      "feature": "outputs\\vibe-coding-course\\L1\\L1-mod-03\\L1-mod-03.feature",
+      "architecture": "outputs\\vibe-coding-course\\L1\\L1-mod-03\\architecture",
+      "architecture_files": [
+        "outputs\\vibe-coding-course\\L1\\L1-mod-03\\architecture\\01-design-context.md",
+        "outputs\\vibe-coding-course\\L1\\L1-mod-03\\architecture\\02-architecture-decomposition.md",
+        "outputs\\vibe-coding-course\\L1\\L1-mod-03\\architecture\\03-state-and-data.md",
+        "outputs\\vibe-coding-course\\L1\\L1-mod-03\\architecture\\04-contracts-and-runtime.md",
+        "outputs\\vibe-coding-course\\L1\\L1-mod-03\\architecture\\05-local-decisions.md",
+        "outputs\\vibe-coding-course\\L1\\L1-mod-03\\architecture\\06-leaf-decision.md",
+        "outputs\\vibe-coding-course\\L1\\L1-mod-03\\architecture\\architecture-manifest.yaml",
+        "outputs\\vibe-coding-course\\L1\\L1-mod-03\\architecture\\child-handoff.md"
+      ],
+      "architecture_validation": null,
+      "architecture_validation_files": [],
+      "architecture_supporting_files": [],
+      "architecture_remediation_files": [],
+      "architecture_manifest": "outputs\\vibe-coding-course\\L1\\L1-mod-03\\architecture\\architecture-manifest.yaml",
+      "architecture_selection": "semantic-package",
+      "traceability": "outputs\\vibe-coding-course\\L1\\L1-mod-03\\traceability.md",
+      "risks": "outputs\\vibe-coding-course\\L1\\L1-mod-03\\risks.md",
+      "missing": [],
+      "warnings": [],
+      "inventory": {
+        "traceability_source": "provided",
+        "risks_source": "provided",
+        "architecture_package": "outputs\\vibe-coding-course\\L1\\L1-mod-03\\architecture",
+        "architecture_primary_count": 8,
+        "architecture_validation_count": 0,
+        "architecture_supporting_count": 0,
+        "architecture_remediation_count": 0
+      }
+    },
+    "requirements": {
+      "count": 2,
+      "ids": [
+        "REQ-D001",
+        "REQ-D002"
+      ],
+      "items": [
+        {
+          "id": "REQ-D001",
+          "text": "服务器应使用课程邀请码、课程名单以及提交中的姓名和小组校验课程归属。",
+          "section": "Must Have",
+          "priority": "must",
+          "status": "active",
+          "source": {
+            "artifact": "prd.md",
+            "line": 47
+          }
+        },
+        {
+          "id": "REQ-D002",
+          "text": "学生修改姓名或小组后，服务器应在每次提交时重新执行校验。",
+          "section": "Must Have",
+          "priority": "must",
+          "status": "active",
+          "source": {
+            "artifact": "prd.md",
+            "line": 54
+          }
+        }
+      ]
+    },
+    "C1_behavior_complexity": {
+      "status": "pass",
+      "reason": "Static behavior thresholds passed.",
+      "evidence": {
+        "parser": "fallback",
+        "scenario_count": 10,
+        "scenario_outline_count": 1,
+        "expanded_case_count": 12,
+        "max_steps_per_scenario": 6,
+        "max_req_tags_per_scenario": 2,
+        "composite_scenario_count": 1,
+        "metric_only_scenario_count": 0,
+        "weak_assertion_scenarios": [],
+        "scenario_points": 15,
+        "untagged_scenarios": [],
+        "covered_requirements": [
+          "REQ-D001",
+          "REQ-D002"
+        ],
+        "scenarios": [
+          {
+            "id": null,
+            "name": "上传材料包后保存材料并执行课程归属校验",
+            "outline": false,
+            "tags": [
+              "@REQ-D001",
+              "@TC-001"
+            ],
+            "req_tags": [
+              "REQ-D001"
+            ],
+            "trace_tags": [
+              "REQ-D001"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "medium",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "L1-mod-03.feature",
+              "line": 7
+            }
+          },
+          {
+            "id": null,
+            "name": "校验通过后提交进入 processing",
+            "outline": false,
+            "tags": [
+              "@REQ-D001",
+              "@TC-002"
+            ],
+            "req_tags": [
+              "REQ-D001"
+            ],
+            "trace_tags": [
+              "REQ-D001"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "strong",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "L1-mod-03.feature",
+              "line": 14
+            }
+          },
+          {
+            "id": null,
+            "name": "校验失败时提交为 rejected 并记录原因",
+            "outline": false,
+            "tags": [
+              "@REQ-D001",
+              "@TC-003"
+            ],
+            "req_tags": [
+              "REQ-D001"
+            ],
+            "trace_tags": [
+              "REQ-D001"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "strong",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "L1-mod-03.feature",
+              "line": 21
+            }
+          },
+          {
+            "id": null,
+            "name": "材料目录存在但为空时提交进入评分并标记材料缺失",
+            "outline": false,
+            "tags": [
+              "@REQ-D001",
+              "@TC-004"
+            ],
+            "req_tags": [
+              "REQ-D001"
+            ],
+            "trace_tags": [
+              "REQ-D001"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "medium",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "L1-mod-03.feature",
+              "line": 28
+            }
+          },
+          {
+            "id": null,
+            "name": "上传中断时提交状态为 upload_failed 且教师端可见失败原因",
+            "outline": false,
+            "tags": [
+              "@REQ-D001",
+              "@TC-005"
+            ],
+            "req_tags": [
+              "REQ-D001"
+            ],
+            "trace_tags": [
+              "REQ-D001"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "strong",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "L1-mod-03.feature",
+              "line": 35
+            }
+          },
+          {
+            "id": null,
+            "name": "修改姓名或小组后再次提交触发本次重新校验",
+            "outline": true,
+            "tags": [
+              "@REQ-D002",
+              "@TC-006"
+            ],
+            "req_tags": [
+              "REQ-D002"
+            ],
+            "trace_tags": [
+              "REQ-D002"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "medium",
+            "step_count": 3,
+            "example_rows": 3,
+            "source": {
+              "artifact": "L1-mod-03.feature",
+              "line": 42
+            }
+          },
+          {
+            "id": null,
+            "name": "当前身份有效时再次提交进入 processing",
+            "outline": false,
+            "tags": [
+              "@REQ-D002",
+              "@TC-007"
+            ],
+            "req_tags": [
+              "REQ-D002"
+            ],
+            "trace_tags": [
+              "REQ-D002"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "medium",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "L1-mod-03.feature",
+              "line": 55
+            }
+          },
+          {
+            "id": null,
+            "name": "当前姓名或小组无效时即使上一次提交有效本次仍 rejected",
+            "outline": false,
+            "tags": [
+              "@REQ-D002",
+              "@TC-008"
+            ],
+            "req_tags": [
+              "REQ-D002"
+            ],
+            "trace_tags": [
+              "REQ-D002"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "medium",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "L1-mod-03.feature",
+              "line": 62
+            }
+          },
+          {
+            "id": null,
+            "name": "课程名单服务不可用时进入 identity_validation_failed",
+            "outline": false,
+            "tags": [
+              "@REQ-D002",
+              "@TC-009"
+            ],
+            "req_tags": [
+              "REQ-D002"
+            ],
+            "trace_tags": [
+              "REQ-D002"
+            ],
+            "metric_tags": [],
+            "composite": false,
+            "assertion_quality": "medium",
+            "step_count": 3,
+            "example_rows": 0,
+            "source": {
+              "artifact": "L1-mod-03.feature",
+              "line": 69
+            }
+          },
+          {
+            "id": null,
+            "name": "首次提交校验通过后修改身份信息再次提交仍独立校验",
+            "outline": false,
+            "tags": [
+              "@COMP-001",
+              "@REQ-D001",
+              "@REQ-D002"
+            ],
+            "req_tags": [
+              "REQ-D001",
+              "REQ-D002"
+            ],
+            "trace_tags": [
+              "REQ-D001",
+              "REQ-D002"
+            ],
+            "metric_tags": [],
+            "composite": true,
+            "assertion_quality": "strong",
+            "step_count": 6,
+            "example_rows": 0,
+            "source": {
+              "artifact": "L1-mod-03.feature",
+              "line": 76
+            }
+          }
+        ]
+      }
+    },
+    "C2_contract_boundary": {
+      "status": "pass",
+      "reason": "Contract fields are present.",
+      "evidence": {
+        "fields": {
+          "inputs": true,
+          "outputs": true,
+          "errors": true,
+          "states": true,
+          "side_effects": true,
+          "dependencies": true
+        },
+        "missing_fields": [],
+        "contracts": [
+          {
+            "id": "01-design-context",
+            "provider": "",
+            "consumer": "",
+            "trigger": "",
+            "inputs": [
+              "present"
+            ],
+            "outputs": [
+              "present"
+            ],
+            "errors": [
+              "present"
+            ],
+            "states": [
+              "present"
+            ],
+            "side_effects": [
+              "present"
+            ],
+            "dependencies": [
+              "present"
+            ],
+            "observability": [],
+            "source": {
+              "artifact": "architecture/01-design-context.md"
+            }
+          },
+          {
+            "id": "02-architecture-decomposition",
+            "provider": "",
+            "consumer": "",
+            "trigger": "",
+            "inputs": [],
+            "outputs": [],
+            "errors": [
+              "present"
+            ],
+            "states": [
+              "present"
+            ],
+            "side_effects": [
+              "present"
+            ],
+            "dependencies": [
+              "present"
+            ],
+            "observability": [],
+            "source": {
+              "artifact": "architecture/02-architecture-decomposition.md"
+            }
+          },
+          {
+            "id": "03-state-and-data",
+            "provider": "",
+            "consumer": "",
+            "trigger": "",
+            "inputs": [
+              "present"
+            ],
+            "outputs": [
+              "present"
+            ],
+            "errors": [
+              "present"
+            ],
+            "states": [
+              "present"
+            ],
+            "side_effects": [
+              "present"
+            ],
+            "dependencies": [
+              "present"
+            ],
+            "observability": [],
+            "source": {
+              "artifact": "architecture/03-state-and-data.md"
+            }
+          },
+          {
+            "id": "04-contracts-and-runtime",
+            "provider": "",
+            "consumer": "",
+            "trigger": "",
+            "inputs": [
+              "present"
+            ],
+            "outputs": [
+              "present"
+            ],
+            "errors": [
+              "present"
+            ],
+            "states": [
+              "present"
+            ],
+            "side_effects": [
+              "present"
+            ],
+            "dependencies": [
+              "present"
+            ],
+            "observability": [],
+            "source": {
+              "artifact": "architecture/04-contracts-and-runtime.md"
+            }
+          },
+          {
+            "id": "05-local-decisions",
+            "provider": "",
+            "consumer": "",
+            "trigger": "",
+            "inputs": [
+              "present"
+            ],
+            "outputs": [],
+            "errors": [
+              "present"
+            ],
+            "states": [
+              "present"
+            ],
+            "side_effects": [
+              "present"
+            ],
+            "dependencies": [
+              "present"
+            ],
+            "observability": [],
+            "source": {
+              "artifact": "architecture/05-local-decisions.md"
+            }
+          },
+          {
+            "id": "06-leaf-decision",
+            "provider": "",
+            "consumer": "",
+            "trigger": "",
+            "inputs": [],
+            "outputs": [],
+            "errors": [],
+            "states": [
+              "present"
+            ],
+            "side_effects": [],
+            "dependencies": [],
+            "observability": [],
+            "source": {
+              "artifact": "architecture/06-leaf-decision.md"
+            }
+          },
+          {
+            "id": "architecture-manifest",
+            "provider": "",
+            "consumer": "",
+            "trigger": "",
+            "inputs": [
+              "present"
+            ],
+            "outputs": [
+              "present"
+            ],
+            "errors": [
+              "present"
+            ],
+            "states": [
+              "present"
+            ],
+            "side_effects": [
+              "present"
+            ],
+            "dependencies": [
+              "present"
+            ],
+            "observability": [],
+            "source": {
+              "artifact": "architecture/architecture-manifest.yaml"
+            }
+          },
+          {
+            "id": "child-handoff",
+            "provider": "",
+            "consumer": "",
+            "trigger": "",
+            "inputs": [
+              "present"
+            ],
+            "outputs": [
+              "present"
+            ],
+            "errors": [],
+            "states": [
+              "present"
+            ],
+            "side_effects": [],
+            "dependencies": [
+              "present"
+            ],
+            "observability": [],
+            "source": {
+              "artifact": "architecture/child-handoff.md"
+            }
+          }
+        ]
+      }
+    },
+    "C3_ai_context_control": {
+      "status": "pass",
+      "reason": "Static context thresholds passed.",
+      "evidence": {
+        "estimated_tokens": 16362,
+        "implementation_pack_tokens": 16362,
+        "full_artifact_tokens": 16787,
+        "open_questions": 0,
+        "todo_markers": 0
+      }
+    },
+    "C4_verifiability": {
+      "status": "pass",
+      "reason": "Static traceability checks passed.",
+      "evidence": {
+        "unmapped_requirements": [],
+        "deferred_or_excluded_requirements": [],
+        "architecture_evidence_gaps": [],
+        "untagged_scenarios": [],
+        "covered_requirements": [
+          "REQ-D001",
+          "REQ-D002"
+        ]
+      }
+    },
+    "C5_risk_decomposition": {
+      "status": "pass",
+      "reason": "Static risk thresholds passed.",
+      "evidence": {
+        "unresolved_high_risks": 0,
+        "risk_like_lines": 3,
+        "risk_classes": {
+          "security_auth": 5,
+          "privacy_data": 4,
+          "destructive_operation": 2,
+          "financial_legal": 1,
+          "concurrency_time": 7,
+          "external_dependency": 3,
+          "performance_slo": 1,
+          "ai_nondeterminism": 1
+        },
+        "high_risk_classes": [
+          "destructive_operation",
+          "financial_legal",
+          "privacy_data",
+          "security_auth"
+        ],
+        "unmitigated_high_risk_classes": [],
+        "items": [
+          {
+            "id": "RISK-001",
+            "class": "ai_nondeterminism",
+            "severity": "medium",
+            "status": "mitigated",
+            "source": {
+              "artifact": "risks"
+            }
+          },
+          {
+            "id": "RISK-002",
+            "class": "concurrency_time",
+            "severity": "medium",
+            "status": "mitigated",
+            "source": {
+              "artifact": "risks"
+            }
+          },
+          {
+            "id": "RISK-003",
+            "class": "destructive_operation",
+            "severity": "high",
+            "status": "mitigated",
+            "source": {
+              "artifact": "risks"
+            }
+          },
+          {
+            "id": "RISK-004",
+            "class": "external_dependency",
+            "severity": "medium",
+            "status": "mitigated",
+            "source": {
+              "artifact": "risks"
+            }
+          },
+          {
+            "id": "RISK-005",
+            "class": "financial_legal",
+            "severity": "high",
+            "status": "mitigated",
+            "source": {
+              "artifact": "risks"
+            }
+          },
+          {
+            "id": "RISK-006",
+            "class": "performance_slo",
+            "severity": "medium",
+            "status": "mitigated",
+            "source": {
+              "artifact": "risks"
+            }
+          },
+          {
+            "id": "RISK-007",
+            "class": "privacy_data",
+            "severity": "high",
+            "status": "mitigated",
+            "source": {
+              "artifact": "risks"
+            }
+          },
+          {
+            "id": "RISK-008",
+            "class": "security_auth",
+            "severity": "high",
+            "status": "mitigated",
+            "source": {
+              "artifact": "risks"
+            }
+          }
+        ],
+        "open_questions": 0
+      }
+    }
+  },
+  "llm_judgement": {
+    "C1_behavior_complexity": {
+      "status": "pass",
+      "confidence": 0.9,
+      "evidence": [
+        "L1-mod-03.feature: all 10 scenarios exercise the single course-membership-verification behavior represented by REQ-D001 and REQ-D002.",
+        "architecture/06-leaf-decision.md: the two components are internal implementation boundaries, not independent product delivery boundaries."
+      ],
+      "reason": "The scenarios vary inputs, failure responses, and revalidation timing of one bounded responsibility; splitting them would not create independently meaningful child behavior."
+    },
+    "C2_contract_boundary": {
+      "status": "pass",
+      "confidence": 0.91,
+      "evidence": [
+        "architecture/architecture-manifest.yaml: children is empty and both CMP-MEMBERSHIP-VERIFIER and CMP-COURSE-ROSTER-ADMIN have l2_target: false.",
+        "architecture/06-leaf-decision.md: CT-003, CT-013, and FLOW-011 remain inherited MOD-03 contracts."
+      ],
+      "reason": "The inherited contracts remain one MOD-03 boundary; the internal components do not introduce an independently versioned or deployed contract boundary."
+    },
+    "C3_ai_context_control": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": [
+        "leaf-gate.static.json: implementation_pack_tokens is 16436, below the configured 18000 threshold.",
+        "leaf-gate.static.json: both current requirements and all scenarios are fully traceable."
+      ],
+      "reason": "One implementation context remains within the configured context budget and contains a coherent responsibility."
+    },
+    "C4_verifiability": {
+      "status": "pass",
+      "confidence": 0.9,
+      "evidence": [
+        "leaf-gate.static.json: REQ-D001 and REQ-D002 are both covered with no unmapped requirements or untagged scenarios.",
+        "architecture/02-architecture-decomposition.md: CMP-MEMBERSHIP-VERIFIER owns the verification behavior and its verification records."
+      ],
+      "reason": "The verification evidence tests the same membership-verification boundary and does not require separate child PRDs to isolate testable behavior."
+    },
+    "C5_risk_decomposition": {
+      "status": "pass",
+      "confidence": 0.88,
+      "evidence": [
+        "leaf-gate.static.json: unresolved_high_risks is 0 and all listed risks are mitigated.",
+        "architecture/05-local-decisions.md: state ownership and one-way internal dependency rules isolate roster management from verification execution inside MOD-03."
+      ],
+      "reason": "Further PRD layering would not improve ownership, risk isolation, contracts, or parallel delivery beyond the existing internal component boundaries."
+    }
+  },
+  "next_action": {
+    "type": "vibecode",
+    "children": [],
+    "notes": [
+      "Proceed to implementation package."
+    ]
+  }
+}

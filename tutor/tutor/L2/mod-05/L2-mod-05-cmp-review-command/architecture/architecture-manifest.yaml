@@ -1,0 +1,81 @@
+package:
+  node_name: CMP-REVIEW-COMMAND
+  level: L2
+  target_node_id: CMP-REVIEW-COMMAND
+  parent_node_id: CMP-REVIEW-COMMAND
+  responsibility: >-
+    在 MOD-05 内承接教师批注与最终等级调整，并经 M05-IC-01 创建 ReviewRecord；
+    保留原始等级、最终等级、操作者、时间和调整留痕，拒绝对评分失败提交伪造等级。
+  exclusions:
+    - 不实现教师查询、展示视图、教师网页 UI 或课程范围授权。
+    - 不执行 Agent 评分，不修改原始等级来源，不访问 MOD-04 模型服务。
+    - 不持有 Submission、MaterialFile、AssessmentResult 或教师读模型所有权。
+    - 不创建独立服务、容器、数据库、部署单元或公共运行时边界。
+    - 不修改 CT-008、M05-IC-01、M05-IC-05 的标识、字段、所有者、副作用、失败语义、幂等或版本。
+
+inputs:
+  current_prd: prd/L2-PRD/mod-05/L2-mod-05-cmp-review-command/prd.md
+  parent_architecture: architecture/L1/L1-mod-05
+  parent_prd: null
+  ancestor_architectures: []
+  output_dir: architecture/L2/mod-05/L2-mod-05-cmp-review-command
+  mode: new
+
+parent_package_type: recursive_child_package
+parent_package_detection: >-
+  父包根目录存在 architecture-manifest.yaml，按 parent-package-adapter.md 识别为递归子架构包。
+
+parent_node_identity:
+  parent_node_id: CMP-REVIEW-COMMAND
+  display_name: CMP-REVIEW-COMMAND
+  parent_level: L1
+  parent_responsibility: 复核写侧、ReviewRecord 聚合与 CT-008 实现映射
+
+node_match_evidence:
+  - source: architecture/L1/L1-mod-05/architecture-manifest.yaml
+    match: "children: CMP-REVIEW-COMMAND"
+    kind: exact_unique
+  - source: architecture/L1/L1-mod-05/02-architecture-decomposition.md
+    match: "CMP-REVIEW-COMMAND | 复核写侧、ReviewRecord 聚合"
+    kind: exact_unique
+  - source: architecture/L1/L1-mod-05/child-handoff.md
+    match: "| CMP-REVIEW-COMMAND | 复核写侧、ReviewRecord 聚合（CT-008）"
+    kind: exact_unique
+  - source: prd/L2-PRD/mod-05/L2-mod-05-cmp-review-command/prd.md
+    match: "module_name: CMP-REVIEW-COMMAND"
+    kind: cross_confirmation
+
+boundary_fingerprint:
+  parent_artifacts:
+    - architecture/L1/L1-mod-05/01-design-context.md §2.1-§2.7
+    - architecture/L1/L1-mod-05/02-architecture-decomposition.md §1.1-§1.5
+    - architecture/L1/L1-mod-05/03-state-and-data.md §1-§5
+    - architecture/L1/L1-mod-05/04-contracts-and-runtime.md §1-§3、§5
+    - architecture/L1/L1-mod-05/child-handoff.md §2-§5
+  contracts: [CT-008, M05-IC-01, M05-IC-05, M05-IC-07]
+  decisions: [KD-002, KD-003, KD-005, LCD-003, LCD-009]
+  ownership:
+    - ST-REVIEW-RECORD / ReviewRecord remains inside CMP-REVIEW-COMMAND; M05-IC-07 is the only parent-triggered content purge entry
+    - ST-IDEMPOTENCY-REVIEW remains local to the command write path
+    - ST-READ-MODEL remains owned by CMP-READMODEL-PROJECTOR
+  deployment: DU-2 course-app; no new deployable boundary
+
+resolved_input_inventory:
+  - path: prd/L2-PRD/mod-05/L2-mod-05-cmp-review-command/prd.md
+    role: current_prd
+    status: read
+  - path: architecture/L1/L1-mod-05
+    role: parent_architecture
+    status: read
+  - path: architecture/L2/mod-05/L2-mod-05-cmp-review-command
+    role: output_dir
+    status: empty_before_write
+
+children: []  # L2 leaf override: no L3/L4 decomposition
+status: leaf_ready
+leaf_gate_override:
+  decision: STOP_LAYERING
+  status: leaf_ready
+  authority: product_owner
+  rationale: "?????? L2 ??????????????? vibe coding?????????????"
+  no_further_layering: true

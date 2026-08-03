@@ -1,0 +1,128 @@
+package:
+  node_name: CMP-ASSESSMENT-ENGINE
+  layer: L2
+  parent_node_id: MOD-04
+  target_node_id: CMP-ASSESSMENT-ENGINE
+  responsibility: >
+    Execute one assessment attempt inside the MOD-04 assessment-worker boundary:
+    coordinate prompt composition, read material contents through the MOD-02
+    read-only port, invoke the model through the ACL, validate the response,
+    assemble the assessment result, and report completion or failure.
+  exclusions:
+    - Does not own scoring-task lifecycle, leasing, scheduling, retry count, or terminal transactions.
+    - Does not persist state, publish CT-005, or own Outbox rows.
+    - Does not call the network or model vendor directly.
+    - Does not own rubric/template configuration, material storage, teacher presentation, or notification rendering.
+
+inputs:
+  current_prd: prd/L2-PRD/mod-04/L2-mod-04-cmp-assessment-engine/prd.md
+  parent_architecture: architecture/L1/L1-mod-04
+  parent_prd: null
+  output_dir: architecture/L2/mod-04/L2-mod-04-cmp-assessment-engine
+  mode: new
+  parent_package_type: recursive_child_package
+
+node_match_evidence:
+  method: exact stable-id match
+  target_node_id: CMP-ASSESSMENT-ENGINE
+  matches: 1
+  evidence:
+    - source: architecture/L1/L1-mod-04/02-architecture-decomposition.md
+      location: direct child registry and component responsibility table
+      matched_text: CMP-ASSESSMENT-ENGINE
+    - source: architecture/L1/L1-mod-04/child-handoff.md
+      location: direct child targets table
+      matched_text: CMP-ASSESSMENT-ENGINE
+
+boundary_fingerprint:
+  parent_identity:
+    - MOD-04
+    - BC-ASSESSMENT
+    - DU-3 assessment-worker
+  requirement_traces:
+    - REQ-D001
+    - FR-008
+    - AC-REQ-008-01
+    - D-AC-REQ-008-01
+  inherited_contracts:
+    - CT-004
+    - CT-005
+    - CT-010
+    - ICT-001
+    - ICT-002
+    - ICT-003
+    - ICT-004
+    - ICT-005
+    - ICT-006
+  inherited_state_and_decisions:
+    - ST-001
+    - ST-002
+    - ST-003
+    - ST-004
+    - KD-001
+    - KD-002
+    - KD-003
+    - LCD-003
+    - LCD-004
+  parent_flows:
+    - FLOW-004
+    - FLOW-005
+    - FLOW-006
+    - FLOW-007
+    - SCENARIO-012
+    - DF-2
+  direct_boundaries:
+    upstream:
+      - CMP-SCORING-ORCHESTRATOR via ICT-001 task execution context
+      - MOD-02 material read port via ICT-003
+      - CMP-RUBRIC-PROMPT-COMPOSER via ICT-002
+    downstream:
+      - CMP-SCORING-ORCHESTRATOR via ICT-005 and ICT-006
+      - CMP-MODEL-SERVICE-ACL via ICT-004
+  deployment_constraints:
+    - DU-3 only; no new deployable unit
+    - same process/in-process collaboration; no message bus or workflow engine
+    - no new database, cache, search engine, or public API
+
+resolved_inputs:
+  - { path: prd/L2-PRD/mod-04/L2-mod-04-cmp-assessment-engine/prd.md, role: current_prd }
+  - { path: architecture/L1/L1-mod-04/architecture-manifest.yaml, role: parent_manifest }
+  - { path: architecture/L1/L1-mod-04/01-design-context.md, role: parent_boundary }
+  - { path: architecture/L1/L1-mod-04/02-architecture-decomposition.md, role: parent_decomposition }
+  - { path: architecture/L1/L1-mod-04/03-state-and-data.md, role: parent_state_and_data }
+  - { path: architecture/L1/L1-mod-04/04-contracts-and-runtime.md, role: parent_contracts_and_runtime }
+  - { path: architecture/L1/L1-mod-04/05-local-decisions.md, role: parent_decisions }
+  - { path: architecture/L1/L1-mod-04/child-handoff.md, role: parent_handoff }
+
+generated_outputs:
+  - architecture-manifest.yaml
+  - 01-design-context.md
+  - 02-architecture-decomposition.md
+  - 03-state-and-data.md
+  - 04-contracts-and-runtime.md
+  - 05-local-decisions.md
+  - child-handoff.md
+
+validation_checks:
+  - { check: required inputs resolved and target matched uniquely, result: passed }
+  - { check: output directory was empty before mode=new write, result: passed }
+  - { check: every child has stable child_id and requirement or parent trace, result: passed }
+  - { check: parent contracts, state ownership, deployment, and sibling boundaries are unchanged, result: passed }
+  - { check: C1-C6 mappings are recorded, result: passed }
+  - { check: inherited contracts and child-only contracts are listed with owner/consumer semantics, result: passed }
+  - { check: success, failure/recovery, and lifecycle flows are covered, result: passed }
+  - { check: child registry, state registry, decision registry, and handoff ordering are stable, result: passed }
+
+incomplete_items:
+  - Q-001: parent-level AssessmentResult retention deletion wiring remains unresolved and is not used by this PRD.
+  - LCD-005: prompt template text and compression details are delegated to the next level.
+  - LCD-006: physical schema, polling interval, lease values, provider endpoint, and logging configuration are implementation details.
+
+blocking_impact: none
+status: leaf_ready
+leaf_gate_override:
+  decision: STOP_LAYERING
+  status: leaf_ready
+  authority: product_owner
+  rationale: "?????? L2 ??????????????? vibe coding?????????????"
+  no_further_layering: true

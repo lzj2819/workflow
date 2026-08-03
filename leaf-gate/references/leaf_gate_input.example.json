@@ -1,0 +1,26 @@
+{
+  "artifact_schema_version": "leaf-gate-input/v2",
+  "current_artifacts": {
+    "architecture": {"artifact_id": "ARCH-001", "artifact_schema_version": "architecture/v2", "path": "architecture.json", "sha256": "0000000000000000000000000000000000000000000000000000000000000000"},
+    "mocktest_evidence": {"artifact_id": "MOCK-EVIDENCE-001", "artifact_schema_version": "mocktest-leaf-evidence/v2", "path": "leaf_gate_evidence.json", "sha256": "0000000000000000000000000000000000000000000000000000000000000000"},
+    "mocktest_report": {"artifact_id": "MOCK-REPORT-001", "artifact_schema_version": "mocktest-report/v2", "path": "mocktest_report.json", "sha256": "0000000000000000000000000000000000000000000000000000000000000000"},
+    "prd": {"artifact_id": "PRD-001", "artifact_schema_version": "prd/v3", "path": "prd.json", "sha256": "0000000000000000000000000000000000000000000000000000000000000000"},
+    "testcases": {"artifact_id": "TEST-001", "artifact_schema_version": "testcases/v2", "path": "testcases.json", "sha256": "0000000000000000000000000000000000000000000000000000000000000000"}
+  },
+  "node_id": "NODE-001",
+  "parent_node_id": null,
+  "policy": {
+    "max_leaf_complexity": 12,
+    "max_leaf_contracts": 6,
+    "max_leaf_states": 3,
+    "max_recursion_depth": 4,
+    "min_semantic_confidence": 0.75,
+    "semantic_judgement": "OPTIONAL"
+  },
+  "project_id": "PROJECT-001",
+  "repair_history": {"completeness": "COMPLETE", "cycles": [], "mode": "FIRST_PASS"},
+  "run_id": "leaf-run-001",
+  "schema_version": "1.0",
+  "semantic_judgement": null,
+  "source_prd_id": "PRD-001"
+}

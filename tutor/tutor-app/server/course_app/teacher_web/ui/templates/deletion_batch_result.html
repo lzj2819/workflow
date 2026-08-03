@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}删除确认结果{% endblock %}
+{% block content %}
+<div class="notice-panel">
+  <h1>删除确认已提交</h1>
+  <p>批次：<strong>{{ batch_id }}</strong></p>
+  <p>批次状态：<span class="badge">{{ batch_status }}</span></p>
+  <p>待删除范围：{{ pending_deletion_scope }}</p>
+</div>
+<p><a href="/teacher/courses">返回课程列表</a></p>
+{% endblock %}

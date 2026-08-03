@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}小组列表{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>课程 {{ course_id }} · 小组列表</h1>
+  <p><a href="/teacher/courses/{{ course_id }}/presentation">生成展示视图</a></p>
+  {% if groups %}
+  <ul>
+    {% for group in groups %}
+    <li>
+      <a href="/teacher/courses/{{ course_id }}/groups/{{ group.group_id }}">
+        {{ group.name or group.group_id }}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="missing-value">暂无小组数据</p>
+  {% endif %}
+</div>
+{% if deletion_batches %}
+<div class="card">
+  <h2>删除批次</h2>
+  <ul>
+    {% for b in deletion_batches %}
+    <li><a href="/teacher/deletion-batches/{{ b.batch_id }}">{{ b.batch_id }}</a>
+      <span class="badge">{{ b.batch_status }}</span> 到期 {{ b.retention_due_at }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+{% endblock %}

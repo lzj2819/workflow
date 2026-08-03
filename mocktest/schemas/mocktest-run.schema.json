@@ -1,0 +1,239 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mocktest-run.schema.json",
+  "title": "Mocktest Canonical Run Contract v2",
+  "oneOf": [
+    {"$ref": "#/$defs/runManifest"},
+    {"$ref": "#/$defs/normalizedInput"},
+    {"$ref": "#/$defs/extractionReport"},
+    {"$ref": "#/$defs/executionPlan"},
+    {"$ref": "#/$defs/scenarioEvents"},
+    {"$ref": "#/$defs/contractCheck"},
+    {"$ref": "#/$defs/validatorResults"},
+    {"$ref": "#/$defs/strictAudit"},
+    {"$ref": "#/$defs/executionLog"},
+    {"$ref": "#/$defs/report"},
+    {"$ref": "#/$defs/leafEvidence"},
+    {"$ref": "#/$defs/bundleManifest"}
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "stringArray": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "artifactRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id", "artifact_type", "artifact_schema_version", "path", "sha256"],
+      "properties": {
+        "artifact_id": {"type": "string", "minLength": 1},
+        "artifact_type": {"type": "string", "minLength": 1},
+        "artifact_schema_version": {"type": "string", "minLength": 1},
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "sourceArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id", "artifact_type", "artifact_schema_version", "sha256"],
+      "properties": {
+        "artifact_id": {"type": "string", "minLength": 1},
+        "artifact_type": {"type": "string", "minLength": 1},
+        "artifact_schema_version": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "runManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "artifact_schema_version", "run_id", "input_fingerprint", "workspace_files"],
+      "properties": {
+        "schema_version": {"const": "1.0"},
+        "artifact_schema_version": {"const": "mocktest-run/v2"},
+        "run_id": {"type": "string", "minLength": 1},
+        "input_fingerprint": {"$ref": "#/$defs/sha256"},
+        "workspace_files": {"type": "array", "items": {"type": "string"}, "minItems": 9, "maxItems": 9, "uniqueItems": true}
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["project_id", "node_id", "parent_node_id", "source_prd_id"],
+      "properties": {
+        "project_id": {"type": "string", "minLength": 1},
+        "node_id": {"type": "string", "minLength": 1},
+        "parent_node_id": {"type": ["string", "null"]},
+        "source_prd_id": {"type": "string", "minLength": 1}
+      }
+    },
+    "bindingCandidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["component_id", "contract_id", "flow_id", "action", "provenance"],
+      "properties": {
+        "component_id": {"type": "string", "minLength": 1},
+        "contract_id": {"type": "string", "minLength": 1},
+        "flow_id": {"type": "string", "minLength": 1},
+        "action": {"type": "string", "minLength": 1},
+        "provenance": {"$ref": "#/$defs/stringArray"}
+      }
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tc_id", "status", "selected", "candidates", "confidence", "diagnostics"],
+      "properties": {
+        "tc_id": {"type": "string", "minLength": 1},
+        "status": {"enum": ["BOUND", "AMBIGUOUS", "UNBOUND", "INVALID"]},
+        "selected": {"oneOf": [{"$ref": "#/$defs/bindingCandidate"}, {"type": "null"}]},
+        "candidates": {"type": "array", "items": {"$ref": "#/$defs/bindingCandidate"}},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "diagnostics": {"$ref": "#/$defs/stringArray"}
+      }
+    },
+    "normalizedInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "artifact_schema_version", "identity", "inputs", "architecture", "testcases", "bindings", "input_fingerprint"],
+      "properties": {
+        "schema_version": {"const": "1.0"},
+        "artifact_schema_version": {"const": "mocktest-normalized-input/v2"},
+        "identity": {"$ref": "#/$defs/identity"},
+        "inputs": {"type": "array", "items": {"$ref": "#/$defs/artifactRef"}, "minItems": 2, "maxItems": 2},
+        "architecture": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "components", "interfaces", "dependencies", "nodes", "contracts", "inherited_contracts", "runtime_flows", "states"],
+          "properties": {
+            "mode": {"enum": ["top_level", "decompose"]},
+            "components": {"type": "array"}, "interfaces": {"type": "array"},
+            "dependencies": {"type": "array"}, "nodes": {"type": "array"},
+            "contracts": {"type": "array"}, "inherited_contracts": {"type": "array"},
+            "runtime_flows": {"type": "array"}, "states": {"type": "array"}
+          }
+        },
+        "testcases": {"type": "array", "minItems": 1},
+        "feature_projection": {"$ref": "#/$defs/artifactRef"},
+        "bindings": {"type": "array", "items": {"$ref": "#/$defs/binding"}},
+        "input_fingerprint": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "extractionReport": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "artifact_schema_version", "adapter", "status", "bindings", "blocked_testcase_ids", "diagnostics"],
+      "properties": {
+        "schema_version": {"const": "1.0"}, "artifact_schema_version": {"const": "mocktest-extraction/v2"},
+        "adapter": {"enum": ["canonical-v2", "legacy-markdown/v1"]},
+        "status": {"enum": ["PASS", "BLOCKED", "ERROR"]},
+        "bindings": {"type": "array", "items": {"$ref": "#/$defs/binding"}},
+        "blocked_testcase_ids": {"$ref": "#/$defs/stringArray"}, "diagnostics": {"$ref": "#/$defs/stringArray"}
+      }
+    },
+    "step": {
+      "type": "object", "additionalProperties": true,
+      "required": ["phase", "keyword", "text", "source_field", "source_index"],
+      "properties": {
+        "phase": {"enum": ["given", "when", "then"]}, "keyword": {"enum": ["Given", "When", "Then", "And"]},
+        "text": {"type": "string", "minLength": 1}, "source_field": {"type": "string"}, "source_index": {"type": ["integer", "null"]}
+      }
+    },
+    "planScenario": {
+      "type": "object", "additionalProperties": false,
+      "required": ["tc_id", "scenario_id", "requirement_ids", "binding", "steps", "interaction_count", "state"],
+      "properties": {
+        "tc_id": {"type": "string"}, "scenario_id": {"type": "string"}, "requirement_ids": {"$ref": "#/$defs/stringArray"},
+        "binding": {"$ref": "#/$defs/binding"}, "steps": {"type": "array", "items": {"$ref": "#/$defs/step"}},
+        "interaction_count": {"type": "integer", "minimum": 1}, "state": {"enum": ["READY", "BLOCKED"]}
+      }
+    },
+    "executionPlan": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "artifact_schema_version", "input_fingerprint", "scenarios"],
+      "properties": {
+        "schema_version": {"const": "1.0"}, "artifact_schema_version": {"const": "mocktest-plan/v2"},
+        "input_fingerprint": {"$ref": "#/$defs/sha256"}, "scenarios": {"type": "array", "items": {"$ref": "#/$defs/planScenario"}}
+      }
+    },
+    "scenarioEvents": {
+      "type": "object", "additionalProperties": false, "required": ["schema_version", "artifact_schema_version", "events"],
+      "properties": {"schema_version": {"const": "1.0"}, "artifact_schema_version": {"const": "mocktest-events/v2"}, "events": {"type": "array"}}
+    },
+    "contractCheck": {
+      "type": "object", "additionalProperties": false, "required": ["schema_version", "artifact_schema_version", "status", "findings"],
+      "properties": {"schema_version": {"const": "1.0"}, "artifact_schema_version": {"const": "mocktest-contract-check/v2"}, "status": {"enum": ["NOT_RUN", "PASS", "WARNING", "FAIL", "ERROR"]}, "findings": {"type": "array", "items": {"$ref": "#/$defs/finding"}}}
+    },
+    "validatorResults": {
+      "type": "object", "additionalProperties": false, "required": ["schema_version", "artifact_schema_version", "results"],
+      "properties": {"schema_version": {"const": "1.0"}, "artifact_schema_version": {"const": "mocktest-validator-results/v2"}, "results": {"type": "array"}}
+    },
+    "strictAudit": {
+      "type": "object", "additionalProperties": false, "required": ["schema_version", "artifact_schema_version", "audit_state", "violations"],
+      "properties": {"schema_version": {"const": "1.0"}, "artifact_schema_version": {"const": "mocktest-audit/v2"}, "audit_state": {"enum": ["NOT_RUN", "PASS", "FAIL"]}, "violations": {"type": "array"}}
+    },
+    "finding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["finding_id", "origin", "category", "severity", "scope", "tc_ids", "requirement_ids", "component_ids", "contract_ids", "summary", "evidence_refs"],
+      "properties": {
+        "finding_id": {"type": "string"}, "origin": {"enum": ["ADAPTER", "RUNNER", "CONTRACT_CHECK", "VALIDATOR", "AUDIT"]},
+        "category": {"type": "string"}, "severity": {"enum": ["INFO", "WARNING", "FAIL", "ERROR"]},
+        "scope": {"enum": ["INPUT", "TOP_LEVEL", "MODULE", "COMPONENT", "TOOL"]},
+        "tc_ids": {"$ref": "#/$defs/stringArray"}, "requirement_ids": {"$ref": "#/$defs/stringArray"},
+        "component_ids": {"$ref": "#/$defs/stringArray"}, "contract_ids": {"$ref": "#/$defs/stringArray"},
+        "summary": {"type": "string"}, "evidence_refs": {"$ref": "#/$defs/stringArray"}
+      }
+    },
+    "states": {
+      "type": "object", "additionalProperties": false,
+      "required": ["execution_state", "validation_verdict", "audit_state", "publication_state", "overall"],
+      "properties": {
+        "execution_state": {"enum": ["NOT_STARTED", "BLOCKED", "PARTIAL", "COMPLETED", "ERROR"]},
+        "validation_verdict": {"enum": ["NOT_EVALUATED", "PASS", "WARNING", "FAIL"]},
+        "audit_state": {"enum": ["NOT_RUN", "PASS", "FAIL"]},
+        "publication_state": {"enum": ["NOT_STARTED", "COMPLETE", "ERROR"]},
+        "overall": {"enum": ["PASS", "WARNING", "FAIL", "BLOCKED", "ERROR"]}
+      }
+    },
+    "executionLog": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "artifact_schema_version", "execution_state", "events"],
+      "properties": {"schema_version": {"const": "1.0"}, "artifact_schema_version": {"const": "mocktest-execution-log/v2"}, "execution_state": {"enum": ["NOT_STARTED", "BLOCKED", "PARTIAL", "COMPLETED", "ERROR"]}, "events": {"type": "array"}}
+    },
+    "coverage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["total", "evaluated", "passed", "warning", "failed", "blocked", "requirement_ids", "covered_requirement_ids"],
+      "properties": {
+        "total": {"type": "integer", "minimum": 0}, "evaluated": {"type": "integer", "minimum": 0},
+        "passed": {"type": "integer", "minimum": 0}, "warning": {"type": "integer", "minimum": 0},
+        "failed": {"type": "integer", "minimum": 0}, "blocked": {"type": "integer", "minimum": 0},
+        "requirement_ids": {"$ref": "#/$defs/stringArray"}, "covered_requirement_ids": {"$ref": "#/$defs/stringArray"}
+      }
+    },
+    "report": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "artifact_schema_version", "run_id", "identity", "source_artifacts", "input_fingerprint", "states", "coverage", "findings", "evidence_refs", "errors", "content_sha256"],
+      "properties": {
+        "schema_version": {"const": "1.0"}, "artifact_schema_version": {"const": "mocktest-report/v2"}, "run_id": {"type": "string"},
+        "identity": {"$ref": "#/$defs/identity"}, "source_artifacts": {"type": "array", "items": {"$ref": "#/$defs/sourceArtifact"}, "minItems": 2, "maxItems": 2}, "input_fingerprint": {"$ref": "#/$defs/sha256"},
+        "states": {"$ref": "#/$defs/states"}, "coverage": {"$ref": "#/$defs/coverage"},
+        "findings": {"type": "array", "items": {"$ref": "#/$defs/finding"}}, "evidence_refs": {"$ref": "#/$defs/stringArray"},
+        "errors": {"$ref": "#/$defs/stringArray"}, "content_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "leafEvidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "artifact_schema_version", "run_id", "states", "gate_recommendation", "finding_ids", "evidence_refs", "content_sha256"],
+      "properties": {
+        "schema_version": {"const": "1.0"}, "artifact_schema_version": {"const": "mocktest-leaf-evidence/v2"}, "run_id": {"type": "string"},
+        "states": {"$ref": "#/$defs/states"}, "gate_recommendation": {"enum": ["ALLOW", "BLOCK", "ERROR"]},
+        "finding_ids": {"$ref": "#/$defs/stringArray"}, "evidence_refs": {"$ref": "#/$defs/stringArray"}, "content_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "bundleManifest": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "artifact_schema_version", "run_id", "files", "bundle_sha256"],
+      "properties": {
+        "schema_version": {"const": "1.0"}, "artifact_schema_version": {"const": "mocktest-bundle/v2"}, "run_id": {"type": "string"},
+        "files": {"type": "array", "items": {"$ref": "#/$defs/artifactRef"}, "minItems": 4}, "bundle_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

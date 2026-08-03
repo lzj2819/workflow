@@ -1,0 +1,125 @@
+# Architecture Manifest — L1 模块架构包清单
+# 由 recursive-architecture-design 生成（mode: new）
+# 状态机: draft → ready_for_human_gate | blocked_parent_change
+
+package:
+  node_name: submission-intake
+  layer: L1
+  target_node_id: MOD-02
+  responsibility: >
+    材料包接收(500MB 上限、类型白名单,KD-004);提交生命周期状态机
+    (upload_failed/rejected/received/processing/scored/scoring_failed);
+    完整性报告与缺失项标记;30 秒内返回接收确认;发布 SubmissionReceived 事件;
+    执行保留期数据清除并回传清除结果(CT-014);
+    提供 POST /api/v1/auth/token 令牌签发(KD-005,CT-001 契约族附属)
+  exclusions:
+    - 不采集对话与材料(MOD-01 codex-plugin,DU-1)
+    - 不持有课程/邀请码/名单数据(MOD-03);每次提交经 CT-003 重新校验,不缓存通过结论(REQ-006)
+    - 不执行 Agent 评分与评分重试(MOD-04,DU-3)
+    - 不提供教师端查询/批注/展示/删除确认(MOD-05)
+    - 不计算保留到期时间、不持有删除批次与审计记录(MOD-05);仅按 CT-012 submission_ids[] 执行清除并经 CT-014 回传
+
+inputs:
+  current_prd: prd/L1/L1-mod-02/prd.md   # doc_id UNKNOWN-MOD-02-v1.0, status: complete, schema 2.0
+  parent_architecture: architecture/L0/output
+  parent_prd: null                        # 未读取:父包已提供充分的需求/契约/决策追溯,无实质缺口
+  ancestor_architectures: []
+  output_dir: architecture/L1/L1-mod-02
+  mode: new
+  existing_architecture: null             # 输出目录生成前为空,无覆盖
+  human_constraints: null
+
+parent:
+  parent_package_type: top-level-ddd-to-system
+    # 识别依据: 存在 output/01-system-overview.md 且无 architecture-manifest.yaml
+  parent_node_id: MOD-02
+  parent_node_name: submission-intake
+  node_match_evidence:
+    source: architecture/L0/output/01-system-overview.md
+    location: 「模块清单(按 module_id 排序)」表
+    matched_row: "| MOD-02 | submission-intake | BC-SUBMISSION | REQ-003、REQ-004、REQ-007、REQ-011;NFR-002、NFR-003;SM-001 |"
+    match_count: 1
+    cross_check:
+      - "04-interface-contracts.md「组件接口卡」MOD-02 条(provides/consumes/publishes 一致)"
+      - "03-data-and-consistency.md「数据所有权」Submission 行(Owning Module=MOD-02)"
+
+boundary_fingerprint:
+  responsibility_source: "01-system-overview.md「模块职责」MOD-02 条;「Success Metric 分配」SM-001 owning_module=MOD-02"
+  provided_and_consumed_contracts:
+    provides: [CT-001, CT-002, "POST /api/v1/auth/token(未编号附属端点)"]
+    consumes_api: [CT-003]
+    consumes_events: [CT-005, CT-012]
+    publishes_events: [CT-004, CT-006, CT-014]
+    source: "04-interface-contracts.md「组件接口卡」MOD-02 条及各契约 contract_fields"
+  state_and_data_ownership: "03-data-and-consistency.md「数据所有权」Submission 行: 提交记录、状态机、材料清单、材料文件、完整性报告、上传失败原因;本地事务边界=状态迁移+材料清单+完整性报告"
+  direct_boundaries:
+    upstream: ["MOD-01(CT-001/CT-002/auth-token)"]
+    downstream: ["MOD-03(CT-003)", "MOD-04(CT-004 出/CT-005 入)", "MOD-05(CT-006/CT-014 出, CT-012 入)"]
+  relevant_flows: "02-runtime-architecture.md legal_flows FLOW-001/002/003/004/006/008/010/012;scenario_chains SCENARIO-001/016;DF-1 步骤 2-6;DF-3 步骤 4-5"
+  inherited_decisions_and_constraints:
+    decisions: [KD-002, KD-003, KD-004, KD-005]   # 05-decisions-and-technology.md,原样继承不重开
+    storage: "单一关系型数据库(结构化)+ 本地磁盘加密(材料文件),DU-2/DU-3 共享设施(KD-002/KD-003)"
+    deployment: "06-deployment.md DU-2 course-app(MOD-02/03/05 同部署单元);MOD-02 支撑 30 并发上传(NFR-002);不新增部署单元"
+    deferred_by_parent: ["数据库产品选型(defer_to_detail_design)"]
+  acceptance_projections:
+    source: architecture/L0/output/acceptance-contract-projections.yaml
+    slices:
+      - { contract_id: AC-REQ-003-01, disposition: shared, owning_module: MOD-02 }
+      - { contract_id: AC-REQ-007-01, disposition: shared, owning_module: MOD-02 }
+      - { contract_id: AC-REQ-008-01, disposition: shared, owning_module: MOD-04, participating: [MOD-02] }
+      - { contract_id: AC-NFR-003-01, disposition: shared, owning_module: MOD-02 }
+      - { contract_id: AC-NFR-004-01, disposition: module_local, owning_module: MOD-05, mod02_role: execution_dependency }
+  delegated_and_unresolved_items:
+    delegated: ["MOD-02 内部结构/状态拆分/内部契约/局部战术(本包 02~05)"]
+    unresolved: []   # 无 return_to_parent 项
+
+outputs:
+  - architecture-manifest.yaml
+  - 01-design-context.md
+  - 02-architecture-decomposition.md
+  - 03-state-and-data.md
+  - 04-contracts-and-runtime.md
+  - 05-local-decisions.md
+  - child-handoff.md
+  # 无 parent-change-request.md(无 return_to_parent 决策)
+
+children:   # 仅列直接 child_id；按稳定 ID 排序；下一层 target_node_id 见 child-handoff.md
+  - SI-API      # intake-api 接入层；REQ-D003
+  - SI-CORE     # submission-core 提交聚合核心；REQ-D001/002/004
+  - SI-XFER     # upload-transfer 分片上传会话；REQ-D001/002
+
+internal_support_components:
+  - component_id: SI-PURGE
+    traces: [AC-NFR-004-01, CT-012, CT-014, DF-3, FLOW-010, FLOW-012]
+    l2_target: false
+  - component_id: SI-RELAY
+    traces: [REQ-D003, CT-004, CT-005, CT-006, CT-012, CT-014, KD-002]
+    l2_target: false
+  - component_id: SI-STORE
+    traces: [REQ-D002, KD-003, KD-004, CT-001]
+    l2_target: false
+  - component_id: SI-VERIFY
+    traces: [CT-003, REQ-005, REQ-006, LCD-001]
+    l2_target: false
+
+local_decisions:   # 详见 05-local-decisions.md
+  decide_now: [LCD-001, LCD-002, LCD-003, LCD-009]
+  defer_to_next_level: [LCD-007, LCD-008]
+  implementation_detail: [LCD-004, LCD-005, LCD-006]
+  return_to_parent: []
+
+validation:
+  checks:
+    - { check: "父包识别与 target_node_id 唯一匹配", result: pass, evidence: "01 模块清单唯一行 + 04 组件接口卡交叉一致" }
+    - { check: "需求分配覆盖(REQ-D001~D004 allocated;NFR-002/003、SM-001 inherited),无越界/错配兄弟", result: pass, evidence: "01-design-context.md 需求分配表" }
+    - { check: "每个直接 child_id 至少拥有 current REQ-D/NFR-D；内部支撑组件不进入 direct children", result: pass, evidence: "02-architecture-decomposition.md 直接子节点/内部实现组件登记" }
+    - { check: "父契约语义与 L0 CT-001/CT-004/CT-006/FLOW-008 一致", result: pending, evidence: "已同步修改 L0 与 L1；需重新运行 strict audit" }
+    - { check: "状态机外部值域与父 AC/FLOW 终态一致(六态+deleted)", result: pending, evidence: "02/03 已补充 UploadSession、Submission、Outbox、InboundEventDedup 迁移；需重新运行 strict audit" }
+    - { check: "子节点/内部契约/状态/决策注册表按稳定 ID 排序", result: pass, evidence: "SI-API..SI-XFER;IC-SI-01..06;ST-01..07;LCD-001..009" }
+    - { check: "边界红线:未新增部署单元/平台/数据库/消息总线/公共运行时边界;未设计兄弟模块内部", result: pass, evidence: "05-local-decisions.md 禁止项确认" }
+  incomplete_items:
+    - "重新执行当前工作区对应的 validate-arch strict audit，并记录本仓库路径与文件哈希"
+  blocking_impact: pending_revalidation
+  notes: "架构文档修复已完成静态落盘；strict audit 尚未在本次修改后执行，不能据此宣称验证通过"
+
+status: ready_for_human_gate

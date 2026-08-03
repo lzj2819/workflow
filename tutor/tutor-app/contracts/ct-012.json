@@ -1,0 +1,71 @@
+{
+  "contract_id": "CT-012",
+  "title": "RecordsDeleted",
+  "contract_type": "event",
+  "direction": "async_event",
+  "provider": "MOD-05",
+  "consumer": [
+    "MOD-02",
+    "MOD-04",
+    "MOD-05"
+  ],
+  "delivery": "数据库 Outbox；消费失败重试",
+  "sync_async": "async",
+  "versioning": "v=1",
+  "idempotency": "重复清除已删除记录为空操作",
+  "error_codes": [],
+  "publishes_events": [],
+  "side_effects": "清除目标提交材料与读模型数据（MOD-02）与评分记录（MOD-04，含 ScoringTask/AssessmentResult，保留最小墓碑用于重放守卫），教师端不再可读；审计记录永久留存不在删除范围",
+  "freeze_note": "CCR-001 方案 A 已由用户批准（2026-07-22）：消费者集合扩展 MOD-04；payload 不变，v=1 兼容",
+  "source": {
+    "doc": "tutor/L0-root/architecture/04-interface-contracts.md",
+    "sha256": "4599918536e46ca90f566919dc3e1e9f42c59d6da034d771ca44a98bae3efb9f"
+  },
+  "schemas": {
+    "event": {
+      "type": "object",
+      "required": [
+        "batch_id",
+        "submission_ids",
+        "scope",
+        "operator",
+        "executed_at",
+        "audit_record_id",
+        "v"
+      ],
+      "properties": {
+        "batch_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "submission_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "operator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "executed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "audit_record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "v": {
+          "const": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

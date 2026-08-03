@@ -1,0 +1,128 @@
+manifest_version: "1.0"
+
+package:
+  node_name: CMP-MATERIAL-COLLECTOR
+  level: L2
+  target_node_id: CMP-MATERIAL-COLLECTOR
+  parent_node_id: CMP-MATERIAL-COLLECTOR
+  responsibility: >-
+    按配置目录收集代码、截图和项目结果文件；执行文件类型白名单与 500MB 客户端预算预检；
+    生成 MaterialManifest，并将材料与作业、姓名、小组关联后交回 MOD-01 采集编排。
+  exclusions:
+    - 不导出 Codex 对话；对话采集归 CMP-DIALOGUE-COLLECTOR
+    - 不执行上传、分片、令牌换取或远端状态查询；上传归 CMP-UPLOAD-CLIENT
+    - 不执行服务端课程邀请码、姓名和小组校验；服务端权威归 MOD-02/MOD-03 链路
+    - 不改变 CT-001 的 material_chunks[] 类别、字段、失败语义或版本
+    - 不引入独立服务、数据库、消息总线、部署单元或跨模块公共契约
+
+inputs:
+  parent_architecture: "C:/Users/Lenovo/Desktop/codex_plugin/architecture/L1/L1-mod-01"
+  target_node_id: CMP-MATERIAL-COLLECTOR
+  current_prd: "C:/Users/Lenovo/Desktop/codex_plugin/prd/L2-PRD/mod-01/L2-mod-01-cmp-material-collector/prd.md"
+  parent_prd: null
+  ancestor_architectures:
+    - "C:/Users/Lenovo/Desktop/codex_plugin/architecture/L1/L1-mod-01"
+  output_dir: "C:/Users/Lenovo/Desktop/codex_plugin/architecture/L2/mod-01/L2-mod-01-cmp-material-collector"
+  mode: new
+
+parent_package_type: recursive_child_package
+parent_package_detection: >-
+  父包根存在 architecture-manifest.yaml，按 parent-package-adapter 规则 1 识别为递归子架构包；
+  父包自身的 target_node_id 为 MOD-01，当前目标在其 child registry 中登记为 CMP-MATERIAL-COLLECTOR。
+
+node_match_evidence:
+  - source: "architecture/L1/L1-mod-01/02-architecture-decomposition.md §2 子节点清单"
+    match: "| CMP-MATERIAL-COLLECTOR | 材料收集器 |"
+    kind: exact_unique_registry_row
+  - source: "architecture/L1/L1-mod-01/child-handoff.md §2 下一层可选 child_id"
+    match: "| CMP-MATERIAL-COLLECTOR | 三类目录材料收集与清单 |"
+    kind: exact_unique_child_handoff_row
+  - source: "architecture/L1/L1-mod-01/03-state-and-data.md §1 状态所有权注册表"
+    match: "| ST-03 | MaterialManifest + 材料暂存引用 | CMP-MATERIAL-COLLECTOR |"
+    kind: ownership_cross_confirmation
+
+boundary_fingerprint:
+  parent_artifacts:
+    - "01-design-context.md §2.1/2.3/2.5：CMP-MATERIAL-COLLECTOR 职责、外部边界、本地状态范围"
+    - "01-design-context.md §3：REQ-D004、D-AC-REQ-003-01、KD-004 的分配"
+    - "02-architecture-decomposition.md §1/§2：MaterialManifest、ST-03 与 CMP-MATERIAL-COLLECTOR 行"
+    - "03-state-and-data.md §1/§3：ST-03 所有权、任务创建时生成、终态清理和路径引用语义"
+    - "04-contracts-and-runtime.md §1/§3/§5：CT-001、IC-M01-03、材料收集运行流与错误语义"
+    - "05-local-decisions.md §1：LCD-003 客户端预检 + 服务端权威"
+    - "child-handoff.md §3/§4：IC-M01-03、ST-03、INV-4 与下一层目标"
+  contracts:
+    - "IC-M01-03（PENDING-QUEUE → DIALOGUE/MATERIAL-COLLECTOR，采集编排端口）"
+    - "CT-001（材料最终经 UPLOAD-CLIENT consumer 上传，material_chunks[] 类别语义不可变）"
+  decisions: [KD-003, KD-004, KD-005, LCD-003, A-007]
+  ownership: "ST-03 MaterialManifest + 材料暂存引用仍由 CMP-MATERIAL-COLLECTOR 所有；Submission 仍归 MOD-02"
+  deployment: "DU-1 student-plugin；本层只能作为 MOD-01 进程内组件运行"
+
+status: leaf_ready
+outputs:
+  - architecture-manifest.yaml
+  - 01-design-context.md
+  - 02-architecture-decomposition.md
+  - 03-state-and-data.md
+  - 04-contracts-and-runtime.md
+  - 05-local-decisions.md
+  - child-handoff.md
+
+resolved_input_inventory:
+  - path: "C:/Users/Lenovo/Desktop/codex_plugin/architecture/L1/L1-mod-01"
+    role: parent_architecture
+    result: read_and_unique_target_verified
+  - path: "C:/Users/Lenovo/Desktop/codex_plugin/prd/L2-PRD/mod-01/L2-mod-01-cmp-material-collector/prd.md"
+    role: current_prd
+    result: read_and_requirement_trace_verified
+  - path: "C:/Users/Lenovo/Desktop/codex_plugin/architecture/L2/mod-01/L2-mod-01-cmp-material-collector"
+    role: output_dir
+    result: newly_created_without_overwrite
+
+validation:
+  checks:
+    - check: "四项输入解析、递归父包识别、输出目录安全"
+      result: pass
+      evidence: "父包与当前 PRD 可读；目标输出目录在写入前不存在；未覆盖两个兄弟目录"
+    - check: "CMP-MATERIAL-COLLECTOR 唯一目标匹配"
+      result: pass
+      evidence: "父分解表 child registry 行、child-handoff 行、ST-03 所有权行交叉确认同一稳定 ID"
+    - check: "REQ-DD004 与 D-AC-REQ-003-01 需求/验收追踪"
+      result: pass
+      evidence: "01-design-context.md §3、02 child registry、child-handoff.md §2 均有直接追踪"
+    - check: "子节点清单包含 trace_exemption_reason"
+      result: pass
+      evidence: "3 个 child 按稳定 ID 排序，均有 REQ/父层追踪，豁免数为 0"
+    - check: "ST-03 所有权、生命周期与隐私边界不变"
+      result: pass
+      evidence: "03-state-and-data.md §1/§5；清单仍由目标组件拥有，Submission 未转移"
+    - check: "CT-001 与 IC-M01-03 外部契约语义不变"
+      result: pass
+      evidence: "04-contracts-and-runtime.md §1/§2/§6；未新增跨模块契约、字段、版本或部署边界"
+    - check: "C1-C6、成功/失败/生命周期运行流完整"
+      result: pass
+      evidence: "02-architecture-decomposition.md §3/§5；04-contracts-and-runtime.md §4/§5"
+    - check: "决策队列无遗留 decide_now 或 return_to_parent"
+      result: pass
+      evidence: "05-local-decisions.md §5；仅保留 3 项 defer_to_next_level"
+    - check: "七文件输出清单与 handoff 清单一致"
+      result: pass
+      evidence: "manifest.outputs 与实际目录均包含 7 个文件；无 parent-change-request.md"
+    - check: "兄弟组件仅引用未重设计"
+      result: pass
+      evidence: "02/04 明确只消费 CONFIG-STORE、PENDING-QUEUE、UPLOAD-CLIENT、STATUS-PRESENTER 的既有语义"
+    - check: "字段级契约与 produced⊇required 覆盖（validate-arch 修改项闭环）"
+      result: pass
+      evidence: "04-contracts-and-runtime.md §3.1 机器可读字段契约与 MC-ERR-* 错误码；IC-L2-MC-01→IC-L2-MC-02 透传 missing_categories/diagnostics；IC-M01-03 入口唯一为 MANIFEST-BUILDER facade；04 §4.3 状态机要素表含 owner/前置条件/分支/副作用；UPLOAD-CLIENT/STATUS-PRESENTER 声明为 ST-03 注册读方"
+  method: >-
+    对照父包实际节点、ST-03、IC-M01-03、CT-001 和当前 PRD；检查每个 child_id 的需求/父层追踪、
+    状态所有权、契约语义、C1-C6 映射、决策队列和七文件清单。
+
+incomplete_items: []
+blocking_impact: "无阻塞项；包内一致，可进入一次 Human Gate。"
+
+leaf_gate_override:
+  decision: STOP_LAYERING
+  status: leaf_ready
+  authority: product_owner
+  rationale: "?????? L2 ??????????????? vibe coding?????????????"
+  no_further_layering: true

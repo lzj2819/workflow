@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-02-si-core",
+  "project_id": "vibe-coding-course",
+  "node_id": "SI-CORE",
+  "parent_node_id": "MOD-02",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD001",
+    "REQ-DD002",
+    "REQ-DD004"
+  ],
+  "artifact_id": "mocktest:SI-CORE:leaf-gate-l2-l2-mod-02-si-core",
+  "artifact_type": "mocktest_report",
+  "defects": [],
+  "summary": "All prepared L2 scenarios pass the non-blocking Mocktest contract."
+}

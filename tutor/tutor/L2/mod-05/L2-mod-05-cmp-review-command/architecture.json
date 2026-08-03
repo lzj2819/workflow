@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-05-cmp-review-command",
+  "project_id": "vibe-coding-course",
+  "node_id": "CMP-REVIEW-COMMAND",
+  "parent_node_id": "CMP-REVIEW-COMMAND",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD001"
+  ],
+  "artifact_id": "architecture:CMP-REVIEW-COMMAND:leaf-gate-l2-l2-mod-05-cmp-review-command",
+  "artifact_type": "architecture",
+  "components": [
+    "CMP-REVIEW-COMMAND",
+    "CMP-RETENTION-GOVERNANCE",
+    "CMP-READMODEL-PROJECTOR",
+    "CMP-REVIEW-QUERY",
+    "CMP-ACCESS-GATE",
+    "CMP-RC-REVIEW-RECORD-WRITER",
+    "CMP-RC-REVIEW-INTEGRITY-POLICY",
+    "CMP-RC-REVIEW-IDEMPOTENCY-GUARD",
+    "CMP-TEACHER-UI"
+  ],
+  "interfaces": [
+    "CT-008",
+    "IC-01",
+    "IC-05",
+    "IC-07",
+    "CT-005",
+    "CT-012",
+    "CT-007",
+    "IC-004",
+    "IC-001",
+    "IC-002",
+    "IC-003",
+    "CT-014"
+  ],
+  "dependencies": [
+    "CMP-RETENTION-GOVERNANCE",
+    "CMP-READMODEL-PROJECTOR",
+    "CMP-REVIEW-QUERY",
+    "CMP-ACCESS-GATE",
+    "CMP-RC-REVIEW-RECORD-WRITER",
+    "CMP-RC-REVIEW-INTEGRITY-POLICY",
+    "CMP-RC-REVIEW-IDEMPOTENCY-GUARD",
+    "CMP-TEACHER-UI"
+  ],
+  "depth": 2,
+  "complexity": 29,
+  "risks": [],
+  "responsibility": "CMP-REVIEW-COMMAND is a terminal L2 implementation boundary.",
+  "children": []
+}

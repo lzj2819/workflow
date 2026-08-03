@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "node.schema.json",
+  "title": "Recursive Workflow Node",
+  "type": "object",
+  "required": [
+    "node_id",
+    "parent_node_id",
+    "depth",
+    "status",
+    "decision",
+    "children",
+    "requirement_ids",
+    "coding_task_queued",
+    "coding_admission_pending",
+    "coding_task_id",
+    "attempts",
+    "error_message"
+  ],
+  "properties": {
+    "node_id": {"type": "string", "minLength": 1},
+    "parent_node_id": {"type": ["string", "null"]},
+    "depth": {"type": "integer", "minimum": 0},
+    "status": {
+      "enum": [
+        "PENDING",
+        "RUNNING",
+        "PASS",
+        "FAIL",
+        "ERROR",
+        "CONTINUE_LAYERING",
+        "STOP_LAYERING",
+        "COMPLETED"
+      ]
+    },
+    "decision": {
+      "anyOf": [
+        {"enum": ["CONTINUE_LAYERING", "STOP_LAYERING", "ERROR"]},
+        {"type": "null"}
+      ]
+    },
+    "children": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    },
+    "requirement_ids": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "coding_task_queued": {"type": "boolean"},
+    "coding_admission_pending": {"type": "boolean"},
+    "coding_task_id": {"type": ["string", "null"]},
+    "attempts": {
+      "type": "array",
+      "items": {"$ref": "attempt.schema.json"}
+    },
+    "error_message": {"type": ["string", "null"]}
+  },
+  "additionalProperties": false
+}

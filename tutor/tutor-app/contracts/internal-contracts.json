@@ -1,0 +1,205 @@
+{
+  "title": "内部契约索引（模块内，限定不外溢语义）",
+  "note": "字段级语义以各 L1 包 04-contracts-and-runtime.md 为准；本索引登记归属与来源，供任务包边界检查使用",
+  "modules": {
+    "MOD-01": {
+      "source_doc": "tutor/L1/L1-mod-01/architecture/04-contracts-and-runtime.md §3",
+      "contracts": [
+        {
+          "id": "IC-M01-01",
+          "name": "意图解析端口",
+          "owner": "CMP-INTENT-PARSER",
+          "consumer": "CMP-PENDING-QUEUE"
+        },
+        {
+          "id": "IC-M01-02",
+          "name": "配置端口",
+          "owner": "CMP-CONFIG-STORE",
+          "consumer": "各读取方"
+        },
+        {
+          "id": "IC-M01-03",
+          "name": "采集编排端口",
+          "owner": "CMP-PENDING-QUEUE",
+          "consumer": "CMP-DIALOGUE-COLLECTOR / CMP-MATERIAL-COLLECTOR"
+        },
+        {
+          "id": "IC-M01-04",
+          "name": "上传执行端口",
+          "owner": "CMP-UPLOAD-CLIENT",
+          "consumer": "CMP-PENDING-QUEUE"
+        },
+        {
+          "id": "IC-M01-05",
+          "name": "状态展示端口",
+          "owner": "CMP-PENDING-QUEUE / CMP-CONFIG-STORE",
+          "consumer": "CMP-STATUS-PRESENTER"
+        }
+      ]
+    },
+    "MOD-02": {
+      "source_doc": "tutor/L1/L1-mod-02/architecture/04-contracts-and-runtime.md 2.1",
+      "contracts": [
+        {
+          "id": "IC-SI-01",
+          "name": "上传会话命令/查询",
+          "owner": "SI-XFER",
+          "consumer": "SI-API"
+        },
+        {
+          "id": "IC-SI-02",
+          "name": "材料写入/转正式/元数据/删除/配额",
+          "owner": "SI-STORE",
+          "consumer": "SI-XFER / SI-CORE / SI-PURGE"
+        },
+        {
+          "id": "IC-SI-03",
+          "name": "归属校验（CT-003 客户端封装）",
+          "owner": "SI-VERIFY",
+          "consumer": "SI-API"
+        },
+        {
+          "id": "IC-SI-04",
+          "name": "提交聚合命令与查询（含状态机守卫）",
+          "owner": "SI-CORE",
+          "consumer": "SI-API / SI-RELAY / SI-PURGE"
+        },
+        {
+          "id": "IC-SI-05",
+          "name": "Outbox 事务写入、投递循环、入站消费路由",
+          "owner": "SI-RELAY",
+          "consumer": "SI-CORE / SI-PURGE；外部入站"
+        },
+        {
+          "id": "IC-SI-06",
+          "name": "清除执行与结果汇总",
+          "owner": "SI-PURGE",
+          "consumer": "SI-RELAY"
+        }
+      ]
+    },
+    "MOD-03": {
+      "source_doc": "tutor/L1/L1-mod-03/architecture/04-contracts-and-runtime.md §3",
+      "contracts": [
+        {
+          "id": "CP-COURSE-ENDTIME",
+          "name": "课程结束时间只读端口（FLOW-011 实现形态）",
+          "owner": "CMP-COURSE-ROSTER-ADMIN",
+          "consumer": "MOD-05"
+        },
+        {
+          "id": "CP-ROSTER-QUERY",
+          "name": "名单只读端口（每次直读，不允许结论缓存）",
+          "owner": "CMP-COURSE-ROSTER-ADMIN",
+          "consumer": "CMP-MEMBERSHIP-VERIFIER"
+        }
+      ]
+    },
+    "MOD-04": {
+      "source_doc": "tutor/L1/L1-mod-04/architecture/04-contracts-and-runtime.md 第 3 节",
+      "contracts": [
+        {
+          "id": "ICT-001",
+          "name": "ClaimScoringTask",
+          "owner": "CMP-SCORING-ORCHESTRATOR",
+          "consumer": "worker 主循环"
+        },
+        {
+          "id": "ICT-002",
+          "name": "ComposeEvaluationPrompt",
+          "owner": "CMP-RUBRIC-PROMPT-COMPOSER",
+          "consumer": "CMP-ASSESSMENT-ENGINE"
+        },
+        {
+          "id": "ICT-003",
+          "name": "LoadMaterialContents（MOD-02 所有权只读端口）",
+          "owner": "MOD-02（只读）",
+          "consumer": "CMP-ASSESSMENT-ENGINE"
+        },
+        {
+          "id": "ICT-004",
+          "name": "InvokeModelAssessment",
+          "owner": "CMP-MODEL-SERVICE-ACL",
+          "consumer": "CMP-ASSESSMENT-ENGINE"
+        },
+        {
+          "id": "ICT-005",
+          "name": "CompleteAssessment",
+          "owner": "CMP-ASSESSMENT-ENGINE",
+          "consumer": "CMP-SCORING-ORCHESTRATOR"
+        },
+        {
+          "id": "ICT-006",
+          "name": "FailAssessment",
+          "owner": "CMP-ASSESSMENT-ENGINE",
+          "consumer": "CMP-SCORING-ORCHESTRATOR"
+        },
+        {
+          "id": "ICT-007",
+          "name": "PublishScoringOutcome",
+          "owner": "CMP-RESULT-PUBLISHER",
+          "consumer": "CMP-SCORING-ORCHESTRATOR"
+        },
+        {
+          "id": "ICT-008",
+          "name": "QueryScoringMetrics",
+          "owner": "CMP-SCORING-METRICS",
+          "consumer": "观测面"
+        },
+        {
+          "id": "ICT-009",
+          "name": "PurgeAssessmentRecords（CT-012 消费：评分清除+墓碑+CT-015 发布；CCR-001）",
+          "owner": "CMP-SCORING-ORCHESTRATOR",
+          "consumer": "SI-RELAY 入站路由 / Outbox"
+        }
+      ]
+    },
+    "MOD-05": {
+      "source_doc": "tutor/L1/L1-mod-05/architecture/04-contracts-and-runtime.md §2.1",
+      "contracts": [
+        {
+          "id": "M05-IC-01",
+          "name": "创建复核记录（幂等）",
+          "owner": "CMP-READMODEL-PROJECTOR",
+          "consumer": "CMP-REVIEW-COMMAND"
+        },
+        {
+          "id": "M05-IC-02",
+          "name": "读模型查询端口",
+          "owner": "CMP-READMODEL-PROJECTOR",
+          "consumer": "CMP-REVIEW-QUERY / CMP-PRESENTATION"
+        },
+        {
+          "id": "M05-IC-03",
+          "name": "课程结束时间读取",
+          "owner": "CMP-RETENTION-GOVERNANCE",
+          "consumer": "MOD-03（CP-COURSE-ENDTIME）"
+        },
+        {
+          "id": "M05-IC-04",
+          "name": "CT-012 发布端口",
+          "owner": "CMP-RETENTION-GOVERNANCE",
+          "consumer": "Outbox"
+        },
+        {
+          "id": "M05-IC-05",
+          "name": "复核模块内事件",
+          "owner": "CMP-REVIEW-COMMAND",
+          "consumer": "CMP-READMODEL-PROJECTOR"
+        },
+        {
+          "id": "M05-IC-06",
+          "name": "删除治理读端口",
+          "owner": "CMP-RETENTION-GOVERNANCE",
+          "consumer": "CMP-REVIEW-QUERY 批次视图 / PROJECTOR 重放守卫"
+        },
+        {
+          "id": "M05-IC-07",
+          "name": "双回流批次聚合（CT-014 + CT-015 合并判定；CCR-001）",
+          "owner": "CMP-RETENTION-GOVERNANCE",
+          "consumer": "SI-RELAY 入站路由"
+        }
+      ]
+    }
+  }
+}

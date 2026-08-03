@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}教师登录{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>教师登录</h1>
+  {% if error %}
+  <div class="error-panel">登录失败：{{ error }}</div>
+  {% endif %}
+  <form class="inline" method="post" action="/teacher/login" data-lock>
+    <label for="teacher_account">教师账号</label>
+    <input type="text" id="teacher_account" name="teacher_account"
+           value="{{ teacher_account or '' }}" required autocomplete="username">
+    <label for="password">密码</label>
+    <input type="password" id="password" name="password" required autocomplete="current-password">
+    <p><button type="submit">登录</button></p>
+  </form>
+</div>
+{% endblock %}

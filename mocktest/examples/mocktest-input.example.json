@@ -1,0 +1,32 @@
+{
+  "schema_version": "mocktest-input/v2",
+  "run_id": "RUN-EXAMPLE-001",
+  "project_id": "PROJECT-EXAMPLE",
+  "node_id": "NODE-EXAMPLE",
+  "parent_node_id": null,
+  "source_prd_id": "PRD-EXAMPLE",
+  "created_at": "2026-07-17T00:00:00+08:00",
+  "generator": "mocktest",
+  "status": "PASS",
+  "mode": "strict",
+  "architecture": {
+    "artifact_id": "ARCH-EXAMPLE-001",
+    "artifact_type": "architecture_json",
+    "path": "../architecture-bundle/architecture.json",
+    "schema_version": "architecture/v2",
+    "run_id": "ARCH-RUN-EXAMPLE-001",
+    "project_id": "PROJECT-EXAMPLE",
+    "node_id": "NODE-EXAMPLE",
+    "source_prd_id": "PRD-EXAMPLE"
+  },
+  "testcases": {
+    "artifact_id": "TEST-EXAMPLE-001",
+    "artifact_type": "testcases_json",
+    "path": "../testcase-bundle/testcases.json",
+    "schema_version": "testcases/v2",
+    "run_id": "TEST-RUN-EXAMPLE-001",
+    "project_id": "PROJECT-EXAMPLE",
+    "node_id": "NODE-EXAMPLE",
+    "source_prd_id": "PRD-EXAMPLE"
+  }
+}

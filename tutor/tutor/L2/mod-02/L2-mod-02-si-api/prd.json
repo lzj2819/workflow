@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-02-si-api",
+  "project_id": "vibe-coding-course",
+  "node_id": "SI-API",
+  "parent_node_id": "SI-API",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD003"
+  ],
+  "artifact_id": "prd:SI-API:leaf-gate-l2-l2-mod-02-si-api",
+  "artifact_type": "prd",
+  "requirements": [
+    {
+      "id": "REQ-DD003",
+      "text": "Inherited and bounded requirement REQ-DD003 for SI-API.",
+      "status": "active"
+    }
+  ],
+  "depth": 2,
+  "max_depth": 2,
+  "parent": {
+    "node_id": "SI-API"
+  },
+  "node_history": [
+    {
+      "node_id": "SI-API",
+      "depth": 1,
+      "source": "inherited"
+    }
+  ]
+}

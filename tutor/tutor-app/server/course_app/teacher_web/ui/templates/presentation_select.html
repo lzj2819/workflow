@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}生成展示视图{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>生成展示视图 · 课程 {{ course_id }}</h1>
+  {% if error %}<div class="error-panel">{{ error }}</div>{% endif %}
+  {% if groups %}
+  <form class="inline" method="post" action="/teacher/presentations" data-lock>
+    <input type="hidden" name="course_id" value="{{ course_id }}">
+    <p>选择一个或多个小组：</p>
+    {% for group in groups %}
+    <label>
+      <input type="checkbox" name="group_ids" value="{{ group.group_id }}">
+      {{ group.name or group.group_id }}
+    </label>
+    {% endfor %}
+    <p><button type="submit">生成展示视图</button></p>
+  </form>
+  {% else %}
+  {% if not error %}<p class="missing-value">暂无可选小组</p>{% endif %}
+  <p><a href="/teacher/courses/{{ course_id }}">返回小组列表</a></p>
+  {% endif %}
+</div>
+{% endblock %}

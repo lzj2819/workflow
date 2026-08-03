@@ -1,0 +1,89 @@
+{
+  "contract_id": "CT-006",
+  "title": "SubmissionReceived（读模型派生）",
+  "contract_type": "event",
+  "direction": "async_event",
+  "provider": "MOD-02",
+  "consumer": "MOD-05",
+  "delivery": "数据库 Outbox；消费失败重试；可全量重建",
+  "sync_async": "async",
+  "versioning": "v=1",
+  "idempotency": "按 submission_id 去重",
+  "error_codes": [],
+  "publishes_events": [],
+  "side_effects": "派生教师侧提交列表与处理状态读模型",
+  "notes": "发布时机：received 或终态 upload_failed（MOD-02 LCD-002，schema 不变，status 字段承载状态）",
+  "source": {
+    "doc": "tutor/L0-root/architecture/04-interface-contracts.md",
+    "sha256": "4599918536e46ca90f566919dc3e1e9f42c59d6da034d771ca44a98bae3efb9f"
+  },
+  "schemas": {
+    "event": {
+      "type": "object",
+      "required": [
+        "submission_id",
+        "course_id",
+        "assignment",
+        "student_name",
+        "group_name",
+        "status",
+        "missing_items",
+        "received_at",
+        "v"
+      ],
+      "properties": {
+        "submission_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "course_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assignment": {
+          "type": "string",
+          "minLength": 1
+        },
+        "student_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "group_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "upload_failed",
+            "rejected",
+            "received",
+            "processing",
+            "scored",
+            "scoring_failed"
+          ]
+        },
+        "missing_items": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "对话",
+              "代码",
+              "截图",
+              "结果"
+            ]
+          }
+        },
+        "received_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "v": {
+          "const": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

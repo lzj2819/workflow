@@ -1,0 +1,4 @@
+interface:
+  display_name: "Decompose Canonical Architecture"
+  short_description: "只细化父 Architecture 中一个精确选中的模块或组件。"
+  default_prompt: "按 prd-to-architecture-skill 的 decompose 模式细化 exact target_node_id，保持父边界不可变并输出统一 canonical bundle。"

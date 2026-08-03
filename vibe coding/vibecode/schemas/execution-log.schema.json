@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "execution-log.schema.json",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["run_id", "project_id", "node_id", "module", "start_time", "end_time", "duration_ms", "status", "input_artifacts", "output_artifacts", "input_hash", "output_hash", "model", "model_parameters", "random_seed", "retry_count", "token_usage", "estimated_cost", "human_interventions", "warning_count", "error_type", "error_message"],
+    "properties": {
+      "status": {"enum": ["PENDING", "RUNNING", "PASS", "FAIL", "ERROR", "CONTINUE_LAYERING", "STOP_LAYERING", "COMPLETED"]},
+      "input_artifacts": {"type": "array", "items": {"type": "string"}},
+      "output_artifacts": {"type": "array", "items": {"type": "string"}},
+      "retry_count": {"type": "integer", "minimum": 0}
+    }
+  }
+}

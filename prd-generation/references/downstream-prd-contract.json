@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "artifact_schema_version": "prd-handoff/v1",
+  "canonical_prd_schema": "../schemas/canonical-prd.schema.json",
+  "canonical_payload_version": "prd/v3",
+  "machine_authority": "prd.json",
+  "markdown_role": "deterministic_read_only_view",
+  "required_bundle": [
+    "prd.md|prd.draft.md",
+    "prd.json",
+    "prd_manifest.json",
+    "validation_report.json",
+    "execution_log.json"
+  ],
+  "ready_gate": {
+    "status": "PASS",
+    "prd_status": ["approved", "complete"],
+    "ready_for_test_generation": true,
+    "oracle_blocked_count": 0,
+    "blocking_questions": 0
+  },
+  "draft_gate": {
+    "status": "FAIL",
+    "prd_status": "draft",
+    "ready_for_test_generation": false
+  },
+  "consumer_profiles": ["architecture", "gherkin", "leaf"],
+  "forbidden_business_fields": ["Feature", "Scenario", "Given", "When", "Then", "gherkin", "testcase"],
+  "adapter_owned_fields": ["module-result.json"],
+  "workflow_profile_fields": ["depth", "max_depth", "node_history", "requirements"]
+}

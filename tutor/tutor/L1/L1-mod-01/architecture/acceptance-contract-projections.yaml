@@ -1,0 +1,10 @@
+version: 1
+source_prd: ../prd.md
+source_architecture: .
+acceptance_contract_projections:
+  - target_module: CMP-DIALOGUE-COLLECTOR
+    parent_contract: D-AC-REQ-003-01
+    mode: shared
+  - target_module: CMP-MATERIAL-COLLECTOR
+    parent_contract: D-AC-REQ-003-01
+    mode: shared

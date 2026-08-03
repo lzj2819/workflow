@@ -1,0 +1,65 @@
+framework:
+  name: "Mocktest"
+  version: "2.0.0"
+
+execution:
+  mode: "strict"
+
+loader:
+  gherkin_parser: "official"
+  mapping_confidence_threshold: "diagnostic-only"
+  gap_detector:
+    non_component_words: []
+    chinese_mode_threshold: 0.5
+
+simulator:
+  latency_model:
+    components: {}
+    network_overhead: {}
+    concurrency_penalty: {}
+  token_budget: 50000
+
+validator:
+  dimensions:
+    - structure
+    - flow
+    - state
+    - contract
+    - performance
+    - interface_compat
+  token_budget: 50000
+
+logging:
+  level: INFO
+  format: structured
+  output: console
+
+llm:
+  api_key: ""
+  base_url: null
+  simulator:
+    provider: "codex"
+    model: "configured-by-strict-driver"
+    token_budget: 50000
+    timeout_seconds: 300
+    max_retries: 0
+    retry_backoff_seconds: 1.0
+  validator:
+    provider: "codex"
+    model: "configured-by-strict-driver"
+    token_budget: 50000
+    timeout_seconds: 300
+    max_retries: 0
+    retry_backoff_seconds: 1.0
+
+skill:
+  max_modify_rounds: 0
+  auto_modify: false
+  pause_on_high_severity: true
+  show_reasoning: false
+  show_modification_diff: false
+  enable_modification_history: false
+  max_history_versions: 0
+  cache_file_path: ".work/validate-arch/cache/prompt_cache.json"
+  cache_ttl_seconds: 86400
+  batch_size: 1

@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-04-cmp-assessment-engine",
+  "project_id": "vibe-coding-course",
+  "node_id": "CMP-ASSESSMENT-ENGINE",
+  "parent_node_id": "MOD-04",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD001"
+  ],
+  "artifact_id": "prd:CMP-ASSESSMENT-ENGINE:leaf-gate-l2-l2-mod-04-cmp-assessment-engine",
+  "artifact_type": "prd",
+  "requirements": [
+    {
+      "id": "REQ-DD001",
+      "text": "Inherited and bounded requirement REQ-DD001 for CMP-ASSESSMENT-ENGINE.",
+      "status": "active"
+    }
+  ],
+  "depth": 2,
+  "max_depth": 2,
+  "parent": {
+    "node_id": "MOD-04"
+  },
+  "node_history": [
+    {
+      "node_id": "MOD-04",
+      "depth": 1,
+      "source": "inherited"
+    }
+  ]
+}

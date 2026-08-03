@@ -1,0 +1,64 @@
+{
+  "node_id": "SI-XFER",
+  "input_summary": {
+    "requirement_ids": [
+      "REQ-DD001",
+      "REQ-DD002"
+    ],
+    "complexity_metrics": {
+      "requirement_count": 2,
+      "component_count": 9,
+      "interface_count": 14,
+      "dependency_count": 8,
+      "architecture_depth": 2,
+      "current_depth": 2,
+      "node_max_depth": 2,
+      "configured_max_recursion_depth": 4,
+      "effective_max_depth": 2,
+      "complexity": 31,
+      "uncovered_requirement_count": 0,
+      "unverified_scenario_count": 0
+    },
+    "risk_metrics": {
+      "risk_count": 0,
+      "mock_defect_count": 0,
+      "mock_critical_defect_count": 0
+    },
+    "mocktest_summary": {
+      "status": "PASS",
+      "defect_count": 0,
+      "critical_defect_count": 0,
+      "artifact": "mocktest_report.json"
+    },
+    "evidence_refs": [
+      {
+        "artifact_type": "prd",
+        "path": "prd.json",
+        "sha256": "3cad0779254472a60bb8568c62161599a82470e262aa3a9f87b0c17de1788847"
+      },
+      {
+        "artifact_type": "architecture",
+        "path": "architecture.json",
+        "sha256": "58f7eae97554df6a94b365596be567147cd04c47089725a7c62ae78c0c711025"
+      },
+      {
+        "artifact_type": "testcases",
+        "path": "testcases.json",
+        "sha256": "5672b13f7ffb297749672fe0538fd2467f5779f48e3be4767b96c342f35281b7"
+      },
+      {
+        "artifact_type": "mocktest_report",
+        "path": "mocktest_report.json",
+        "sha256": "d062c5492bff411fb8ad84bc1428f970b18bbfb505ad6351b7f589abc62aef05"
+      }
+    ]
+  },
+  "label_options": [
+    "CONTINUE_LAYERING",
+    "STOP_LAYERING",
+    "CANNOT_JUDGE"
+  ],
+  "human_label": null,
+  "rationale": "",
+  "annotator_id": null
+}

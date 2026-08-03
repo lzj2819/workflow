@@ -1,0 +1,86 @@
+package:
+  node_name: CMP-SCORING-ORCHESTRATOR
+  layer: L2
+  level_label: component-refinement
+  target_node_id: CMP-SCORING-ORCHESTRATOR
+  parent_node_id: CMP-SCORING-ORCHESTRATOR
+  responsibility: >-
+    Consume CT-004 idempotently, create and coordinate scoring tasks, own the
+    ScoringTask lifecycle, apply one bounded retry, track the ten-minute
+    deadline, and atomically commit the terminal result, retry record, and
+    CT-005 outbox outcome.
+  exclusions:
+    - Execute assessment or validate model output; CMP-ASSESSMENT-ENGINE owns that behavior.
+    - Assemble prompts or call the model provider directly; prompt composition and CT-010 access remain delegated.
+    - Deliver CT-005 or own the Outbox dispatcher; CMP-RESULT-PUBLISHER and inherited infrastructure own those responsibilities.
+    - Own MOD-02 Submission/material state or MOD-05 presentation/notification state.
+    - Add a service, public API, message bus, datastore platform, deployment unit, or new runtime boundary.
+
+inputs:
+  current_prd: 'C:\Users\Lenovo\Desktop\codex_plugin\prd\L2-PRD\mod-04\L2-mod-04-cmp-scoring-orchestrator\prd.md'
+  parent_architecture: 'C:\Users\Lenovo\Desktop\codex_plugin\architecture\L1\L1-mod-04'
+  parent_prd: null
+  ancestor_architectures: []
+  output_dir: 'C:\Users\Lenovo\Desktop\codex_plugin\architecture\L2\mod-04\L2-mod-04-cmp-scoring-orchestrator'
+
+mode: new
+parent_package_type: recursive_child_package
+status: leaf_ready
+created_at: '2026-07-19'
+
+parent_node_identity:
+  node_id: CMP-SCORING-ORCHESTRATOR
+  parent_package: L1-mod-04
+  parent_module: MOD-04 assessment
+  deployment_unit: DU-3 assessment-worker
+
+node_match_evidence:
+  method: exact stable target_node_id match in the parent direct-child registry
+  matches: 1
+  evidence:
+    - source: 'architecture-manifest.yaml'
+      location: 'children registry, parent lines 21-23'
+      matched_text: 'CMP-SCORING-ORCHESTRATOR'
+    - source: '02-architecture-decomposition.md'
+      location: 'direct child registry'
+      matched_text: 'CMP-SCORING-ORCHESTRATOR | scoring task creation, state machine, one retry, terminal outcome transaction'
+    - source: 'child-handoff.md'
+      location: 'L2 target registry, parent row 10'
+      matched_text: 'CMP-SCORING-ORCHESTRATOR'
+
+boundary_fingerprint:
+  responsibility_and_exclusions:
+    - 'L1 architecture-manifest.yaml: package responsibility and exclusions'
+    - 'L1 01-design-context.md: selected-node boundary snapshot'
+    - 'L1 02-architecture-decomposition.md: direct child registry and rationale'
+  requirement_traces:
+    - 'REQ-D002 / REQ-DD002'
+    - 'FR-012 and DF-2: one retry and scoring_failed terminal behavior'
+    - 'SM-002 and NFR-003: created_at to outcome=scored timing measure'
+    - 'D-AC-REQ-008-01 and AC-REQ-007-01'
+  state_ownership:
+    - 'ST-001 ScoringTask owned by CMP-SCORING-ORCHESTRATOR'
+    - 'ST-002 AssessmentResult persisted by CMP-SCORING-ORCHESTRATOR and assembled by CMP-ASSESSMENT-ENGINE'
+    - 'ST-003 Outbox row write protocol owned by CMP-RESULT-PUBLISHER; this node coordinates it only'
+  contracts:
+    - 'CT-004 SubmissionReceived, consumer'
+    - 'CT-005 SubmissionScored/ScoringFailed, producer'
+    - 'CT-010 model assessment API, consumer through ACL only'
+    - 'ICT-001 through ICT-008, inherited internal contracts'
+  decisions_and_constraints:
+    - 'KD-001 model API isolation and data minimization'
+    - 'KD-002 shared relational task table plus Outbox and no message bus'
+    - 'KD-003 encryption, backup, local-region and operational limits'
+    - 'L1 LCD-001 through LCD-004 and Q-001'
+  deployment:
+    - 'DU-3 assessment-worker; scale-out is by worker replicas inside the inherited boundary'
+  boundary_fingerprint: 'L1-MOD-04/CMP-SCORING-ORCHESTRATOR|REQ-D002|ST-001|ST-002|CT-004|CT-005|CT-010|ICT-001..008|KD-001..003|DU-3'
+
+children: []  # L2 leaf override: no L3/L4 decomposition
+
+leaf_gate_override:
+  decision: STOP_LAYERING
+  status: leaf_ready
+  authority: product_owner
+  rationale: "?????? L2 ??????????????? vibe coding?????????????"
+  no_further_layering: true

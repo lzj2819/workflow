@@ -1,0 +1,140 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-01-cmp-status-presenter",
+  "project_id": "vibe-coding-course",
+  "node_id": "CMP-STATUS-PRESENTER",
+  "parent_node_id": "MOD-01",
+  "created_at": "2026-07-19T14:41:56Z",
+  "generator": "structured-input-preparer",
+  "status": "PASS",
+  "input_artifacts": [],
+  "requirement_ids": [
+    "REQ-DD001",
+    "REQ-DD002"
+  ],
+  "artifact_id": "testcases:CMP-STATUS-PRESENTER:leaf-gate-l2-l2-mod-01-cmp-status-presenter",
+  "artifact_type": "testcases",
+  "testcases": [
+    {
+      "id": "TC-001",
+      "name": "插件创建提交任务并将身份、作业和配置目录提交到服务器",
+      "requirement_ids": [
+        "REQ-DD001"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-002",
+      "name": "返回唯一提交编号",
+      "requirement_ids": [
+        "REQ-DD001"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-003",
+      "name": "服务器记录作业、姓名和小组",
+      "requirement_ids": [
+        "REQ-DD001"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-004",
+      "name": "未包含任一必填信息时不创建可评分提交",
+      "requirement_ids": [
+        "REQ-DD001"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-005",
+      "name": "返回具体缺失字段并保持提交状态为信息不完整",
+      "requirement_ids": [
+        "REQ-DD001"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-006",
+      "name": "保留本地待上传任务并显示失败原因",
+      "requirement_ids": [
+        "REQ-DD001"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-007",
+      "name": "插件保存配置并在下次提交时使用",
+      "requirement_ids": [
+        "REQ-DD002"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-008",
+      "name": "配置重新打开后值一致",
+      "requirement_ids": [
+        "REQ-DD002"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-009",
+      "name": "目录不可读时显示具体目录错误",
+      "requirement_ids": [
+        "REQ-DD002"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-010",
+      "name": "配置保存为不完整并列出缺失项",
+      "requirement_ids": [
+        "REQ-DD002"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    },
+    {
+      "id": "TC-011",
+      "name": "拒绝保存并保留上一次有效配置",
+      "requirement_ids": [
+        "REQ-DD002"
+      ],
+      "status": "PASS",
+      "assertions": [
+        "scenario outcome is verified"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Top-Level Canonical Architecture"
+  short_description: "从 approved PRD v3 生成系统边界和第一层模块的统一 Architecture bundle。"
+  default_prompt: "按 prd-to-architecture-skill 的 top_level 模式生成 canonical Architecture；只定义系统与第一层模块，不进入组件内部。"
+

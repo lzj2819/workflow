@@ -1,0 +1,133 @@
+{
+  "design_schema_version": "architecture-design/v1",
+  "architecture_mode": "decompose",
+  "design_context": {
+    "summary": "Order Module",
+    "scope": "Internal realization of the selected parent node",
+    "goals": ["Separate orchestration and storage"],
+    "non_goals": ["Change the parent public API"],
+    "responsibility": "Refine only MOD-ORDER",
+    "exclusions": ["Sibling redesign"],
+    "external_systems": []
+  },
+  "requirement_allocations": [
+    {
+      "requirement_id": "REQ-001",
+      "classification": "inherited",
+      "owner_node_ids": ["CMP-HANDLER", "CMP-STORE"],
+      "source_refs": ["REQ-001"],
+      "reason": "Realizes the parent allocation"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "CMP-HANDLER",
+      "name": "Order Handler",
+      "kind": "component",
+      "responsibility": "Validate and coordinate order creation",
+      "exclusions": ["Persist data"],
+      "requirement_ids": ["REQ-001"],
+      "state_ids": [],
+      "dependency_ids": ["CMP-STORE"],
+      "source_refs": ["REQ-001"],
+      "rationale": "Separate orchestration"
+    },
+    {
+      "id": "CMP-STORE",
+      "name": "Order Store",
+      "kind": "component",
+      "responsibility": "Persist orders",
+      "exclusions": ["Authenticate operators"],
+      "requirement_ids": ["REQ-001"],
+      "state_ids": ["STATE-ORDER-LOCAL"],
+      "dependency_ids": [],
+      "source_refs": ["REQ-001"],
+      "rationale": "One internal data owner"
+    }
+  ],
+  "state_ownership": [
+    {
+      "id": "STATE-ORDER-LOCAL",
+      "name": "Order record",
+      "owner_node_id": "CMP-STORE",
+      "reader_node_ids": ["CMP-HANDLER"],
+      "writer_node_ids": ["CMP-STORE"],
+      "lifecycle": "created to retained",
+      "consistency_boundary": "store transaction",
+      "retention_and_privacy": "inherit parent policy",
+      "source_refs": ["REQ-001"]
+    }
+  ],
+  "contracts": [
+    {
+      "id": "INT-ORDER-SAVE",
+      "type": "internal",
+      "provider_id": "CMP-STORE",
+      "consumer_ids": ["CMP-HANDLER"],
+      "trigger": "validated order",
+      "protocol": "in-process",
+      "interaction_style": "sync",
+      "schema_fields": ["order_id"],
+      "side_effects": "persists an order",
+      "dependency_ids": [],
+      "error_semantics": "typed storage error",
+      "timeout": "1s",
+      "retry": "none",
+      "idempotency": "order_id",
+      "version": "1",
+      "requirement_ids": ["REQ-001"],
+      "source_refs": ["REQ-001"]
+    }
+  ],
+  "contract_realizations": [
+    {
+      "contract_id": "API-ORDER-CREATE",
+      "realizing_node_ids": ["CMP-HANDLER"],
+      "notes": "Preserve the inherited public contract"
+    }
+  ],
+  "runtime_flows": [
+    {
+      "id": "FLOW-ORDER-INTERNAL",
+      "name": "Persist order",
+      "kind": "success",
+      "requirement_ids": ["REQ-001"],
+      "steps": [
+        {
+          "order": 1,
+          "from_id": "CMP-HANDLER",
+          "to_id": "CMP-STORE",
+          "contract_id": "INT-ORDER-SAVE",
+          "action": "persist the validated order",
+          "failure_behavior": "propagate a typed error"
+        }
+      ],
+      "source_refs": ["REQ-001"]
+    }
+  ],
+  "technology_decisions": [],
+  "deployment_units": [],
+  "decisions": [],
+  "risks": [],
+  "assumptions": ["Parent public API remains fixed"],
+  "open_questions": [],
+  "traceability": [
+    {
+      "source_id": "REQ-001",
+      "target_ids": ["CMP-HANDLER", "CMP-STORE"],
+      "relation": "realized_by",
+      "evidence_refs": ["REQ-001"]
+    }
+  ],
+  "child_handoff": {
+    "recommended_target_ids": ["CMP-STORE"],
+    "required_ancestor_context": ["MOD-ORDER boundary"]
+  },
+  "change_requests": [],
+  "review": {
+    "status": "approved",
+    "reviewer": "architecture-owner",
+    "evidence_ref": "review:replace-me"
+  }
+}
+

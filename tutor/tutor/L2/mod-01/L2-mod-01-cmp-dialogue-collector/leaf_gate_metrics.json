@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "run_id": "leaf-gate-l2-l2-mod-01-cmp-dialogue-collector",
+  "project_id": "vibe-coding-course",
+  "node_id": "CMP-DIALOGUE-COLLECTOR",
+  "parent_node_id": "CMP-DIALOGUE-COLLECTOR",
+  "artifact_id": "leaf-gate-metrics:CMP-DIALOGUE-COLLECTOR",
+  "artifact_type": "leaf_gate_metrics",
+  "created_at": "2026-07-19T14:42:15Z",
+  "generator": "leaf-gate",
+  "status": "STOP_LAYERING",
+  "input_artifacts": [
+    {
+      "artifact_type": "prd",
+      "path": "prd.json",
+      "sha256": "7ab61d67205ac2f3a0c7b3401586493ccfab34c37de24c72b66f036ddbff4fe1"
+    },
+    {
+      "artifact_type": "architecture",
+      "path": "architecture.json",
+      "sha256": "071036b288d459c7ff79debd7d20942b613dc824481ebd93d5b62bcf80826bf5"
+    },
+    {
+      "artifact_type": "testcases",
+      "path": "testcases.json",
+      "sha256": "20483b07cf4827ee9294f8a0ea0b2e626effad00430f6f7707f112c30118d771"
+    },
+    {
+      "artifact_type": "mocktest_report",
+      "path": "mocktest_report.json",
+      "sha256": "74fb26027e3bffc740c8d6969dcdfdfc28094252033af56bd627e946b3cf5615"
+    }
+  ],
+  "requirement_ids": [
+    "REQ-DD003"
+  ],
+  "complexity_metrics": {
+    "requirement_count": 1,
+    "component_count": 9,
+    "interface_count": 9,
+    "dependency_count": 8,
+    "architecture_depth": 2,
+    "current_depth": 2,
+    "node_max_depth": 2,
+    "configured_max_recursion_depth": 4,
+    "effective_max_depth": 2,
+    "complexity": 26,
+    "uncovered_requirement_count": 0,
+    "unverified_scenario_count": 0
+  },
+  "risk_metrics": {
+    "risk_count": 0,
+    "mock_defect_count": 0,
+    "mock_critical_defect_count": 0
+  },
+  "triggered_rules": []
+}

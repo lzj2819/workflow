@@ -1,0 +1,85 @@
+# Architecture Manifest — L2 SI-XFER
+# Generated according to recursive-architecture-design (mode: new)
+# State machine: draft → ready_for_human_gate | blocked_parent_change
+
+package:
+  node_name: upload-transfer
+  layer: L2
+  target_node_id: SI-XFER
+  responsibility: >
+    在 MOD-02 内承载材料上传会话、分片接收、断点续传、顺序与幂等校验、
+    合并最终化以及 500MB/类型白名单约束；通过 IC-SI-01 与 SI-API 协作，
+    通过 IC-SI-02 使用 SI-STORE 保存暂存和正式材料。
+  exclusions:
+    - 不持有 Submission 聚合、外部提交状态机或完整性报告（SI-CORE）。
+    - 不拥有 MaterialFile、CourseQuotaUsage、磁盘目录或加密参数（SI-STORE）。
+    - 不执行课程归属校验、令牌签发、HTTP 错误映射或外部 API 编排（SI-API/SI-VERIFY）。
+    - 不发布 CT-004/CT-006/CT-014，不直接实现 Outbox 或入站事件去重（SI-RELAY）。
+    - 不创建服务、容器、部署单元、数据库产品或公共消息平台。
+
+inputs:
+  current_prd: prd/L2-PRD/mod-02/L2-mod-02-si-xfer/prd.md
+  parent_architecture: architecture/L1/L1-mod-02
+  parent_prd: null
+  ancestor_architectures: []
+  output_dir: architecture/L2/mod-02/L2-mod-02-si-xfer
+  mode: new
+  existing_architecture: null
+  human_constraints: 用户确认按前置设计继续生成；遵守递归架构设计七文件规范
+
+parent:
+  parent_package_type: recursive-child-package
+  parent_node_id: SI-XFER
+  parent_node_name: upload-transfer
+  node_match_evidence:
+    source: architecture/L1/L1-mod-02/child-handoff.md
+    location: "下一层 target_node_id 清单表"
+    matched_row: "| SI-XFER | upload-transfer 分片上传会话 | 会话/分片/断点续传/合并、500MB 与白名单校验 |"
+    match_count: 1
+    cross_check:
+      - "architecture-manifest.yaml children 中存在唯一 SI-XFER"
+      - "03-state-and-data.md 中 ST-02 owner=SI-XFER"
+      - "04-contracts-and-runtime.md 中 IC-SI-01 owner=SI-XFER"
+
+boundary_fingerprint:
+  responsibility_source: "L1 child-handoff.md SI-XFER 行；L1 architecture-manifest.yaml package.responsibility"
+  source_hashes:
+    parent_manifest_sha256: 4358A5F1A038880BF7E1C87AE74D84BAC9A891B67D9B7D64471D14E7B6E88624
+    parent_handoff_sha256: 2FE391E916E570A6CD1294F632C2FE48820240E7530A56A96AA510C9ED7CCD93
+    parent_state_sha256: 5DF3DF17A69E5DEC34A141BE46A60E0EA23B0DF06717F80396D30E7EEBA6B930
+    parent_contract_sha256: 8D902299F0767D95F9857D7BEA62BBB8FB4D51DDF878C54BADB89FAE134CCE40
+    current_prd_sha256: 7D91D7C25E3DE6C571FD337B8634E2DB1DC1DF4BAEC71697A56CEF4E2B399EC1
+  responsibility_and_exclusions: "L1 SI-XFER child-handoff.md；本包只细化 SI-XFER 内部"
+  provided_and_consumed_contracts:
+    provides_to_parent: [IC-SI-01]
+    consumes: [IC-SI-02]
+    related_parent_contracts: [CT-001]
+    source: "L1 04-contracts-and-runtime.md IC-SI-01/IC-SI-02 与 CT-001 映射"
+  state_and_data_ownership: "L1 ST-02 UploadSession 由 SI-XFER 拥有；MaterialFile/CourseQuotaUsage 仍由 SI-STORE 拥有"
+  direct_boundaries:
+    upstream: [SI-API]
+    downstream: [SI-STORE]
+    sibling_constraints: [SI-CORE, SI-VERIFY, SI-RELAY]
+  relevant_flows: ["L1 RF-01 成功上传", "L1 RF-02 上传中断/恢复", "CT-001 分片协议"]
+  inherited_decisions_and_constraints: [KD-002, KD-003, KD-004, KD-005, LCD-001, LCD-005, LCD-006, LCD-007]
+  delegated_and_unresolved_items:
+    delegated: ["SI-XFER 内部结构、会话/分片/最终化状态拆分、局部幂等与恢复策略、局部可观测性"]
+    unresolved: ["SI-STORE 目录布局、文件命名和加密参数由 LCD-007 委托 SI-STORE；本包不决定"]
+
+outputs:
+  - architecture-manifest.yaml
+  - 01-design-context.md
+  - 02-architecture-decomposition.md
+  - 03-state-and-data.md
+  - 04-contracts-and-runtime.md
+  - 05-local-decisions.md
+  - child-handoff.md
+
+children: []  # L2 leaf override: no L3/L4 decomposition
+status: leaf_ready
+leaf_gate_override:
+  decision: STOP_LAYERING
+  status: leaf_ready
+  authority: product_owner
+  rationale: "?????? L2 ??????????????? vibe coding?????????????"
+  no_further_layering: true

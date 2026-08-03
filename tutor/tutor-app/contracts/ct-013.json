@@ -1,0 +1,57 @@
+{
+  "contract_id": "CT-013",
+  "title": "名单导入",
+  "contract_type": "api",
+  "direction": "sync_api",
+  "provider": "MOD-03",
+  "consumer": "教师浏览器 / 名单文件",
+  "endpoint": { "method": "POST", "path": "/api/v1/courses/{course_id}/roster" },
+  "sync_async": "sync",
+  "versioning": "/api/v1 路径版本",
+  "idempotency": "同一文件重复导入按（姓名+小组）去重，不产生重复条目",
+  "timeout_retry": "格式错误条目逐项拒绝并报告；部分成功可见",
+  "error_codes": ["AUTH_INVALID", "FORBIDDEN", "NOT_FOUND", "VALIDATION_FAILED"],
+  "publishes_events": [],
+  "side_effects": "创建/更新名单记录；前置条件：课程已创建（v1 运维预置，LCD-004）",
+  "source": { "doc": "tutor/L0-root/architecture/04-interface-contracts.md", "sha256": "4599918536e46ca90f566919dc3e1e9f42c59d6da034d771ca44a98bae3efb9f" },
+  "schemas": {
+    "request": {
+      "type": "object",
+      "required": ["course_id", "roster_entries"],
+      "properties": {
+        "course_id": { "type": "string", "minLength": 1, "description": "路径参数" },
+        "roster_entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["student_name", "group_name"],
+            "properties": {
+              "student_name": { "type": "string", "minLength": 1 },
+              "group_name": { "type": "string", "minLength": 1 }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "required": ["import_result"],
+      "properties": {
+        "import_result": {
+          "type": "object",
+          "required": ["imported_count", "skipped_duplicates", "conflicts"],
+          "properties": {
+            "imported_count": { "type": "integer", "minimum": 0 },
+            "skipped_duplicates": { "type": "array", "items": { "type": "object" } },
+            "conflicts": { "type": "array", "items": { "type": "object" }, "description": "含格式错误条目的逐项报告" }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

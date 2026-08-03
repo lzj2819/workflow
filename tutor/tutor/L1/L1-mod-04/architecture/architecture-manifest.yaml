@@ -1,0 +1,218 @@
+# Architecture Manifest — MOD-04 assessment L1 架构包
+# 由 recursive-architecture-design 生成；本文件为该层包的身份、边界指纹与验证记录。
+
+package:
+  node_name: MOD-04 assessment
+  layer: L1
+  target_node_id: MOD-04
+  source_bc: BC-ASSESSMENT
+  responsibility: >
+    消费 SubmissionReceived 创建评分任务；经 ACL 调用外部模型 API（KD-001）执行五维度
+    独立评估；产出原始等级、依据、教师专用建议；失败自动重试一次，再失败标记
+    scoring_failed 并触发教师通知。
+  exclusions:
+    - 不提供任何网络/API 契约（父层 component_interfaces：provides_contracts 为空）
+    - 不负责教师端展示与通知呈现（MOD-05 teacher-web）
+    - 不持有提交状态机、材料文件与完整性报告（MOD-02 submission-intake）
+    - 不执行保留期删除；父层未将删除流程接线到 MOD-04（见 01-design-context 问题 Q-001）
+    - 不新建部署单元/服务；运行于父层指定的 DU-3 assessment-worker 内
+
+inputs:
+  parent_architecture: architecture/L0/output        # 只读
+  current_prd: prd/L1/L1-mod-04/prd.md               # 只读
+  parent_prd: null                                   # 未读取：父包已提供 REQ/FR/SM/契约/运行流追踪，不满足补充条件
+  ancestor_architectures: []                         # 父层即顶层，无更高祖先包
+  output_dir: architecture/L1/L1-mod-04              # 写入前为空目录，无误覆盖风险
+
+mode: new
+status: ready_for_human_gate                       # draft → ready_for_human_gate；本轮无 return_to_parent
+created_at: '2026-07-18'
+
+children:                                             # 仅列直接 child_id；按稳定 ID 排序
+  - CMP-ASSESSMENT-ENGINE                             # REQ-D001
+  - CMP-SCORING-ORCHESTRATOR                          # REQ-D002
+
+internal_support_components:
+  - component_id: CMP-MODEL-SERVICE-ACL
+    traces: [KD-001, CT-010, REQ-D002, FR-012]
+    l2_target: false
+  - component_id: CMP-RESULT-PUBLISHER
+    traces: [CT-005, KD-002, REQ-D002, FLOW-006, FLOW-007]
+    l2_target: false
+  - component_id: CMP-RUBRIC-PROMPT-COMPOSER
+    traces: [REQ-D001, FR-008, AC-REQ-008-01]
+    l2_target: false
+  - component_id: CMP-SCORING-METRICS
+    traces: [SM-002, SM-003, NFR-003, KD-003]
+    l2_target: false
+
+parent_package_type: 顶层 DDD 到系统架构包            # 判定依据：包根无 architecture-manifest.yaml，存在 output/01-system-overview.md
+parent_node_identity:
+  module_id: MOD-04
+  module: assessment
+  source_bc: BC-ASSESSMENT
+  source_requirements: [REQ-008, REQ-012, NFR-003, SM-002, SM-003]
+  owning_metrics: [SM-002, SM-003]
+  deployment_unit: DU-3 assessment-worker
+
+node_match_evidence:
+  method: 精确匹配 target_node_id=MOD-04
+  matches: 1
+  evidence:
+    - source: architecture/L0/output/01-system-overview.md
+      location: 「模块清单（按 module_id 排序）」表
+      matched_text: "| MOD-04 | assessment | BC-ASSESSMENT | REQ-008、REQ-012;NFR-003;SM-002、SM-003 | - |"
+    - source: architecture/L0/output/01-system-overview.md
+      location: 「模块职责」
+      matched_text: "MOD-04 assessment：消费 SubmissionReceived 创建评分任务；经 ACL 调用外部模型 API(KD-001）执行五维度独立评估；产出原始等级、依据、教师专用建议；失败自动重试一次，再失败标记 scoring_failed 并触发教师通知。"
+    - source: architecture/L0/output/04-interface-contracts.md
+      location: 「组件接口卡」component_interfaces
+      matched_text: "module_id: MOD-04 / provides_contracts: [] / consumes_events: [CT-004] / publishes_events: [CT-005] / external_consumes: [CT-010]"
+
+boundary_fingerprint:
+  responsibility_and_exclusions:
+    - architecture/L0/output/01-system-overview.md「模块职责」MOD-04 条目
+    - architecture/L0/output/01-system-overview.md「系统目标与范围」首版 Non-goals（学生查看评分/建议、百分制、自动触发提交）
+  requirement_traces:
+    - 01-system-overview.md 模块清单：MOD-04 ← REQ-008、REQ-012；NFR-003；SM-002、SM-003
+    - architecture/L0/FR.md：FR-008（五维度评估）、FR-012（失败重试一次）、FR-015（30 秒/10 分钟时限）
+    - architecture/L0/aggregates.md：AssessmentResult 聚合定义与不变量
+    - architecture/L0/output/acceptance-contract-projections.yaml：AC-REQ-007-01（MOD-04 slice）、AC-REQ-008-01（owning_module=MOD-04）、AC-NFR-003-01（MOD-04 slice）
+  state_and_data_ownership:
+    - architecture/L0/output/03-data-and-consistency.md「数据所有权」：AssessmentResult（评分任务、原始等级、五维度依据、教师专用建议、重试记录、失败原因）归 MOD-04
+    - 不变量：原始等级不可变；最多自动重试一次；失败必须记录原因与重试结果；等级必须落在 A–E 及默认区间；建议标记为教师专用；单次评估结果及其重试记录在同一事务内
+  provided_and_consumed_contracts:
+    consumes_events: [CT-004 SubmissionReceived]     # Provider MOD-02
+    publishes_events: [CT-005 SubmissionScored/ScoringFailed]  # Consumer MOD-02、MOD-05
+    external_consumes: [CT-010 模型评估推理]          # Provider 模型服务（外部）
+    provides_contracts: []
+  direct_boundaries:
+    upstream: [MOD-02 submission-intake（CT-004、材料只读来源）]
+    downstream: [MOD-02（CT-005 状态回写）、MOD-05（CT-005 复核/读模型/通知）、模型服务（外部，CT-010）]
+    siblings_reference_only: [MOD-01, MOD-03]        # 仅作协作约束引用，不读取其内部
+  relevant_flows:
+    - 02-runtime-architecture.md：FLOW-004（MOD-02→MOD-04，CT-004）、FLOW-005（MOD-04→模型服务，CT-010）、FLOW-006/007（MOD-04→MOD-02/MOD-05，CT-005）
+    - 02-runtime-architecture.md：SCENARIO-012（模型评估调用与失败重试链路）
+    - architecture/L0/domain-flow.md：DF-2（评分失败与重试路径）
+  inherited_decisions_and_constraints:
+    - KD-001：外部模型 API + MOD-04 内 ACL；材料最小化（不向供应商发送 submission_id、学生姓名等业务标识；request_id 仅用于单次调用关联与重试去重）；供应商可替换
+    - KD-002：同组服务共部署；数据库持久化任务表 + Outbox 表投递事件；单一关系型数据库 + 本地材料磁盘（存储加密）
+    - KD-003：基础级运维（单地域、HTTPS+存储加密、每日备份 30 天、基础监控告警、RPO 24h/RTO 48h）
+    - 时限：CT-010 单次调用 ≤3 分钟；评分任务创建至 CT-005 outcome=scored ≤10 分钟（NFR-003，SM-002 ≥95%）
+    - 不采用：消息中间件、工作流引擎、缓存/搜索引擎、分布式事务、自托管模型（05-decisions-and-technology「不采用方案」）
+  deployment:
+    - 06-deployment.md：DU-3 assessment-worker 仅含 MOD-04；独立扩缩（评分高峰 2–3 worker 副本）；连接同组数据库与本地材料磁盘；故障与 DU-2 隔离，任务持久化可恢复
+  delegated_and_unresolved_items:
+    - 数据库产品选型（defer_to_detail_design，仅要求事务+备份）
+    - 父层未将 AssessmentResult 纳入删除流程（CT-012 消费者不含 MOD-04）→ 登记为问题 Q-001，非本轮阻塞项（见 01/05）
+
+resolved_inputs:
+  - { path: architecture/L0/output/README.md, role: parent_architecture }
+  - { path: architecture/L0/output/01-system-overview.md, role: parent_architecture }
+  - { path: architecture/L0/output/02-runtime-architecture.md, role: parent_architecture }
+  - { path: architecture/L0/output/03-data-and-consistency.md, role: parent_architecture }
+  - { path: architecture/L0/output/04-interface-contracts.md, role: parent_architecture }
+  - { path: architecture/L0/output/05-decisions-and-technology.md, role: parent_architecture }
+  - { path: architecture/L0/output/06-deployment.md, role: parent_architecture }
+  - { path: architecture/L0/output/acceptance-contract-projections.yaml, role: parent_architecture }
+  - { path: architecture/L0/FR.md, role: parent_traceability }
+  - { path: architecture/L0/aggregates.md, role: parent_traceability }
+  - { path: architecture/L0/domain-flow.md, role: parent_traceability }
+  - { path: architecture/L0/ubiquitous-language.md, role: parent_traceability }
+  - { path: prd/L1/L1-mod-04/prd.md, role: current_prd }
+
+generated_outputs:
+  - architecture-manifest.yaml
+  - 01-design-context.md
+  - 02-architecture-decomposition.md
+  - 03-state-and-data.md
+  - 04-contracts-and-runtime.md
+  - 05-local-decisions.md
+  - child-handoff.md
+  - validation-entry-overrides.json
+  # 未生成 parent-change-request.md：本轮无 return_to_parent
+validation_checks:
+  - { check: "四项必需输入解析、输出目录为空且 mode=new", result: 通过 }
+  - { check: "父包类型识别（顶层 DDD 到系统架构包）与 MOD-04 唯一匹配（3 处证据）", result: 通过 }
+  - { check: "需求分配 inherited/allocated/local/out-of-scope 齐备且引用父层标识", result: 通过 }
+  - { check: "每个直接 child_id 至少拥有 current REQ-D/NFR-D；内部支撑组件不进入 direct children", result: 通过 }
+  - { check: "C1–C6（边界内分解、所有权不变、父流程顺序、父契约语义、ACL 收口、仅内部策略）", result: 通过 }
+  - { check: "父契约 CT-004/005/010 逐字段实现映射，语义不变", result: 通过 }
+  - { check: "内部契约 ICT-001~008 稳定排序且字段齐备", result: 通过 }
+  - { check: "运行流覆盖成功/失败恢复/生命周期", result: 通过 }
+  - { check: "决策队列无未处理 decide_now、无 return_to_parent", result: 通过 }
+  - { check: "稳定 ID 排序（CMP/ST/ICT/LCD）与跨文件引用一致", result: 通过 }
+unresolved_items:
+  - id: Q-001
+    text: 父层未将 AssessmentResult 纳入保留期删除接线（CT-012 消费者仅 MOD-02/MOD-05）
+    impact: 非阻塞：本层 PRD（REQ-D001/D002）不依赖删除行为；已按父层专属事项登记于 05-local-decisions，留待 L0 修订处置
+blocking_impact: "已移除无 current REQ-D/NFR-D 或仅实现支撑的直接 child_id；CMP-ASSESSMENT-ENGINE 与 CMP-SCORING-ORCHESTRATOR 保留为直接产品 owner。"
+
+validation_entry_overrides: validation-entry-overrides.json
+
+# Strict validate-arch machine bindings. These bindings make the existing
+# architecture semantics explicit without adding a new public API contract.
+validation_bindings:
+  - scenario_id: SCENARIO-001
+    precondition: MOD-02.Submission.processing + material_readability=readable
+    state_projection: SP-001
+    entry_component: CMP-SCORING-ORCHESTRATOR
+    entry_action: ICT-001
+    entry_contract_id: ICT-001
+  - scenario_id: SCENARIO-002
+    precondition: MOD-02.Submission.processing + material_readability=readable
+    state_projection: SP-001
+    entry_component: CMP-SCORING-ORCHESTRATOR
+    entry_action: ICT-001
+    entry_contract_id: ICT-001
+  - scenario_id: SCENARIO-003
+    precondition: MOD-02.Submission.processing + missing_items=non_empty
+    state_projection: SP-001
+    entry_component: CMP-SCORING-ORCHESTRATOR
+    entry_action: ICT-001
+    entry_contract_id: ICT-001
+  - scenario_id: SCENARIO-004
+    precondition: ST-001.in_progress + attempts=1
+    state_projection: SP-003
+    entry_component: CMP-ASSESSMENT-ENGINE
+    entry_action: ICT-006
+    entry_contract_id: ICT-006
+  - scenario_id: SCENARIO-005
+    precondition: ST-001.in_progress + attempts=2
+    state_projection: SP-004
+    entry_component: CMP-SCORING-ORCHESTRATOR
+    entry_action: ICT-006
+    entry_contract_id: ICT-006
+  - scenario_id: SCENARIO-006
+    precondition: course_period + valid_submissions
+    entry_component: CMP-SCORING-METRICS
+    entry_action: ICT-008
+    entry_contract_id: ICT-008
+  - scenario_id: SCENARIO-007
+    precondition: before_course_end + all_submissions
+    entry_component: CMP-SCORING-METRICS
+    entry_action: ICT-008
+    entry_contract_id: ICT-008
+  - scenario_id: SCENARIO-008
+    composition: [SCENARIO-004, SCENARIO-005]
+    entry_component: CMP-ASSESSMENT-ENGINE
+    entry_action: ICT-006
+    entry_contract_id: ICT-006
+
+machine_contracts:
+  ICT-003:
+    provider: MOD-02-MATERIAL-READ-PORT
+    consumer: CMP-ASSESSMENT-ENGINE
+    kind: query_port
+    input: [material_refs]
+    output: [materials, readability]
+    errors: [MATERIAL_UNREADABLE]
+    ownership: MOD-02
+    access: read_only
+  ICT-008:
+    provider: CMP-SCORING-ORCHESTRATOR
+    consumer: CMP-SCORING-METRICS
+    kind: query
+    source_states: [ST-001, ST-002]
+    output: [created_at, finished_at, outcome, latency_distribution, backlog, failure_rate, retry_rate]
+    read_only: true

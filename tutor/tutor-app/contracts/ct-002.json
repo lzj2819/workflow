@@ -1,0 +1,30 @@
+{
+  "contract_id": "CT-002",
+  "title": "提交状态查询",
+  "contract_type": "api",
+  "direction": "sync_api_query",
+  "provider": "MOD-02",
+  "consumer": "MOD-01",
+  "endpoint": { "method": "GET", "path": "/api/v1/submissions/{submission_uuid}" },
+  "sync_async": "sync",
+  "versioning": "/api/v1 路径版本",
+  "idempotency": "只读，天然幂等",
+  "timeout_retry": "未知 UUID → 404；客户端指数退避重试",
+  "error_codes": ["AUTH_INVALID", "NOT_FOUND"],
+  "publishes_events": [],
+  "side_effects": "None; read-only",
+  "source": { "doc": "tutor/L0-root/architecture/04-interface-contracts.md", "sha256": "4599918536e46ca90f566919dc3e1e9f42c59d6da034d771ca44a98bae3efb9f" },
+  "schemas": {
+    "response": {
+      "type": "object",
+      "required": ["submission_id", "status", "missing_items"],
+      "properties": {
+        "submission_id": { "type": "string", "minLength": 1 },
+        "status": { "type": "string", "enum": ["upload_failed", "rejected", "received", "processing", "scored", "scoring_failed", "deleted"] },
+        "failure_reason": { "type": "string", "description": "upload_failed / rejected / scoring_failed 时返回" },
+        "missing_items": { "type": "array", "items": { "type": "string", "enum": ["对话", "代码", "截图", "结果"] } }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "state-event.schema.json",
+  "title": "Append-only State Checkpoint Event",
+  "type": "object",
+  "required": [
+    "event_id",
+    "previous_event_id",
+    "state_id",
+    "revision",
+    "at",
+    "event",
+    "detail",
+    "stage",
+    "state_sha256",
+    "projection"
+  ],
+  "properties": {
+    "event_id": {"type": "string", "minLength": 1},
+    "previous_event_id": {"type": ["string", "null"]},
+    "state_id": {"type": "string", "minLength": 1},
+    "revision": {"type": "integer", "minimum": 1},
+    "at": {"type": "string", "format": "date-time"},
+    "event": {"type": "string", "minLength": 1},
+    "detail": {"type": "string"},
+    "stage": {"type": ["string", "null"]},
+    "state_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "projection": {"type": "object"}
+  },
+  "additionalProperties": false
+}
